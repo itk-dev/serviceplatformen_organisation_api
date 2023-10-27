@@ -1,0 +1,45 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Service\CertificateLocator:
+        arguments:
+            $options:
+                certificate_locator_type: '%env(SF1500_ORGANISATION_CERTIFICATE_LOCATOR_TYPE)%'
+                certificate_path: '%env(SF1500_ORGANISATION_CERTIFICATE_PATH)%'
+                certificate_tenant_id: '%env(SF1500_ORGANISATION_CERTIFICATE_TENANT_ID)%'
+                certificate_application_id: '%env(SF1500_ORGANISATION_CERTIFICATE_APPLICATION_ID)%'
+                certificate_client_secret: '%env(SF1500_ORGANISATION_CERTIFICATE_CLIENT_SECRET)%'
+                certificate_name: '%env(SF1500_ORGANISATION_CERTIFICATE_NAME)%'
+                certificate_secret: '%env(SF1500_ORGANISATION_CERTIFICATE_SECRET)%'
+                certificate_version: '%env(SF1500_ORGANISATION_CERTIFICATE_VERSION)%'
+                certificate_passphrase: '%env(SF1500_ORGANISATION_CERTIFICATE_PASSPHRASE)%'
+
+
+    App\Service\SF1500Service:
+        arguments:
+            $options:
+                authority_cvr: '%env(SF1500_ORGANISATION_AUTHORITY_CVR)%'
+                sts_applies_to: '%env(SF1500_ORGANISATION_STS_APPLIES_TO)%'
+                test_mode: '%env(SF1500_ORGANISATION_TEST_MODE)%'
