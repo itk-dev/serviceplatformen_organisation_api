@@ -35,7 +35,7 @@ class FetchDataCommand extends Command
     {
 
         $pageSize = 1000;
-        $max = 10000;
+        $max = 5000;
 
         $this->fetchData->setLogger(new ConsoleLogger($output));
 

@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Person;
 use App\Entity\PersonRegistrering;
 use App\Entity\PersonRegistreringEgenskab;
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\Soeg;
@@ -17,7 +16,6 @@ use ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegInputType;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Uid\UuidV4;
 
 class FetchData
 {
@@ -30,56 +28,7 @@ class FetchData
 
     public function fetch($pageSize = 1000, $max = null): Response
     {
-        $total = 0;
-
-        // TODO: REMOVE ONCE TESTED AND WOKRING
-//        $attributListe = new AttributListeType();
-//        $attributListe->addToEgenskab((new EgenskabType())
-//            ->setNavnTekst('Jeppe Kuhl*'));
-
-        while(true) {
-            $this->logger->debug(sprintf('Fetching data, offset: %d , max: %d', $total, $pageSize));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
-            $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max))
-                ->setFoersteResultatReference($total)
-//                ->setAttributListe($attributListe)
-            ;
-
-            /** @var \ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType $data */
-            $soeg = $this->clientSoeg()->soeg($request);
-
-
-            $ids = $soeg->getIdListe()->getUUIDIdentifikator();
-
-            // To limit memory we set request and response to null.
-            $request = null;
-            $soeg = null;
-
-            $total += count($ids);
-
-            if (empty($ids) || $total > $max) {
-                break;
-            }
-
-
-            $personList = $this->clientList()->_list_11(new ListInputType($ids));
-
-            foreach ($personList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
-                $this->handleOejebliksbillede($oejebliksbillede);
-            }
-
-            // To limit memory we set request and response to null.
-            $personList = null;
-
-//            $this->entityManager->flush();
-//
-//            $this->entityManager->clear();
-//            gc_collect_cycles();
-        }
-
-        $this->logger->debug(sprintf('Finished fetching dataFetching data'));
-        
+        $this->fetchPerson($pageSize, $max);
 
         return new Response(
             '<html lang="en"><body>Lucky number: '.'</body></html>'
@@ -104,52 +53,95 @@ class FetchData
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
     {
-        $id = $oejebliksbillede->getObjektType()->getUUIDIdentifikator();
+        $person = new Person();
+        $person->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
 
-        $this->insert('person', ['id' => $id]);
+        $this->entityManager->persist($person);
 
-        $this->handleRegistrering($id, $oejebliksbillede->getRegistrering());
+        $this->handleRegistrering($person, $oejebliksbillede->getRegistrering());
+        $person = null;
     }
 
-    private function handleRegistrering(string $personId, array $registreringer)
+    private function handleRegistrering(Person $person, array $registreringer)
     {
         foreach ($registreringer as /** @var RegistreringType $registrering */ $registrering) {
 
-            $registreringsId = (new UuidV4())->toBinary();
+            $personRegistrering = new PersonRegistrering();
+            $person->addRegistreringer($personRegistrering);
 
-            $this->insert('person_registrering', [
-                'id' => $registreringsId,
-                'person_id' => $personId,
-                'note_tekst' =>  $registrering->getNoteTekst(),
-                'tidspunkt' => $registrering->getTidspunkt(),
-                'livscyklus_kode' => $registrering->getLivscyklusKode()
-            ]);
+            $personRegistrering->setTidspunkt($registrering->getTidspunkt());
+            $personRegistrering->setNoteTekst($registrering->getNoteTekst());
+            $personRegistrering->setLivscyklusKode($registrering->getLivscyklusKode());
 
-            $this->handleEgenskab($registreringsId, $registrering->getAttributListe()->getEgenskab());
+            $this->entityManager->persist($personRegistrering);
+
+            $this->handleEgenskab($personRegistrering, $registrering->getAttributListe()->getEgenskab());
+            $personRegistrering = null;
 
         }
     }
 
-    private function handleEgenskab(string $registreringsId, array $egenskaber)
+    private function handleEgenskab(PersonRegistrering $personRegistrering, array $egenskaber)
     {
         foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
+            $personRegistreringEgenskab = new PersonRegistreringEgenskab();
+            $personRegistrering->addEgenskaber($personRegistreringEgenskab);
 
-            $egenskabId = (new UuidV4())->toBinary();
+            $personRegistreringEgenskab->setNavnTekst($egenskab->getNavnTekst());
+            // Commented out due to undefined property.
+            // Warning: Undefined property: ItkDev\Serviceplatformen\SF1500\Person\StructType\EgenskabType::$CPR-NummerTekst
+            // $personRegistreringEgenskab->setCprNummerTekst($egenskab->getCPR_NummerTekst());
+            $personRegistreringEgenskab->setBrugervendtNoegleTekst($egenskab->getBrugervendtNoegleTekst());
 
-            $this->insert('person_registrering_egenskab', [
-                'id' => $egenskabId,
-                'person_registrering_id' => $registreringsId,
-                'brugervendt_noegle_tekst' => $egenskab->getBrugervendtNoegleTekst(),
-//                'cpr_nummer_tekst' => $egenskab->getCPR_NummerTekst(),
-                'navn_tekst' => $egenskab->getNavnTekst(),
-            ]);
+            $this->entityManager->persist($personRegistreringEgenskab);
+            $personRegistreringEgenskab = null;
         }
     }
 
-    private function insert(string $table, array $data)
+    private function fetchPerson(mixed $pageSize, mixed $max)
     {
-        $connection = $this->entityManager->getConnection();
+        $total = 0;
 
-        $connection->insert($table, $data);
+        // TODO: REMOVE ONCE TESTED AND WOKRING
+//        $attributListe = new AttributListeType();
+//        $attributListe->addToEgenskab((new EgenskabType())
+//            ->setNavnTekst('Jeppe Kuhl*'));
+
+        while(true) {
+            $this->logger->debug(sprintf('Fetching data, offset: %d , max: %d', $total, $max));
+            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
+            $request = (new SoegInputType())
+                ->setMaksimalAntalKvantitet(min($pageSize, $max))
+                ->setFoersteResultatReference($total)
+//                ->setAttributListe($attributListe)
+            ;
+
+            /** @var \ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType $data */
+            $soeg = $this->clientSoeg()->soeg($request);
+
+
+            $ids = $soeg->getIdListe()->getUUIDIdentifikator();
+
+            $total += count($ids);
+
+            if (empty($ids) || $total > $max) {
+                break;
+            }
+
+            $personList = $this->clientList()->_list_11(new ListInputType($ids));
+
+            $this->entityManager->getConnection()->beginTransaction();
+
+            foreach ($personList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+                $this->handleOejebliksbillede($oejebliksbillede);
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+            $this->entityManager->clear();
+            gc_collect_cycles();
+        }
+
+        $this->logger->debug(sprintf('Finished fetching dataFetching data'));
     }
 }
