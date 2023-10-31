@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PersonRegistreringRepository;
+use App\Trait\BrugerRefTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,8 @@ use Symfony\Component\Uid\UuidV4;
 #[ORM\Entity(repositoryClass: PersonRegistreringRepository::class)]
 class PersonRegistrering
 {
+    use BrugerRefTrait;
+
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     private UuidV4 $id;
@@ -24,12 +27,6 @@ class PersonRegistrering
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $livscyklusKode = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $brugerRefUUIDIdentifikator = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $brugerRefURNIdentifikator = null;
 
     #[ORM\ManyToOne(inversedBy: 'registreringer')]
     #[ORM\JoinColumn(nullable: false)]
@@ -81,30 +78,6 @@ class PersonRegistrering
     public function setLivscyklusKode(?string $livscyklusKode): static
     {
         $this->livscyklusKode = $livscyklusKode;
-
-        return $this;
-    }
-
-    public function getBrugerRefUUIDIdentifikator(): ?string
-    {
-        return $this->brugerRefUUIDIdentifikator;
-    }
-
-    public function setBrugerRefUUIDIdentifikator(?string $brugerRefUUIDIdentifikator): static
-    {
-        $this->brugerRefUUIDIdentifikator = $brugerRefUUIDIdentifikator;
-
-        return $this;
-    }
-
-    public function getBrugerRefURNIdentifikator(): ?string
-    {
-        return $this->brugerRefURNIdentifikator;
-    }
-
-    public function setBrugerRefURNIdentifikator(?string $brugerRefURNIdentifikator): static
-    {
-        $this->brugerRefURNIdentifikator = $brugerRefURNIdentifikator;
 
         return $this;
     }
