@@ -73,7 +73,7 @@ class PersonFetchService implements FetchServiceInterface
             gc_collect_cycles();
         }
 
-        $this->logger->debug(sprintf('Finished fetching dataFetching data'));
+        $this->logger->debug(sprintf('Finished fetching person data'));
     }
 
     public function clientSoeg(array $options = []): Soeg

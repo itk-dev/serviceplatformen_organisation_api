@@ -86,7 +86,7 @@ class BrugerFetchService implements FetchServiceInterface
             gc_collect_cycles();
         }
 
-        $this->logger->debug(sprintf('Finished fetching data'));
+        $this->logger->debug(sprintf('Finished fetching bruger data'));
     }
 
     public function clientSoeg(array $options = []): Soeg
