@@ -145,7 +145,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             $this->handleEgenskab($organisationFunktionRegistrering, $registrering->getAttributListe()->getEgenskab());
             $this->handleGyldighed($organisationFunktionRegistrering, $registrering->getTilstandListe()->getGyldighed());
             $this->handleRelation($organisationFunktionRegistrering, $registrering->getRelationListe());
-
         }
     }
 
@@ -233,7 +232,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         $this->handleTilknyttedePersoner($organisationFunktionRegistrering, $relation->getTilknyttedePersoner());
         $this->handleTilknyttedeItSystemer($organisationFunktionRegistrering, $relation->getTilknyttedeItSystemer());
         $this->handleLokalUdvidelse($organisationFunktionRegistrering, $relation->getLokalUdvidelse());
-
     }
 
     private function handleAdresser(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $adresser)

@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Service\SF1500\AdresseFetchService;
 use App\Service\SF1500\BrugerFetchService;
+use App\Service\SF1500\OrganisationEnhedFetchService;
 use App\Service\SF1500\OrganisationFunktionFetchService;
 use App\Service\SF1500\PersonFetchService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,5 +46,13 @@ class FetchServiceFactory
         $organisationFunktionService->setLogger($logger);
 
         return $organisationFunktionService;
+    }
+
+    public function organisationEnhedService(?LoggerInterface $logger): OrganisationEnhedFetchService
+    {
+        $organisationEnhedService = new OrganisationEnhedFetchService($this->entityManager, $this->sf1500Service);
+        $organisationEnhedService->setLogger($logger);
+
+        return $organisationEnhedService;
     }
 }

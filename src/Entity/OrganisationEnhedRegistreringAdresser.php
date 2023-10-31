@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\BrugerRegistreringAdresseRepository;
+use App\Repository\OrganisationEnhedRegistreringAdresserRepository;
 use App\Trait\IndeksTrait;
 use App\Trait\ReferenceIdTrait;
 use App\Trait\RolleTrait;
@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
-#[ORM\Entity(repositoryClass: BrugerRegistreringAdresseRepository::class)]
-class BrugerRegistreringAdresse
+#[ORM\Entity(repositoryClass: OrganisationEnhedRegistreringAdresserRepository::class)]
+class OrganisationEnhedRegistreringAdresser
 {
     use VirkningTrait;
     use ReferenceIdTrait;
@@ -27,7 +27,7 @@ class BrugerRegistreringAdresse
 
     #[ORM\ManyToOne(inversedBy: 'adresser')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?BrugerRegistrering $brugerRegistrering = null;
+    private ?OrganisationEnhedRegistrering $organisationEnhedRegistrering = null;
 
     public function __construct()
     {
@@ -39,14 +39,14 @@ class BrugerRegistreringAdresse
         return $this->id;
     }
 
-    public function getBrugerRegistrering(): ?BrugerRegistrering
+    public function getOrganisationEnhedRegistrering(): ?OrganisationEnhedRegistrering
     {
-        return $this->brugerRegistrering;
+        return $this->organisationEnhedRegistrering;
     }
 
-    public function setBrugerRegistrering(?BrugerRegistrering $brugerRegistrering): static
+    public function setOrganisationEnhedRegistrering(?OrganisationEnhedRegistrering $organisationEnhedRegistrering): static
     {
-        $this->brugerRegistrering = $brugerRegistrering;
+        $this->organisationEnhedRegistrering = $organisationEnhedRegistrering;
 
         return $this;
     }
