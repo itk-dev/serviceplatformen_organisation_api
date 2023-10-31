@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PersonRegistreringEgenskabRepository;
+use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -10,6 +11,8 @@ use Symfony\Component\Uid\UuidV4;
 #[ORM\Entity(repositoryClass: PersonRegistreringEgenskabRepository::class)]
 class PersonRegistreringEgenskab
 {
+    use VirkningTrait;
+
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     private UuidV4 $id;

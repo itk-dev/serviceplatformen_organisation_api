@@ -34,8 +34,8 @@ class FetchDataCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $pageSize = 1000;
-        $max = 5000;
+        $pageSize = 1;
+        $max = 1;
 
         $this->fetchData->setLogger(new ConsoleLogger($output));
 

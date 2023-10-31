@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\PersonRegistreringRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -20,11 +19,17 @@ class PersonRegistrering
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $noteTekst = null;
 
-    #[ORM\Column(length: 255)]
-    private string $tidspunkt;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tidspunkt = null;
 
-    #[ORM\Column(length: 255)]
-    private string $livscyklusKode;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $livscyklusKode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $brugerRefUUIDIdentifikator = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $brugerRefURNIdentifikator = null;
 
     #[ORM\ManyToOne(inversedBy: 'registreringer')]
     #[ORM\JoinColumn(nullable: false)]
@@ -56,26 +61,50 @@ class PersonRegistrering
         return $this;
     }
 
-    public function getTidspunkt(): string
+    public function getTidspunkt(): ?string
     {
         return $this->tidspunkt;
     }
 
-    public function setTidspunkt(string $tidspunkt): static
+    public function setTidspunkt(?string $tidspunkt): static
     {
         $this->tidspunkt = $tidspunkt;
 
         return $this;
     }
 
-    public function getLivscyklusKode(): string
+    public function getLivscyklusKode(): ?string
     {
         return $this->livscyklusKode;
     }
 
-    public function setLivscyklusKode(string $livscyklusKode): static
+    public function setLivscyklusKode(?string $livscyklusKode): static
     {
         $this->livscyklusKode = $livscyklusKode;
+
+        return $this;
+    }
+
+    public function getBrugerRefUUIDIdentifikator(): ?string
+    {
+        return $this->brugerRefUUIDIdentifikator;
+    }
+
+    public function setBrugerRefUUIDIdentifikator(?string $brugerRefUUIDIdentifikator): static
+    {
+        $this->brugerRefUUIDIdentifikator = $brugerRefUUIDIdentifikator;
+
+        return $this;
+    }
+
+    public function getBrugerRefURNIdentifikator(): ?string
+    {
+        return $this->brugerRefURNIdentifikator;
+    }
+
+    public function setBrugerRefURNIdentifikator(?string $brugerRefURNIdentifikator): static
+    {
+        $this->brugerRefURNIdentifikator = $brugerRefURNIdentifikator;
 
         return $this;
     }
