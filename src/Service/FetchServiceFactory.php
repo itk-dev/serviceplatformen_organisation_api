@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\SF1500\BrugerFetchService;
 use App\Service\SF1500\PersonFetchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -18,5 +19,13 @@ class FetchServiceFactory
         $personFetchService->setLogger($logger);
 
         return $personFetchService;
+    }
+
+    public function brugerService(?LoggerInterface $logger): BrugerFetchService
+    {
+        $brugerFetchService = new BrugerFetchService($this->entityManager, $this->sf1500Service);
+        $brugerFetchService->setLogger($logger);
+
+        return $brugerFetchService;
     }
 }

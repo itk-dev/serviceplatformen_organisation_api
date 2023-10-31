@@ -20,8 +20,8 @@ class FetchData
         $this->logger->debug('Fetching data');
 
         // Person data.
-        $personService = $this->fetchServiceFactory->personService($this->logger);
-        $personService->fetch($pageSize, $max);
+//        $personService = $this->fetchServiceFactory->personService($this->logger);
+//        $personService->fetch($pageSize, $max);
 
         // Bruger data.
 //        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
