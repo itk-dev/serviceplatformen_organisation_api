@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\SF1500;
 
 interface FetchServiceInterface
 {

@@ -5,7 +5,6 @@ namespace App\Service\SF1500;
 use App\Entity\Person;
 use App\Entity\PersonRegistrering;
 use App\Entity\PersonRegistreringEgenskab;
-use App\Service\FetchServiceInterface;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\_List;
@@ -124,8 +123,12 @@ class PersonFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleEgenskab(PersonRegistrering $personRegistrering, array $egenskaber): void
+    private function handleEgenskab(PersonRegistrering $personRegistrering, ?array $egenskaber): void
     {
+        if (null === $egenskaber) {
+            return;
+        }
+
         foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
             $personRegistreringEgenskab = new PersonRegistreringEgenskab();
             $personRegistrering->addEgenskaber($personRegistreringEgenskab);
