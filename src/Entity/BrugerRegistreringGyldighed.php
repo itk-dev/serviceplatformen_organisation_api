@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BrugerRegistreringGyldighedRepository;
+use App\Trait\GyldighedStatusKodeTrait;
 use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -12,13 +13,11 @@ use Symfony\Component\Uid\UuidV4;
 class BrugerRegistreringGyldighed
 {
     use VirkningTrait;
+    use GyldighedStatusKodeTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: "uuid", unique: true)]
     private UuidV4 $id;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $gyldighedStatusKode = null;
 
     #[ORM\ManyToOne(inversedBy: 'gyldigheder')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,18 +31,6 @@ class BrugerRegistreringGyldighed
     public function getId(): Uuid
     {
         return $this->id;
-    }
-
-    public function getGyldighedStatusKode(): ?string
-    {
-        return $this->gyldighedStatusKode;
-    }
-
-    public function setGyldighedStatusKode(?string $gyldighedStatusKode): static
-    {
-        $this->gyldighedStatusKode = $gyldighedStatusKode;
-
-        return $this;
     }
 
     public function getBrugerRegistrering(): ?BrugerRegistrering

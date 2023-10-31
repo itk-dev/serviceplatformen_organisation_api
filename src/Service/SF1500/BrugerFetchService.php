@@ -214,7 +214,7 @@ class BrugerFetchService implements FetchServiceInterface
             return;
         }
 
-        $this->handleRelationsAdresser($brugerRegistrering, $relation->getAdresser());
+        $this->handleAdresser($brugerRegistrering, $relation->getAdresser());
         $this->handleBrugerTyper($brugerRegistrering, $relation->getBrugerTyper());
         $this->handleTilknyttedeOpgaver($brugerRegistrering, $relation->getTilknyttedeOpgaver());
         $this->handleTilhoerer($brugerRegistrering, $relation->getTilhoerer());
@@ -227,7 +227,7 @@ class BrugerFetchService implements FetchServiceInterface
 
     }
 
-    private function handleRelationsAdresser(BrugerRegistrering $brugerRegistrering, ?array $adresser)
+    private function handleAdresser(BrugerRegistrering $brugerRegistrering, ?array $adresser)
     {
         if (null === $adresser) {
             return;
