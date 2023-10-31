@@ -27,6 +27,10 @@ class FetchData
 //        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
 //        $brugerService->fetch($pageSize, $max);
 
+        // Adresse data.
+        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
+        $adresseService->fetch($pageSize, $max);
+
 
         return new Response(
             '<html lang="en"><body>Lucky number: '.'</body></html>'

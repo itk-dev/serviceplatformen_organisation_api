@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Service\SF1500\AdresseFetchService;
 use App\Service\SF1500\BrugerFetchService;
 use App\Service\SF1500\PersonFetchService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,5 +28,13 @@ class FetchServiceFactory
         $brugerFetchService->setLogger($logger);
 
         return $brugerFetchService;
+    }
+
+    public function adresseService(?LoggerInterface $logger): AdresseFetchService
+    {
+        $adresseFetchService = new AdresseFetchService($this->entityManager, $this->sf1500Service);
+        $adresseFetchService->setLogger($logger);
+
+        return $adresseFetchService;
     }
 }
