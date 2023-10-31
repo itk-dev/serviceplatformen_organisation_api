@@ -28,8 +28,12 @@ class FetchData
 //        $brugerService->fetch($pageSize, $max);
 
         // Adresse data.
-        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
-        $adresseService->fetch($pageSize, $max);
+//        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
+//        $adresseService->fetch($pageSize, $max);
+
+        // OrganisationFunktion data.
+        $organisationFunktionService = $this->fetchServiceFactory->organisationFunktionService($this->logger);
+        $organisationFunktionService->fetch($pageSize, $max);
 
 
         return new Response(
