@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\BrugerRegistreringTilknyttedePersoner;
 use App\Entity\OrganisationFunktion;
 use App\Entity\OrganisationFunktionRegistrering;
 use App\Entity\OrganisationFunktionRegistreringEgenskab;
@@ -45,13 +44,13 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-        $relationListeType = new RelationListeType();
-        $relationListeType->addToTilknyttedeBrugere(
-            new BrugerFlerRelationType(
-                null,
-                new UnikIdType('ffdb7559-2ad3-4662-9fd4-d69849939b66', null)
-            )
-        );
+//        $relationListeType = new RelationListeType();
+//        $relationListeType->addToTilknyttedeBrugere(
+//            new BrugerFlerRelationType(
+//                null,
+//                new UnikIdType('ffdb7559-2ad3-4662-9fd4-d69849939b66', null)
+//            )
+//        );
 
         while(true) {
             $this->logger->debug(sprintf('Fetching OrganisationFunktion data, offset: %d , max: %d', $total, $max));
@@ -59,7 +58,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
-                ->setRelationListe($relationListeType)
+//                ->setRelationListe($relationListeType)
             ;
 
             /** @var SoegOutputType $data */

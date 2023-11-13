@@ -10,7 +10,6 @@ use App\Entity\OrganisationEnhedRegistreringEnhedstype;
 use App\Entity\OrganisationEnhedRegistreringGyldighed;
 use App\Entity\OrganisationEnhedRegistreringOverordnet;
 use App\Entity\OrganisationEnhedRegistreringTilhoerer;
-use App\Entity\OrganisationFunktionRegistreringFunktionstype;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;

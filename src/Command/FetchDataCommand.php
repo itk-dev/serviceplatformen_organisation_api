@@ -23,19 +23,11 @@ class FetchDataCommand extends Command
         parent::__construct();
     }
 
-//    protected function configure(): void
-//    {
-//        $this
-//            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-//            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-//        ;
-//    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $pageSize = 1;
-        $max = 1;
+        $pageSize = 1000;
+        $max = 5000;
 
         $this->fetchData->setLogger(new ConsoleLogger($output));
 

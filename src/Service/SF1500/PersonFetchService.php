@@ -30,9 +30,9 @@ class PersonFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-        $attributListe = new AttributListeType();
-        $attributListe->addToEgenskab((new EgenskabType())
-            ->setNavnTekst('Jeppe Kuhl*'));
+//        $attributListe = new AttributListeType();
+//        $attributListe->addToEgenskab((new EgenskabType())
+//            ->setNavnTekst('Jeppe Kuhl*'));
 
         while(true) {
             $this->logger->debug(sprintf('Fetching person data, offset: %d , max: %d', $total, $max));
@@ -40,7 +40,7 @@ class PersonFetchService implements FetchServiceInterface
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
-                ->setAttributListe($attributListe)
+//                ->setAttributListe($attributListe)
             ;
 
             /** @var \ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType $data */
@@ -61,14 +61,12 @@ class PersonFetchService implements FetchServiceInterface
 
             $personList = $this->clientList()->_list_11(new ListInputType($ids));
 
-            $this->entityManager->getConnection()->beginTransaction();
 
             foreach ($personList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
             $this->entityManager->flush();
-            $this->entityManager->getConnection()->commit();
             $this->entityManager->clear();
             gc_collect_cycles();
         }

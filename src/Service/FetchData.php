@@ -20,8 +20,8 @@ class FetchData
         $this->logger->debug('Fetching data');
 
         // Person data.
-//        $personService = $this->fetchServiceFactory->personService($this->logger);
-//        $personService->fetch($pageSize, $max);
+        $personService = $this->fetchServiceFactory->personService($this->logger);
+        $personService->fetch($pageSize, $max);
 
         // Bruger data.
 //        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
@@ -36,8 +36,8 @@ class FetchData
 //        $organisationFunktionService->fetch($pageSize, $max);
 
         // OrganisationEnhed data.
-        $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
-        $organisationEnhedService->fetch($pageSize, $max);
+//        $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
+//        $organisationEnhedService->fetch($pageSize, $max);
 
 
         return new Response(
