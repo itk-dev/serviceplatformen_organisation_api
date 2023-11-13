@@ -21,28 +21,28 @@ class OrganisationFunktionRegistreringTilknyttedeBrugereRepository extends Servi
         parent::__construct($registry, OrganisationFunktionRegistreringTilknyttedeBrugere::class);
     }
 
-//    /**
-//     * @return OrganisationFunktionRegistreringTilknyttedeBrugere[] Returns an array of OrganisationFunktionRegistreringTilknyttedeBrugere objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return OrganisationFunktionRegistreringTilknyttedeBrugere[] Returns an array of OrganisationFunktionRegistreringTilknyttedeBrugere objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('o')
+    //            ->andWhere('o.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('o.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?OrganisationFunktionRegistreringTilknyttedeBrugere
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?OrganisationFunktionRegistreringTilknyttedeBrugere
+    //    {
+    //        return $this->createQueryBuilder('o')
+    //            ->andWhere('o.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

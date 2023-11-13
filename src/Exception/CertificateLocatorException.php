@@ -5,6 +5,6 @@ namespace App\Exception;
 /**
  * Certificate locator exception.
  */
-class CertificateLocatorException extends Exception {
-
+class CertificateLocatorException extends Exception
+{
 }

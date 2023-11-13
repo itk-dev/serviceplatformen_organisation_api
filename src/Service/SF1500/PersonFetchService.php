@@ -30,13 +30,13 @@ class PersonFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-//        $attributListe = new AttributListeType();
-//        $attributListe->addToEgenskab((new EgenskabType())
-//            ->setNavnTekst('Jeppe Kuhl*'));
+        //        $attributListe = new AttributListeType();
+        //        $attributListe->addToEgenskab((new EgenskabType())
+        //            ->setNavnTekst('Jeppe Kuhl*'));
 
-        while(true) {
+        while (true) {
             $this->logger->debug(sprintf('Fetching person data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
+            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
@@ -45,7 +45,6 @@ class PersonFetchService implements FetchServiceInterface
 
             /** @var \ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType $data */
             $soeg = $this->clientSoeg()->soeg($request);
-
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
@@ -61,8 +60,7 @@ class PersonFetchService implements FetchServiceInterface
 
             $personList = $this->clientList()->_list_11(new ListInputType($ids));
 
-
-            foreach ($personList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            foreach ($personList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
@@ -102,8 +100,7 @@ class PersonFetchService implements FetchServiceInterface
 
     private function handleRegistrering(Person $person, array $registreringer): void
     {
-        foreach ($registreringer as /** @var RegistreringType $registrering */ $registrering) {
-
+        foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $personRegistrering = new PersonRegistrering();
             $person->addRegistreringer($personRegistrering);
 
@@ -127,10 +124,9 @@ class PersonFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
+        foreach ($egenskaber as /* @var EgenskabType $egenskab */ $egenskab) {
             $personRegistreringEgenskab = new PersonRegistreringEgenskab();
             $personRegistrering->addEgenskaber($personRegistreringEgenskab);
-
 
             $personRegistreringEgenskab
                 ->setNavnTekst($egenskab->getNavnTekst())

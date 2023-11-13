@@ -24,7 +24,8 @@ class CertificateLocator
     /**
      * Get certificate locator.
      */
-    public function getCertificateLocator(): CertificateLocatorInterface {
+    public function getCertificateLocator(): CertificateLocatorInterface
+    {
         $certificateSettings = $this->options;
 
         $locatorType = $certificateSettings['certificate_locator_type'];
@@ -54,12 +55,12 @@ class CertificateLocator
                 $certificateSettings['certificate_version'],
                 $certificateSettings['certificate_passphrase'],
             );
-        }
-        elseif (self::LOCATOR_TYPE_FILE_SYSTEM === $locatorType) {
-            $certificatepath = realpath($certificateSettings['certificate_path']) ?: NULL;
-            if (NULL === $certificatepath) {
+        } elseif (self::LOCATOR_TYPE_FILE_SYSTEM === $locatorType) {
+            $certificatepath = realpath($certificateSettings['certificate_path']) ?: null;
+            if (null === $certificatepath) {
                 throw new CertificateLocatorException(sprintf('Invalid certificate path %s', $certificateSettings['certificate_path']));
             }
+
             return new FilesystemCertificateLocator($certificatepath, $certificateSettings['certificate_passphrase']);
         }
 

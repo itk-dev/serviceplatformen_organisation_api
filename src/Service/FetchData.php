@@ -24,25 +24,22 @@ class FetchData
         $personService->fetch($pageSize, $max);
 
         // Bruger data.
-//        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
-//        $brugerService->fetch($pageSize, $max);
+        //        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
+        //        $brugerService->fetch($pageSize, $max);
 
         // Adresse data.
-//        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
-//        $adresseService->fetch($pageSize, $max);
+        //        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
+        //        $adresseService->fetch($pageSize, $max);
 
         // OrganisationFunktion data.
-//        $organisationFunktionService = $this->fetchServiceFactory->organisationFunktionService($this->logger);
-//        $organisationFunktionService->fetch($pageSize, $max);
+        //        $organisationFunktionService = $this->fetchServiceFactory->organisationFunktionService($this->logger);
+        //        $organisationFunktionService->fetch($pageSize, $max);
 
         // OrganisationEnhed data.
-//        $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
-//        $organisationEnhedService->fetch($pageSize, $max);
-
+        //        $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
+        //        $organisationEnhedService->fetch($pageSize, $max);
 
         return new Response(
-            '<html lang="en"><body>Lucky number: '.'</body></html>'
-        );
+            '<html lang="en"><body>Lucky number: </body></html>');
     }
-
 }

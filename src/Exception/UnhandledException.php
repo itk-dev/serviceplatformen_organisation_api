@@ -5,6 +5,6 @@ namespace App\Exception;
 /**
  * Unhandled fetch exception.
  */
-class UnhandledException  extends Exception {
-
+class UnhandledException extends Exception
+{
 }

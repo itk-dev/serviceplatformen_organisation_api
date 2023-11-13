@@ -16,7 +16,7 @@ class OrganisationFunktionRegistreringEgenskab
     use BrugervendtNoegleTekstTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
     #[ORM\Column(length: 255, nullable: true)]

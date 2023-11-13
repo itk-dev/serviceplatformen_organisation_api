@@ -13,21 +13,21 @@ use App\Entity\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\GyldighedType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\_List;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\Soeg;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\BrugerFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\EgenskabType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\FiltreretOejebliksbilledeType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\GyldighedType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\KlasseRelationType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\LokalUdvidelseType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\OrganisationEnhedFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\OrganisationFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\RegistreringType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\BrugerFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\RelationListeType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\FiltreretOejebliksbilledeType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegOutputType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\_List;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\UnikIdType;
 use Psr\Log\LoggerAwareTrait;
 
@@ -44,17 +44,17 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-//        $relationListeType = new RelationListeType();
-//        $relationListeType->addToTilknyttedeBrugere(
-//            new BrugerFlerRelationType(
-//                null,
-//                new UnikIdType('ffdb7559-2ad3-4662-9fd4-d69849939b66', null)
-//            )
-//        );
+        //        $relationListeType = new RelationListeType();
+        //        $relationListeType->addToTilknyttedeBrugere(
+        //            new BrugerFlerRelationType(
+        //                null,
+        //                new UnikIdType('ffdb7559-2ad3-4662-9fd4-d69849939b66', null)
+        //            )
+        //        );
 
-        while(true) {
+        while (true) {
             $this->logger->debug(sprintf('Fetching OrganisationFunktion data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
+            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
@@ -63,7 +63,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
 
             /** @var SoegOutputType $data */
             $soeg = $this->clientSoeg()->soeg($request);
-
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
@@ -77,13 +76,11 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
                 break;
             }
 
-
             $brugerList = $this->clientList()->_list_10(new ListInputType($ids));
-
 
             $this->entityManager->getConnection()->beginTransaction();
 
-            foreach ($brugerList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
@@ -114,7 +111,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
     {
-
         $organisationFunktion = new OrganisationFunktion();
         $organisationFunktion->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
 
@@ -125,8 +121,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
 
     private function handleRegistrering(OrganisationFunktion $organisationFunktion, array $registreringer)
     {
-        foreach ($registreringer as /** @var RegistreringType $registrering */ $registrering) {
-
+        foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $organisationFunktionRegistrering = new OrganisationFunktionRegistrering();
             $organisationFunktion->addRegistreringer($organisationFunktionRegistrering);
 
@@ -140,7 +135,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
 
             $this->entityManager->persist($organisationFunktionRegistrering);
 
-
             $this->handleEgenskab($organisationFunktionRegistrering, $registrering->getAttributListe()->getEgenskab());
             $this->handleGyldighed($organisationFunktionRegistrering, $registrering->getTilstandListe()->getGyldighed());
             $this->handleRelation($organisationFunktionRegistrering, $registrering->getRelationListe());
@@ -153,8 +147,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
-
+        foreach ($egenskaber as /* @var EgenskabType $egenskab */ $egenskab) {
             $organisationFunktionRegistreringEgenskab = new OrganisationFunktionRegistreringEgenskab();
             $organisationFunktionRegistrering->addEgenskaber($organisationFunktionRegistreringEgenskab);
 
@@ -187,8 +180,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($gyldigheder as /** @var GyldighedType $gyldighed */ $gyldighed) {
-
+        foreach ($gyldigheder as /* @var GyldighedType $gyldighed */ $gyldighed) {
             $organisationFunktionRegistreringGyldighed = new OrganisationFunktionRegistreringGyldighed();
 
             $organisationFunktionRegistrering->addGyldigheder($organisationFunktionRegistreringGyldighed);
@@ -237,9 +229,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $adresser) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -281,9 +272,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeOpgaver) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -293,8 +283,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($tilknyttedeBrugere as /** @var BrugerFlerRelationType $tilknyttedeBruger */ $tilknyttedeBruger) {
-
+        foreach ($tilknyttedeBrugere as /* @var BrugerFlerRelationType $tilknyttedeBruger */ $tilknyttedeBruger) {
             $organisationFunktionRegistreringTilknyttedeBrugere = new OrganisationFunktionRegistreringTilknyttedeBrugere();
             $organisationFunktionRegistrering->addTilknyttedeBrugere($organisationFunktionRegistreringTilknyttedeBrugere);
 
@@ -330,8 +319,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($tilknyttedeEnheder as /** @var OrganisationEnhedFlerRelationType $tilknyttedeEnhed */ $tilknyttedeEnhed) {
-
+        foreach ($tilknyttedeEnheder as /* @var OrganisationEnhedFlerRelationType $tilknyttedeEnhed */ $tilknyttedeEnhed) {
             $organisationFunktionRegistreringTilknyttedeEnheder = new OrganisationFunktionRegistreringTilknyttedeEnheder();
             $organisationFunktionRegistrering->addTilknyttedeEnheder($organisationFunktionRegistreringTilknyttedeEnheder);
 
@@ -365,9 +353,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeInteressefaellesskaber) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -377,8 +364,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($tilknyttedeOrganisationer as /** @var OrganisationFlerRelationType $tilknyttedeOrganisation */ $tilknyttedeOrganisation) {
-
+        foreach ($tilknyttedeOrganisationer as /* @var OrganisationFlerRelationType $tilknyttedeOrganisation */ $tilknyttedeOrganisation) {
             $organisationFunktionRegistreringTilknyttedeOrganisationer = new OrganisationFunktionRegistreringTilknyttedeOrganisationer();
             $organisationFunktionRegistrering->addTilknyttedeOrganisationer($organisationFunktionRegistreringTilknyttedeOrganisationer);
 
@@ -412,9 +398,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedePersoner) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -422,9 +407,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeItSystemer) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -432,9 +416,8 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         if (null === $lokalUdvidelse) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 }

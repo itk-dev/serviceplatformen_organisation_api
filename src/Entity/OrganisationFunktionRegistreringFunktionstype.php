@@ -16,7 +16,7 @@ class OrganisationFunktionRegistreringFunktionstype
     use ReferenceIdTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
     public function __construct()

@@ -10,9 +10,9 @@ use App\Service\SF1500\PersonFetchService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
-class FetchServiceFactory
+readonly class FetchServiceFactory
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
+    public function __construct(private EntityManagerInterface $entityManager, private SF1500Service $sf1500Service)
     {
     }
 

@@ -11,7 +11,7 @@ class SF1500Service
     /**
      * The SF1500 service.
      */
-    private ?SF1500 $sf1500 = NULL;
+    private ?SF1500 $sf1500 = null;
 
     public function __construct(private readonly CertificateLocator $certificateLocator, private readonly array $options)
     {
@@ -20,8 +20,9 @@ class SF1500Service
     /**
      * Gets SF1500 Service.
      */
-    public function getSF1500(): SF1500 {
-        if (NULL === $this->sf1500) {
+    public function getSF1500(): SF1500
+    {
+        if (null === $this->sf1500) {
             $certificateSettings = $this->options;
 
             $soapClient = new SoapClient([

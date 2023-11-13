@@ -5,8 +5,6 @@ namespace App\Service\SF1500;
 use App\Entity\Adresse;
 use App\Entity\AdresseRegistrering;
 use App\Entity\AdresseRegistreringEgenskab;
-use App\Entity\PersonRegistrering;
-use App\Entity\PersonRegistreringEgenskab;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,10 +14,10 @@ use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\AttributListeType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\EgenskabType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\FiltreretOejebliksbilledeType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\ListInputType;
+use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegOutputType;
-use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\TilstandListeType;
 use Psr\Log\LoggerAwareTrait;
 
@@ -36,14 +34,14 @@ class AdresseFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-//        $attributListe = new AttributListeType();
-//        $attributListe->addToEgenskab((new EgenskabType())
-//            ->setAdresseTekst('jekua*')
-//        );
+        //        $attributListe = new AttributListeType();
+        //        $attributListe->addToEgenskab((new EgenskabType())
+        //            ->setAdresseTekst('jekua*')
+        //        );
 
-        while(true) {
+        while (true) {
             $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
+            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
@@ -52,7 +50,6 @@ class AdresseFetchService implements FetchServiceInterface
 
             /** @var SoegOutputType $data */
             $soeg = $this->clientSoeg()->soeg($request);
-
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
@@ -66,13 +63,11 @@ class AdresseFetchService implements FetchServiceInterface
                 break;
             }
 
-
             $brugerList = $this->clientList()->_list(new ListInputType($ids));
-
 
             $this->entityManager->getConnection()->beginTransaction();
 
-            foreach ($brugerList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
@@ -113,8 +108,7 @@ class AdresseFetchService implements FetchServiceInterface
 
     private function handleRegistrering(Adresse $adresse, ?array $registreringer)
     {
-        foreach ($registreringer as /** @var RegistreringType $registrering */ $registrering) {
-
+        foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $adresseRegistrering = new AdresseRegistrering();
             $adresse->addRegistreringer($adresseRegistrering);
 
@@ -140,10 +134,9 @@ class AdresseFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
+        foreach ($egenskaber as /* @var EgenskabType $egenskab */ $egenskab) {
             $adresseRegistreringEgenskab = new AdresseRegistreringEgenskab();
             $adresseRegistrering->addEgenskaber($adresseRegistreringEgenskab);
-
 
             $adresseRegistreringEgenskab
                 ->setAdresseTekst($egenskab->getAdresseTekst())
@@ -172,9 +165,8 @@ class AdresseFetchService implements FetchServiceInterface
     {
         if (empty($relationListeType->jsonSerialize())) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -182,9 +174,8 @@ class AdresseFetchService implements FetchServiceInterface
     {
         if (empty($tilstandListeType->jsonSerialize())) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 }

@@ -41,13 +41,13 @@ class BrugerFetchService implements FetchServiceInterface
         $total = 0;
 
         // TODO: REMOVE ONCE TESTED AND WORKING
-//        $attributListe = new AttributListeType();
-//        $attributListe->addToEgenskab((new EgenskabType())
-//            ->setBrugerNavn('az55488'));
+        //        $attributListe = new AttributListeType();
+        //        $attributListe->addToEgenskab((new EgenskabType())
+        //            ->setBrugerNavn('az55488'));
 
-        while(true) {
+        while (true) {
             $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage()/1024/1024));
+            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max))
                 ->setFoersteResultatReference($total)
@@ -56,7 +56,6 @@ class BrugerFetchService implements FetchServiceInterface
 
             /** @var SoegOutputType $data */
             $soeg = $this->clientSoeg()->soeg($request);
-
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
@@ -70,13 +69,11 @@ class BrugerFetchService implements FetchServiceInterface
                 break;
             }
 
-
             $brugerList = $this->clientList()->_list_1(new ListInputType($ids));
-
 
             $this->entityManager->getConnection()->beginTransaction();
 
-            foreach ($brugerList->getFiltreretOejebliksbillede() as /** @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
@@ -117,8 +114,7 @@ class BrugerFetchService implements FetchServiceInterface
 
     private function handleRegistrering(Bruger $bruger, array $registreringer): void
     {
-        foreach ($registreringer as /** @var RegistreringType $registrering */ $registrering) {
-
+        foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $brugerRegistrering = new BrugerRegistrering();
             $bruger->addRegistreringer($brugerRegistrering);
 
@@ -132,7 +128,6 @@ class BrugerFetchService implements FetchServiceInterface
 
             $this->entityManager->persist($brugerRegistrering);
 
-
             $this->handleEgenskab($brugerRegistrering, $registrering->getAttributListe()->getEgenskab());
             $this->handleGyldighed($brugerRegistrering, $registrering->getTilstandListe()->getGyldighed());
             $this->handleRelation($brugerRegistrering, $registrering->getRelationListe());
@@ -145,7 +140,7 @@ class BrugerFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($egenskaber as /** @var EgenskabType $egenskab */ $egenskab) {
+        foreach ($egenskaber as /* @var EgenskabType $egenskab */ $egenskab) {
             $brugerRegistreringEgenskab = new BrugerRegistreringEgenskab();
 
             $brugerRegistrering->addEgenskaber($brugerRegistreringEgenskab);
@@ -180,8 +175,7 @@ class BrugerFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($gyldigheder as /** @var GyldighedType $gyldighed */ $gyldighed) {
-
+        foreach ($gyldigheder as /* @var GyldighedType $gyldighed */ $gyldighed) {
             $brugerRegistreringGyldighed = new BrugerRegistreringGyldighed();
 
             $brugerRegistrering->addGyldigheder($brugerRegistreringGyldighed);
@@ -224,7 +218,6 @@ class BrugerFetchService implements FetchServiceInterface
         $this->handleTilknyttedePersoner($brugerRegistrering, $relation->getTilknyttedePersoner());
         $this->handleTilknyttedeItSystemer($brugerRegistrering, $relation->getTilknyttedeItSystemer());
         $this->handleLokalUdvidelse($brugerRegistrering, $relation->getLokalUdvidelse());
-
     }
 
     private function handleAdresser(BrugerRegistrering $brugerRegistrering, ?array $adresser)
@@ -233,8 +226,7 @@ class BrugerFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($adresser as /** @var AdresseFlerRelationType $adresse */ $adresse) {
-
+        foreach ($adresser as /* @var AdresseFlerRelationType $adresse */ $adresse) {
             $brugerRegistreringAdresse = new BrugerRegistreringAdresse();
             $brugerRegistrering->addAdresser($brugerRegistreringAdresse);
 
@@ -290,9 +282,8 @@ class BrugerFetchService implements FetchServiceInterface
     {
         if (null === $brugerTyper) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -300,9 +291,8 @@ class BrugerFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeOpgaver) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -338,16 +328,14 @@ class BrugerFetchService implements FetchServiceInterface
         ;
 
         $this->entityManager->persist($brugerRegistreringTilhoerer);
-
     }
 
     private function handleTilknyttedeEnheder(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeEnheder)
     {
         if (null === $tilknyttedeEnheder) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -355,9 +343,8 @@ class BrugerFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeInteressefaellesskaber) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -365,9 +352,8 @@ class BrugerFetchService implements FetchServiceInterface
     {
         if (null === $tilknyttedeOrganisationer) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -377,8 +363,7 @@ class BrugerFetchService implements FetchServiceInterface
             return;
         }
 
-        foreach ($tilknyttedePersoner as /** @var PersonFlerRelationType $tilknyttedePerson */ $tilknyttedePerson) {
-
+        foreach ($tilknyttedePersoner as /* @var PersonFlerRelationType $tilknyttedePerson */ $tilknyttedePerson) {
             $brugerRegistreringTilknyttedePersoner = new BrugerRegistreringTilknyttedePersoner();
             $brugerRegistrering->addTilknyttedePersoner($brugerRegistreringTilknyttedePersoner);
 
@@ -406,16 +391,14 @@ class BrugerFetchService implements FetchServiceInterface
 
             $this->entityManager->persist($brugerRegistreringTilknyttedePersoner);
         }
-
     }
 
     private function handleTilknyttedeItSystemer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeItSystemer)
     {
         if (null === $tilknyttedeItSystemer) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 
@@ -423,9 +406,8 @@ class BrugerFetchService implements FetchServiceInterface
     {
         if (null === $lokalUdvidelse) {
             return;
-        }
-        else {
-            throw new UnhandledException(sprintf("Unhandled data in %s: %s.", __CLASS__, __FUNCTION__));
+        } else {
+            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
         }
     }
 }

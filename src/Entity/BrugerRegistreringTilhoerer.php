@@ -16,7 +16,7 @@ class BrugerRegistreringTilhoerer
     use ReferenceIdTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
     #[ORM\ManyToOne(inversedBy: 'tilhoerer')]
