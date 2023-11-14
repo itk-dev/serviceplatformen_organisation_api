@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Views\FunktionsData;
+use App\Entity\Model\FunktionsData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

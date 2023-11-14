@@ -98,6 +98,37 @@ This is done to decrease number of calls needed when requesting specific data.
 
 
 
+## API
+
+### Search for users by name
+
+```sh
+curl -X 'GET' \
+  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann' \
+  -H 'accept: application/ld+json'
+```
+
+#### Search parameters
+
+
+
+### Get info on user
+
+```sh
+curl -X 'GET' \
+  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66' \
+  -H 'accept: application/ld+json'
+```
+
+### Get funktioner
+
+```sh
+curl -X 'GET' \
+  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner' \
+  -H 'accept: application/ld+json'
+```
+
+
 ### Coding standard tests
 
 The following commands let you test that the code follows the coding standards

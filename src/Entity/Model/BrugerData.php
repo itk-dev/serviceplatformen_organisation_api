@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Entity\Model;
+
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\Repository\BrugerDataRepository;
+use App\State\BrugerFunktionerProvider;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ORM\Entity(repositoryClass: BrugerDataRepository::class, readOnly: true)]
+#[ORM\Table(name: 'bruger_data')]
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: 'bruger/{id}',
+            routePrefix: 'v1/',
+            shortName: 'Bruger',
+            normalizationContext: ['groups' => 'bruger:item'],
+        ),
+        new GetCollection(
+            uriTemplate: 'bruger',
+            routePrefix: 'v1/',
+            shortName: 'Bruger',
+            normalizationContext: ['groups' => 'bruger:item'],
+        ),
+        new GetCollection(
+            uriTemplate: 'bruger/{id}/funktioner',
+            routePrefix: 'v1/',
+            shortName: 'Bruger',
+            normalizationContext: ['groups' => ['funktion:item']],
+            provider: BrugerFunktionerProvider::class,
+        ),
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'navn' => 'partial',
+    'az' => 'exact',
+    'email' => 'exact',
+    'telefon' => 'exact',
+    'lokation' => 'exact',
+])]
+class BrugerData
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    #[ORM\Column]
+    #[Groups(['bruger:item'])]
+    private string $id;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['bruger:item'])]
+    private string $navn;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['bruger:item'])]
+    private string $az;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['bruger:item'])]
+    private string $email;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['bruger:item'])]
+    private string $telefon;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['bruger:item'])]
+    private string $lokation;
+
+    private function __construct()
+    {
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getNavn(): string
+    {
+        return $this->navn;
+    }
+
+    public function getAz(): string
+    {
+        return $this->az;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getTelefon(): string
+    {
+        return $this->telefon;
+    }
+
+    public function getLokation(): string
+    {
+        return $this->lokation;
+    }
+}

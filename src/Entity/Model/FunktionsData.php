@@ -1,27 +1,50 @@
 <?php
 
-namespace App\Entity\Views;
+namespace App\Entity\Model;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\FunktionsDataRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FunktionsDataRepository::class, readOnly: true)]
 #[ORM\Table(name: 'funktions_data')]
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: 'funktion/{id}',
+            routePrefix: 'v1/',
+            shortName: 'Funktion',
+            normalizationContext: ['groups' => 'funktion:item']
+        ),
+    ],
+    paginationEnabled: false,
+)]
 class FunktionsData
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column]
+    #[Groups(['funktion:item'])]
     private string $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['funktion:item'])]
     private string $funktionsnavn;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['funktion:item'])]
     private string $enhedsnavn;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['funktion:item'])]
     private string $adresse;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['funktion:item'])]
+    private string $brugerId;
 
     private function __construct()
     {
@@ -45,5 +68,10 @@ class FunktionsData
     public function getAdresse(): string
     {
         return $this->adresse;
+    }
+
+    public function getBrugerId(): string
+    {
+        return $this->brugerId;
     }
 }
