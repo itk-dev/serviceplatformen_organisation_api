@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\PersonRegistrering;
+use App\Entity\Organisation\PersonRegistrering;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

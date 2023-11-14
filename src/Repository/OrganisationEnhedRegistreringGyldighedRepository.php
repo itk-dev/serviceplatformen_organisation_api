@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrganisationEnhedRegistreringGyldighed;
+use App\Entity\Organisation\OrganisationEnhedRegistreringGyldighed;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

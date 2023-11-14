@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
+use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

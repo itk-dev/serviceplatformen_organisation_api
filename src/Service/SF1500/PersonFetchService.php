@@ -2,14 +2,13 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Person;
-use App\Entity\PersonRegistrering;
-use App\Entity\PersonRegistreringEgenskab;
+use App\Entity\Organisation\Person;
+use App\Entity\Organisation\PersonRegistrering;
+use App\Entity\Organisation\PersonRegistreringEgenskab;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\Soeg;
-use ItkDev\Serviceplatformen\SF1500\Person\StructType\AttributListeType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\EgenskabType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\FiltreretOejebliksbilledeType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\ListInputType;
@@ -38,7 +37,7 @@ class PersonFetchService implements FetchServiceInterface
             $this->logger->debug(sprintf('Fetching person data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max))
+                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
 //                ->setAttributListe($attributListe)
             ;
@@ -48,13 +47,7 @@ class PersonFetchService implements FetchServiceInterface
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            if (!is_countable($ids)) {
-                break;
-            }
-
-            $total += count($ids);
-
-            if (empty($ids) || $total > $max) {
+            if (!is_countable($ids) || empty($ids)) {
                 break;
             }
 
@@ -67,6 +60,12 @@ class PersonFetchService implements FetchServiceInterface
             $this->entityManager->flush();
             $this->entityManager->clear();
             gc_collect_cycles();
+
+            $total += count($ids);
+
+            if ($total >= $max) {
+                break;
+            }
         }
 
         $this->logger->debug(sprintf('Finished fetching person data'));

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\BrugerRegistreringEgenskab;
+use App\Entity\Organisation\BrugerRegistreringEgenskab;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

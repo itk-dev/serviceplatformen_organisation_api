@@ -2,14 +2,15 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\OrganisationEnhed;
-use App\Entity\OrganisationEnhedRegistrering;
-use App\Entity\OrganisationEnhedRegistreringAdresser;
-use App\Entity\OrganisationEnhedRegistreringEgenskab;
-use App\Entity\OrganisationEnhedRegistreringEnhedstype;
-use App\Entity\OrganisationEnhedRegistreringGyldighed;
-use App\Entity\OrganisationEnhedRegistreringOverordnet;
-use App\Entity\OrganisationEnhedRegistreringTilhoerer;
+use App\Entity\Organisation\OrganisationEnhed;
+use App\Entity\Organisation\OrganisationEnhedRegistrering;
+use App\Entity\Organisation\OrganisationEnhedRegistreringAdresser;
+use App\Entity\Organisation\OrganisationEnhedRegistreringEgenskab;
+use App\Entity\Organisation\OrganisationEnhedRegistreringEnhedstype;
+use App\Entity\Organisation\OrganisationEnhedRegistreringGyldighed;
+use App\Entity\Organisation\OrganisationEnhedRegistreringOpgave;
+use App\Entity\Organisation\OrganisationEnhedRegistreringOverordnet;
+use App\Entity\Organisation\OrganisationEnhedRegistreringTilhoerer;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\GyldighedType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\KlasseRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\LokalUdvidelseType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OpgaverFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OrganisationEnhedRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OrganisationFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\RegistreringType;
@@ -48,11 +50,12 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
         //        $attributListe->addToEgenskab((new EgenskabType())
         //            ->setBrugerNavn('az55488'));
 
+
         while (true) {
-            $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
+            $this->logger->debug(sprintf('Fetching organisation enhed data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max))
+                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
 //                ->setAttributListe($attributListe)
             ;
@@ -62,31 +65,28 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            if (!is_countable($ids)) {
-                break;
-            }
-
-            $total += count($ids);
-
-            if (empty($ids) || $total > $max) {
+            if (!is_countable($ids) || empty($ids)) {
                 break;
             }
 
             $brugerList = $this->clientList()->_list_9(new ListInputType($ids));
-
-            $this->entityManager->getConnection()->beginTransaction();
 
             foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
             $this->entityManager->flush();
-            $this->entityManager->getConnection()->commit();
             $this->entityManager->clear();
             gc_collect_cycles();
+
+            $total += count($ids);
+
+            if ($total >= $max) {
+                break;
+            }
         }
 
-        $this->logger->debug(sprintf('Finished fetching bruger data'));
+        $this->logger->debug(sprintf('Finished fetching organisation enhed data'));
     }
 
     public function clientSoeg(array $options = []): Soeg
@@ -342,8 +342,58 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
     {
         if (null === $opgaver) {
             return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
+        }
+
+
+        foreach ($opgaver as /* @var OpgaverFlerRelationType $opgaver */ $opgave) {
+            $organisationEnhedRegistreringOpgave = new OrganisationEnhedRegistreringOpgave();
+            $organisationEnhedRegistrering->addOpgaver($organisationEnhedRegistreringOpgave);
+
+            $organisationEnhedRegistreringOpgave
+                ->setIndeks($opgave->getIndeks())
+            ;
+
+            // Virkning.
+            $virkning = $opgave->getVirkning();
+
+            $organisationEnhedRegistreringOpgave
+                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
+                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
+                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
+                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
+                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
+                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
+                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
+                ->setVirkningNoteTekst($virkning->getNoteTekst())
+            ;
+
+            // Reference id.
+            $referenceId = $opgave->getReferenceID();
+
+            $organisationEnhedRegistreringOpgave
+                ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
+                ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
+            ;
+
+            // Rolle.
+            $rolle = $opgave->getRolle();
+
+            $organisationEnhedRegistreringOpgave
+                ->setRolleUUIDIdentifikator($rolle->getUUIDIdentifikator())
+                ->setRolleURNIdentifikator($rolle->getURNIdentifikator())
+                ->setRolleLabel($rolle->getLabel())
+            ;
+
+            // Type.
+            $type = $opgave->getType();
+
+            $organisationEnhedRegistreringOpgave
+                ->setTypeUUIDIdentifikator($type->getUUIDIdentifikator())
+                ->setTypeURNIdentifikator($type->getURNIdentifikator())
+                ->setTypeLabel($type->getLabel())
+            ;
+
+            $this->entityManager->persist($organisationEnhedRegistreringOpgave);
         }
     }
 

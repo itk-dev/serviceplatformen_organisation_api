@@ -2,14 +2,14 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\OrganisationFunktion;
-use App\Entity\OrganisationFunktionRegistrering;
-use App\Entity\OrganisationFunktionRegistreringEgenskab;
-use App\Entity\OrganisationFunktionRegistreringFunktionstype;
-use App\Entity\OrganisationFunktionRegistreringGyldighed;
-use App\Entity\OrganisationFunktionRegistreringTilknyttedeBrugere;
-use App\Entity\OrganisationFunktionRegistreringTilknyttedeEnheder;
-use App\Entity\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
+use App\Entity\Organisation\OrganisationFunktion;
+use App\Entity\Organisation\OrganisationFunktionRegistrering;
+use App\Entity\Organisation\OrganisationFunktionRegistreringEgenskab;
+use App\Entity\Organisation\OrganisationFunktionRegistreringFunktionstype;
+use App\Entity\Organisation\OrganisationFunktionRegistreringGyldighed;
+use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeBrugere;
+use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeEnheder;
+use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +28,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\Registrering
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegOutputType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\UnikIdType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\TilstandListeType;
 use Psr\Log\LoggerAwareTrait;
 
 class OrganisationFunktionFetchService implements FetchServiceInterface
@@ -52,12 +52,23 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         //            )
         //        );
 
+
+        $tilstandListeType = new TilstandListeType();
+        $tilstandListeType->addToGyldighed(
+            new GyldighedType(
+                null,
+                'Aktiv'
+            )
+        );
+
         while (true) {
-            $this->logger->debug(sprintf('Fetching OrganisationFunktion data, offset: %d , max: %d', $total, $max));
+            $this->logger->debug(sprintf('Fetching organisation funktion data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max))
+                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
+                // Only want active objects.
+                ->setTilstandListe($tilstandListeType)
 //                ->setRelationListe($relationListeType)
             ;
 
@@ -66,31 +77,28 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            if (!is_countable($ids)) {
-                break;
-            }
-
-            $total += count($ids);
-
-            if (empty($ids) || $total > $max) {
+            if (!is_countable($ids) || empty($ids)) {
                 break;
             }
 
             $brugerList = $this->clientList()->_list_10(new ListInputType($ids));
-
-            $this->entityManager->getConnection()->beginTransaction();
 
             foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
             $this->entityManager->flush();
-            $this->entityManager->getConnection()->commit();
             $this->entityManager->clear();
             gc_collect_cycles();
+
+            $total += count($ids);
+
+            if ($total >= $max) {
+                break;
+            }
         }
 
-        $this->logger->debug(sprintf('Finished fetching adresse data'));
+        $this->logger->debug(sprintf('Finished fetching organisation funktion data'));
     }
 
     public function clientSoeg(array $options = []): Soeg

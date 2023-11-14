@@ -2,13 +2,13 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Bruger;
-use App\Entity\BrugerRegistrering;
-use App\Entity\BrugerRegistreringAdresse;
-use App\Entity\BrugerRegistreringEgenskab;
-use App\Entity\BrugerRegistreringGyldighed;
-use App\Entity\BrugerRegistreringTilhoerer;
-use App\Entity\BrugerRegistreringTilknyttedePersoner;
+use App\Entity\Organisation\Bruger;
+use App\Entity\Organisation\BrugerRegistrering;
+use App\Entity\Organisation\BrugerRegistreringAdresse;
+use App\Entity\Organisation\BrugerRegistreringEgenskab;
+use App\Entity\Organisation\BrugerRegistreringGyldighed;
+use App\Entity\Organisation\BrugerRegistreringTilhoerer;
+use App\Entity\Organisation\BrugerRegistreringTilknyttedePersoner;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,7 +49,7 @@ class BrugerFetchService implements FetchServiceInterface
             $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max))
+                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
 //                ->setAttributListe($attributListe)
             ;
@@ -59,28 +59,25 @@ class BrugerFetchService implements FetchServiceInterface
 
             $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            if (!is_countable($ids)) {
-                break;
-            }
-
-            $total += count($ids);
-
-            if (empty($ids) || $total > $max) {
+            if (!is_countable($ids) || empty($ids)) {
                 break;
             }
 
             $brugerList = $this->clientList()->_list_1(new ListInputType($ids));
-
-            $this->entityManager->getConnection()->beginTransaction();
 
             foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
                 $this->handleOejebliksbillede($oejebliksbillede);
             }
 
             $this->entityManager->flush();
-            $this->entityManager->getConnection()->commit();
             $this->entityManager->clear();
             gc_collect_cycles();
+
+            $total += count($ids);
+
+            if ($total >= $max) {
+                break;
+            }
         }
 
         $this->logger->debug(sprintf('Finished fetching bruger data'));
