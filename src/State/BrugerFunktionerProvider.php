@@ -13,24 +13,12 @@ readonly class BrugerFunktionerProvider implements ProviderInterface
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {
-            throw new ProviderException('Could not find id.');
+            throw new ProviderException('Could not find id in uri');
         }
 
-        $funktioner = $this->funktionsDataRepository->findBy(['brugerId' => $uriVariables['id']]);
-
-//        $res = [];
-//        foreach ($funktioner as $funktion) {
-//            $res[$funktion->getId()] = [
-//
-//            ];
-//        }
-
-        return $funktioner;
+        return $this->funktionsDataRepository->findOneBy(['brugerId' => $uriVariables['id']]);
     }
 }

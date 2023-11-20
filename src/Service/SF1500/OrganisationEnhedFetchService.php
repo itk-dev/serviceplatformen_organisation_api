@@ -51,7 +51,6 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
         //        $attributListe->addToEgenskab((new EgenskabType())
         //            ->setBrugerNavn('az55488'));
 
-
         $tilstandListeType = new TilstandListeType();
         $tilstandListeType->addToGyldighed(
             new GyldighedType(
@@ -354,7 +353,6 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
         if (null === $opgaver) {
             return;
         }
-
 
         foreach ($opgaver as /* @var OpgaverFlerRelationType $opgaver */ $opgave) {
             $organisationEnhedRegistreringOpgave = new OrganisationEnhedRegistreringOpgave();

@@ -50,7 +50,6 @@ final class Version20231113123834 extends AbstractMigration
                 LEFT OUTER JOIN adresse_registrering_egenskab AS adresse_registrering_egenskab_lokation ON adresse_registrering_lokation.id = adresse_registrering_egenskab_lokation.adresse_registrering_id
             ;"
         );
-
     }
 
     public function down(Schema $schema): void

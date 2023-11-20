@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Service\FetchData;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Logger\ConsoleLogger;
@@ -17,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class FetchDataCommand extends Command
 {
-    const ALLOWED_DATA_TYPES = [
+    public const ALLOWED_DATA_TYPES = [
         'all',
         'person',
         'bruger',
@@ -33,7 +32,6 @@ class FetchDataCommand extends Command
 
     protected function configure(): void
     {
-
         $dataTypeDescription = sprintf('Which data to fetch. Allowed options: %s.', implode(', ', self::ALLOWED_DATA_TYPES));
         $this
             ->addOption('data-type', null, InputOption::VALUE_REQUIRED, $dataTypeDescription, 'all')
@@ -44,12 +42,12 @@ class FetchDataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         // Handle data type option.
         $dataType = $input->getOption('data-type');
 
         if (!in_array($dataType, self::ALLOWED_DATA_TYPES)) {
-            $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType,implode(', ', self::ALLOWED_DATA_TYPES)));
+            $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType, implode(', ', self::ALLOWED_DATA_TYPES)));
+
             return Command::FAILURE;
         }
 
@@ -58,6 +56,7 @@ class FetchDataCommand extends Command
 
         if ($pageSize < 1) {
             $output->writeln(sprintf('Page size: %s not allowed. Page size should be an integer greater than 1', $pageSize));
+
             return Command::FAILURE;
         }
 
@@ -66,6 +65,7 @@ class FetchDataCommand extends Command
 
         if ($max < 1) {
             $output->writeln(sprintf('Max: %s not allowed. Max should be an integer greater than 1', $max));
+
             return Command::FAILURE;
         }
 

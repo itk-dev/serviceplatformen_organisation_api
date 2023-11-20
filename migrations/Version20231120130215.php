@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20231120130215 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $this->addSql(
+            'CREATE OR REPLACE VIEW organisation_data AS
+                SELECT
+                    organisation_enhed_registrering.organisation_enhed_id AS id,
+                    organisation_enhed_registrering_egenskab.enhed_navn AS enhedsnavn,
+                    organisation_enhed_registrering_overordnet.reference_id_uuididentifikator AS overordnet_id
+                FROM organisation_enhed_registrering
+                JOIN organisation_enhed_registrering_egenskab ON organisation_enhed_registrering.id = organisation_enhed_registrering_egenskab.organisation_enhed_registrering_id
+                LEFT OUTER JOIN organisation_enhed_registrering_overordnet ON organisation_enhed_registrering.overordnet_id = organisation_enhed_registrering_overordnet.id
+            ;'
+        );
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->addSql('DROP VIEW organisation_data');
+    }
+}

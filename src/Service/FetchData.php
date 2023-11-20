@@ -4,7 +4,6 @@ namespace App\Service;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Symfony\Component\HttpFoundation\Response;
 
 class FetchData
 {
@@ -56,6 +55,4 @@ class FetchData
         $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
         $organisationEnhedService->fetch($pageSize, $max);
     }
-
-
 }

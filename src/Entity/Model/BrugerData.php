@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\BrugerDataRepository;
 use App\State\BrugerFunktionerProvider;
+use App\State\BrugerLederProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -34,6 +35,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             shortName: 'Bruger',
             normalizationContext: ['groups' => ['funktion:item']],
             provider: BrugerFunktionerProvider::class,
+        ),
+        new Get(
+            uriTemplate: 'bruger/{id}/leder',
+            routePrefix: 'v1/',
+            shortName: 'Bruger',
+            normalizationContext: ['groups' => 'bruger:item'],
+            provider: BrugerLederProvider::class
         ),
     ],
 )]

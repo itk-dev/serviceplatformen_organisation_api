@@ -110,6 +110,16 @@ curl -X 'GET' \
 
 #### Search parameters
 
+| Name    | Accepts      | Example                 |
+|---------|--------------|-------------------------|
+| navn    | Text         | `navn=Jeppe%20Kuhlmann` |
+| az      | Text         | `az=az12345`            |
+| email   | Text         | `email=jeppe%40test.dk` |
+| telefon | Text         | `telefon=12345678`      |
+| lokation   | Text         | `lokation=`             |
+
+
+
 
 
 ### Get info on user

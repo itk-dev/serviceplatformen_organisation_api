@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Organisation\OrganisationEnhedRegistreringOpgave;
+use App\Entity\Model\OrganisationData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<OrganisationEnhedRegistreringOpgave>
+ * @extends ServiceEntityRepository<OrganisationData>
  *
- * @method OrganisationEnhedRegistreringOpgave|null find($id, $lockMode = null, $lockVersion = null)
- * @method OrganisationEnhedRegistreringOpgave|null findOneBy(array $criteria, array $orderBy = null)
- * @method OrganisationEnhedRegistreringOpgave[]    findAll()
- * @method OrganisationEnhedRegistreringOpgave[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method OrganisationData|null find($id, $lockMode = null, $lockVersion = null)
+ * @method OrganisationData|null findOneBy(array $criteria, array $orderBy = null)
+ * @method OrganisationData[]    findAll()
+ * @method OrganisationData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OrganisationEnhedRegistreringOpgaveRepository extends ServiceEntityRepository
+class OrganisationDataRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrganisationEnhedRegistreringOpgave::class);
+        parent::__construct($registry, OrganisationData::class);
     }
 
     //    /**
-    //     * @return OrganisationEnhedRegistreringOpgave[] Returns an array of OrganisationEnhedRegistreringOpgave objects
+    //     * @return OrganisationData[] Returns an array of OrganisationData objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -36,7 +36,7 @@ class OrganisationEnhedRegistreringOpgaveRepository extends ServiceEntityReposit
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?OrganisationEnhedRegistreringOpgave
+    //    public function findOneBySomeField($value): ?OrganisationData
     //    {
     //        return $this->createQueryBuilder('o')
     //            ->andWhere('o.exampleField = :val')

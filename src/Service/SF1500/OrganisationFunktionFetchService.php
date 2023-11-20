@@ -52,7 +52,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         //            )
         //        );
 
-
         $tilstandListeType = new TilstandListeType();
         $tilstandListeType->addToGyldighed(
             new GyldighedType(
