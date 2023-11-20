@@ -30,6 +30,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\RegistreringTyp
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\SoegOutputType;
+use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\TilstandListeType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\VirksomhedRelationType;
 use Psr\Log\LoggerAwareTrait;
 
@@ -51,12 +52,22 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
         //            ->setBrugerNavn('az55488'));
 
 
+        $tilstandListeType = new TilstandListeType();
+        $tilstandListeType->addToGyldighed(
+            new GyldighedType(
+                null,
+                'Aktiv'
+            )
+        );
+
         while (true) {
             $this->logger->debug(sprintf('Fetching organisation enhed data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
+                // Only want active objects.
+                ->setTilstandListe($tilstandListeType)
 //                ->setAttributListe($attributListe)
             ;
 

@@ -26,6 +26,7 @@ use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegOutputType;
+use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\TilstandListeType;
 use Psr\Log\LoggerAwareTrait;
 
 class BrugerFetchService implements FetchServiceInterface
@@ -45,12 +46,22 @@ class BrugerFetchService implements FetchServiceInterface
         //        $attributListe->addToEgenskab((new EgenskabType())
         //            ->setBrugerNavn('az55488'));
 
+        $tilstandListeType = new TilstandListeType();
+        $tilstandListeType->addToGyldighed(
+            new GyldighedType(
+                null,
+                'Aktiv'
+            )
+        );
+
         while (true) {
             $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
+                // Only want active objects.
+                ->setTilstandListe($tilstandListeType)
 //                ->setAttributListe($attributListe)
             ;
 
