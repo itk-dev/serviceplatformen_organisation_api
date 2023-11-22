@@ -5,7 +5,7 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\ProviderException;
-use App\Repository\FunktionsDataRepository;
+use App\Repository\Model\FunktionsDataRepository;
 
 readonly class BrugerLederProvider implements ProviderInterface
 {

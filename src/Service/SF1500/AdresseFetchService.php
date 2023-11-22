@@ -2,9 +2,9 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Organisation\Adresse;
-use App\Entity\Organisation\AdresseRegistrering;
-use App\Entity\Organisation\AdresseRegistreringEgenskab;
+use App\Entity\SF1500\Adresse;
+use App\Entity\SF1500\AdresseRegistrering;
+use App\Entity\SF1500\AdresseRegistreringEgenskab;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;

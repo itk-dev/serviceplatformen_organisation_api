@@ -2,14 +2,14 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Organisation\OrganisationFunktion;
-use App\Entity\Organisation\OrganisationFunktionRegistrering;
-use App\Entity\Organisation\OrganisationFunktionRegistreringEgenskab;
-use App\Entity\Organisation\OrganisationFunktionRegistreringFunktionstype;
-use App\Entity\Organisation\OrganisationFunktionRegistreringGyldighed;
-use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeBrugere;
-use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeEnheder;
-use App\Entity\Organisation\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
+use App\Entity\SF1500\OrganisationFunktion;
+use App\Entity\SF1500\OrganisationFunktionRegistrering;
+use App\Entity\SF1500\OrganisationFunktionRegistreringEgenskab;
+use App\Entity\SF1500\OrganisationFunktionRegistreringFunktionstype;
+use App\Entity\SF1500\OrganisationFunktionRegistreringGyldighed;
+use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeBrugere;
+use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeEnheder;
+use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;

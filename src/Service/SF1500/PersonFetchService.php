@@ -2,9 +2,9 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Organisation\Person;
-use App\Entity\Organisation\PersonRegistrering;
-use App\Entity\Organisation\PersonRegistreringEgenskab;
+use App\Entity\SF1500\Person;
+use App\Entity\SF1500\PersonRegistrering;
+use App\Entity\SF1500\PersonRegistreringEgenskab;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\_List;

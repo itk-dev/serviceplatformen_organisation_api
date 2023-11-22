@@ -2,13 +2,13 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\Organisation\Bruger;
-use App\Entity\Organisation\BrugerRegistrering;
-use App\Entity\Organisation\BrugerRegistreringAdresse;
-use App\Entity\Organisation\BrugerRegistreringEgenskab;
-use App\Entity\Organisation\BrugerRegistreringGyldighed;
-use App\Entity\Organisation\BrugerRegistreringTilhoerer;
-use App\Entity\Organisation\BrugerRegistreringTilknyttedePersoner;
+use App\Entity\SF1500\Bruger;
+use App\Entity\SF1500\BrugerRegistrering;
+use App\Entity\SF1500\BrugerRegistreringAdresse;
+use App\Entity\SF1500\BrugerRegistreringEgenskab;
+use App\Entity\SF1500\BrugerRegistreringGyldighed;
+use App\Entity\SF1500\BrugerRegistreringTilhoerer;
+use App\Entity\SF1500\BrugerRegistreringTilknyttedePersoner;
 use App\Exception\UnhandledException;
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;

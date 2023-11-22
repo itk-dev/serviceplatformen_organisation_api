@@ -4,7 +4,7 @@ namespace App\Entity\Model;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use App\Repository\FunktionsDataRepository;
+use App\Repository\Model\FunktionsDataRepository;
 use App\State\FunktionOrganisationProvider;
 use App\State\FunktionOrganisationTreeProvider;
 use Doctrine\ORM\Mapping as ORM;

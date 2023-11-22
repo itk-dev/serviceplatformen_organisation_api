@@ -4,7 +4,7 @@ namespace App\Entity\Model;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use App\Repository\OrganisationDataRepository;
+use App\Repository\Model\OrganisationDataRepository;
 use App\State\OrganisationTreeProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;

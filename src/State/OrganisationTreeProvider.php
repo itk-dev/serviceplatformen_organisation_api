@@ -5,7 +5,7 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\ProviderException;
-use App\Repository\OrganisationDataRepository;
+use App\Repository\Model\OrganisationDataRepository;
 
 readonly class OrganisationTreeProvider implements ProviderInterface
 {
