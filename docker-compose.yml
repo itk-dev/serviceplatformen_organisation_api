@@ -90,7 +90,15 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  node:
+    image: node:18
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
+
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+

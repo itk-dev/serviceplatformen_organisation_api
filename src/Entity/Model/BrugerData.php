@@ -41,7 +41,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             routePrefix: 'v1/',
             shortName: 'Bruger',
             normalizationContext: ['groups' => 'bruger:item'],
-            provider: BrugerLederProvider::class
+            provider: BrugerLederProvider::class,
         ),
     ],
 )]
