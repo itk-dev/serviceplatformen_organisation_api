@@ -7,7 +7,7 @@ Sets up an API with data from [Serviceplatformen Organisation](https://digitalis
 ### Built with
 
 * [Symfony](https://symfony.com)
-* [APi Platform](https://api-platform.com/)
+* [API Platform](https://api-platform.com/)
 
 ## Getting started
 
@@ -93,10 +93,12 @@ docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interact
 To fetch data from SF1500 run
 
 ```sh
-docker compose exec phpfpm bin/console organisation:fetch:data
+docker compose exec phpfpm bin/console organisation:fetch:data --data-type=DATA-TYPE --page-size=PAGE-SIZE --max=MAX
 ```
 
-Run the command with the verbose flag if you wish to see progress.
+Run `bin/console organisation:fetch:data --help` for command documentation.
+
+Add the verbose flag if you wish to see progress.
 
 **To avoid issues with memory leaks during development add the
 `--no-debug` flag to the fetch data command.**
@@ -104,28 +106,6 @@ Run the command with the verbose flag if you wish to see progress.
 ```sh
 docker compose exec phpfpm bin/console --no-debug organisation:fetch:data -vvv
 ```
-
-The command comes with the following options
-
-```sh
---data-type=DATA-TYPE 
-```
-
-Which data to fetch. Allowed options: all, person, bruger,
-adresse, organisationfunktion, organisationenhed. Defaults to all.
-
-```sh
---page-size=PAGE-SIZE
-```
-
-Page size, e.g. number of elements fetched per call.
-Must be an integer in the range [1-1000]. Defaults to 1000.
-
-```sh
---max=MAX
-```
-
-Max number of elements to fetch. Defaults to [`PHP_INT_MAX`](https://www.php.net/manual/en/reserved.constants.php).
 
 ## API
 
@@ -139,34 +119,29 @@ for api specifics.
 
 ### Example calls
 
-Example calls assume the use of `itkdev-docker-compose`.
-If you are not using this tool,
-replace  `os2forms_organisation_api.local.itkdev.dk`
-with the result of `docker compose port nginx 8080`.
-
 #### Search for users
 
 ```sh
 curl -X 'GET' \
-  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann' \
+  'https://$(docker compose port nginx 8080)/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann' \
   -H 'accept: application/ld+json'
 ```
 
 Search parameters
 
-| Name    | Accepts      | Example                 |
-|---------|--------------|-------------------------|
-| navn    | Text         | `navn=Jeppe%20Kuhlmann` |
-| az      | Text         | `az=az12345`            |
-| email   | Text         | `email=jeppe%40test.dk` |
-| telefon | Text         | `telefon=12345678`      |
-| lokation   | Text         | `lokation=ITK`          |
+| Name    | Type | Example                 |
+|---------|------|-------------------------|
+| navn    | Text | `navn=Jeppe%20Kuhlmann` |
+| az      | Text | `az=az12345`            |
+| email   | Text | `email=jeppe%40test.dk` |
+| telefon | Text | `telefon=12345678`      |
+| lokation   | Text | `lokation=ITK`          |
 
 #### Get info on user
 
 ```sh
 curl -X 'GET' \
-  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66' \
+  'https://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66' \
   -H 'accept: application/ld+json'
 ```
 
@@ -174,7 +149,7 @@ curl -X 'GET' \
 
 ```sh
 curl -X 'GET' \
-  'https://os2forms_organisation_api.local.itkdev.dk/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner' \
+  'https://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner' \
   -H 'accept: application/ld+json'
 ```
 
