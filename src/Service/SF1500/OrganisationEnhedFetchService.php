@@ -46,11 +46,6 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
     {
         $total = 0;
 
-        // TODO: REMOVE ONCE TESTED AND WORKING
-        //        $attributListe = new AttributListeType();
-        //        $attributListe->addToEgenskab((new EgenskabType())
-        //            ->setBrugerNavn('az55488'));
-
         $tilstandListeType = new TilstandListeType();
         $tilstandListeType->addToGyldighed(
             new GyldighedType(
@@ -67,7 +62,6 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
                 ->setFoersteResultatReference($total)
                 // Only want active objects.
                 ->setTilstandListe($tilstandListeType)
-//                ->setAttributListe($attributListe)
             ;
 
             /** @var SoegOutputType $data */

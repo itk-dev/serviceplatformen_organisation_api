@@ -80,7 +80,7 @@ SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD=APP_SF1500_ORGANISATION_MANAGER_ROLE_
 
 ## Commands
 
-### Empty & setup database
+### Drop & setup database
 
 ```sh
 docker compose exec phpfpm bin/console doctrine:database:drop --force
@@ -98,12 +98,34 @@ docker compose exec phpfpm bin/console organisation:fetch:data
 
 Run the command with the verbose flag if you wish to see progress.
 
-**To avoid issues with memory leaks during development add the**
-`--no-debug` **flag to the fetch data command.**
+**To avoid issues with memory leaks during development add the
+`--no-debug` flag to the fetch data command.**
 
 ```sh
 docker compose exec phpfpm bin/console --no-debug organisation:fetch:data -vvv
 ```
+
+The command comes with the following options
+
+```sh
+--data-type=DATA-TYPE 
+```
+
+Which data to fetch. Allowed options: all, person, bruger,
+adresse, organisationfunktion, organisationenhed. Defaults to all.
+
+```sh
+--page-size=PAGE-SIZE
+```
+
+Page size, e.g. number of elements fetched per call.
+Must be an integer in the range [1-1000]. Defaults to 1000.
+
+```sh
+--max=MAX
+```
+
+Max number of elements to fetch. Defaults to [`PHP_INT_MAX`](https://www.php.net/manual/en/reserved.constants.php).
 
 ## API
 

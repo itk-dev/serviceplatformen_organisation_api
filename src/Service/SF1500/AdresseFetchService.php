@@ -32,19 +32,12 @@ class AdresseFetchService implements FetchServiceInterface
     {
         $total = 0;
 
-        // TODO: REMOVE ONCE TESTED AND WORKING
-        //        $attributListe = new AttributListeType();
-        //        $attributListe->addToEgenskab((new EgenskabType())
-        //            ->setAdresseTekst('jekua*')
-        //        );
-
         while (true) {
             $this->logger->debug(sprintf('Fetching adresse data, offset: %d , max: %d', $total, $max));
             $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
-//                ->setAttributListe($attributListe)
             ;
 
             /** @var SoegOutputType $data */

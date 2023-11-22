@@ -33,6 +33,7 @@ class FetchDataCommand extends Command
     protected function configure(): void
     {
         $dataTypeDescription = sprintf('Which data to fetch. Allowed options: %s.', implode(', ', self::ALLOWED_DATA_TYPES));
+
         $this
             ->addOption('data-type', null, InputOption::VALUE_REQUIRED, $dataTypeDescription, 'all')
             ->addOption('page-size', null, InputOption::VALUE_REQUIRED, 'Page size, e.g. number of elements fetched per call.', 1000)
@@ -54,8 +55,8 @@ class FetchDataCommand extends Command
         // Handle page size option.
         $pageSize = (int) $input->getOption('page-size');
 
-        if ($pageSize < 1) {
-            $output->writeln(sprintf('Page size: %s not allowed. Page size should be an integer greater than 1', $pageSize));
+        if ($pageSize < 1 || $pageSize > 1000) {
+            $output->writeln(sprintf('Page size: %s not allowed. Page size should be an integer between 1 and 1000', $pageSize));
 
             return Command::FAILURE;
         }

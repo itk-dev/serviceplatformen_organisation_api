@@ -43,15 +43,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
     {
         $total = 0;
 
-        // TODO: REMOVE ONCE TESTED AND WORKING
-        //        $relationListeType = new RelationListeType();
-        //        $relationListeType->addToTilknyttedeBrugere(
-        //            new BrugerFlerRelationType(
-        //                null,
-        //                new UnikIdType('ffdb7559-2ad3-4662-9fd4-d69849939b66', null)
-        //            )
-        //        );
-
         $tilstandListeType = new TilstandListeType();
         $tilstandListeType->addToGyldighed(
             new GyldighedType(
@@ -68,7 +59,6 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
                 ->setFoersteResultatReference($total)
                 // Only want active objects.
                 ->setTilstandListe($tilstandListeType)
-//                ->setRelationListe($relationListeType)
             ;
 
             /** @var SoegOutputType $data */
