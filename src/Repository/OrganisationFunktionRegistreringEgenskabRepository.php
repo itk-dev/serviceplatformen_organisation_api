@@ -20,29 +20,4 @@ class OrganisationFunktionRegistreringEgenskabRepository extends ServiceEntityRe
     {
         parent::__construct($registry, OrganisationFunktionRegistreringEgenskab::class);
     }
-
-    //    /**
-    //     * @return OrganisationFunktionRegistreringEgenskab[] Returns an array of OrganisationFunktionRegistreringEgenskab objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?OrganisationFunktionRegistreringEgenskab
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

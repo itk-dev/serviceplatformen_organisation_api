@@ -20,29 +20,4 @@ class OrganisationEnhedRegistreringTilhoererRepository extends ServiceEntityRepo
     {
         parent::__construct($registry, OrganisationEnhedRegistreringTilhoerer::class);
     }
-
-    //    /**
-    //     * @return OrganisationEnhedRegistreringTilhoerer[] Returns an array of OrganisationEnhedRegistreringTilhoerer objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?OrganisationEnhedRegistreringTilhoerer
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

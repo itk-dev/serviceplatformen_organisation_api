@@ -20,29 +20,4 @@ class OrganisationFunktionRegistreringTilknyttedeEnhederRepository extends Servi
     {
         parent::__construct($registry, OrganisationFunktionRegistreringTilknyttedeEnheder::class);
     }
-
-    //    /**
-    //     * @return OrganisationFunktionRegistreringTilknyttedeEnheder[] Returns an array of OrganisationFunktionRegistreringTilknyttedeEnheder objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?OrganisationFunktionRegistreringTilknyttedeEnheder
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

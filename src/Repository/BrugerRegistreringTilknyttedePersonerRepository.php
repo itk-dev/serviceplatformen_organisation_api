@@ -20,29 +20,4 @@ class BrugerRegistreringTilknyttedePersonerRepository extends ServiceEntityRepos
     {
         parent::__construct($registry, BrugerRegistreringTilknyttedePersoner::class);
     }
-
-    //    /**
-    //     * @return BrugerRegistreringTilknyttedePersoner[] Returns an array of BrugerRegistreringTilknyttedePersoner objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?BrugerRegistreringTilknyttedePersoner
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

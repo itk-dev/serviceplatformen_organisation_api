@@ -20,29 +20,4 @@ class BrugerRegistreringEgenskabRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, BrugerRegistreringEgenskab::class);
     }
-
-    //    /**
-    //     * @return BrugerRegistreringEgenskab[] Returns an array of BrugerRegistreringEgenskab objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?BrugerRegistreringEgenskab
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

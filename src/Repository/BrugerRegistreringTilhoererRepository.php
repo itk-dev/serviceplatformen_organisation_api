@@ -20,29 +20,4 @@ class BrugerRegistreringTilhoererRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, BrugerRegistreringTilhoerer::class);
     }
-
-    //    /**
-    //     * @return BrugerRegistreringTilhoerer[] Returns an array of BrugerRegistreringTilhoerer objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?BrugerRegistreringTilhoerer
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
