@@ -25,7 +25,7 @@ readonly class OrganisationPathProvider implements ProviderInterface
         $organisationer = [];
 
         // Traverse through enheder until top is reached.
-        while(null !== $id) {
+        while (null !== $id) {
             $organisation = $this->organisationDataRepository->findOneBy(['id' => $id]);
 
             if (!$organisation) {
