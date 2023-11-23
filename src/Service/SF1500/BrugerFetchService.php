@@ -106,21 +106,16 @@ class BrugerFetchService implements FetchServiceInterface
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void
     {
-        $bruger = new Bruger();
-        $bruger->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
-
-        $this->entityManager->persist($bruger);
-
-        $this->handleRegistrering($bruger, $oejebliksbillede->getRegistrering());
+        $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(Bruger $bruger, array $registreringer): void
+    private function handleRegistrering(string $brugerId, array $registreringer): void
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $brugerRegistrering = new BrugerRegistrering();
-            $bruger->addRegistreringer($brugerRegistrering);
 
             $brugerRegistrering
+                ->setBrugerId($brugerId)
                 ->setTidspunkt($registrering->getTidspunkt())
                 ->setNoteTekst($registrering->getNoteTekst())
                 ->setLivscyklusKode($registrering->getLivscyklusKode())

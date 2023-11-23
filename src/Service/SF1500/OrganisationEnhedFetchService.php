@@ -111,21 +111,16 @@ class OrganisationEnhedFetchService implements FetchServiceInterface
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
     {
-        $organisationEnhed = new OrganisationEnhed();
-        $organisationEnhed->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
-
-        $this->entityManager->persist($organisationEnhed);
-
-        $this->handleRegistrering($organisationEnhed, $oejebliksbillede->getRegistrering());
+        $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(OrganisationEnhed $organisationEnhed, ?array $registreringer)
+    private function handleRegistrering(string $organisationEnhedId, ?array $registreringer)
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $organisationEnhedRegistrering = new OrganisationEnhedRegistrering();
-            $organisationEnhed->addRegistreringer($organisationEnhedRegistrering);
 
             $organisationEnhedRegistrering
+                ->setOrganisationEnhedId($organisationEnhedId)
                 ->setTidspunkt($registrering->getTidspunkt())
                 ->setNoteTekst($registrering->getNoteTekst())
                 ->setLivscyklusKode($registrering->getLivscyklusKode())

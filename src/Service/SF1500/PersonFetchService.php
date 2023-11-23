@@ -83,21 +83,16 @@ class PersonFetchService implements FetchServiceInterface
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void
     {
-        $person = new Person();
-        $person->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
-
-        $this->entityManager->persist($person);
-
-        $this->handleRegistrering($person, $oejebliksbillede->getRegistrering());
+        $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(Person $person, array $registreringer): void
+    private function handleRegistrering(string $personId, array $registreringer): void
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $personRegistrering = new PersonRegistrering();
-            $person->addRegistreringer($personRegistrering);
 
             $personRegistrering
+                ->setPersonId($personId)
                 ->setTidspunkt($registrering->getTidspunkt())
                 ->setNoteTekst($registrering->getNoteTekst())
                 ->setLivscyklusKode($registrering->getLivscyklusKode())

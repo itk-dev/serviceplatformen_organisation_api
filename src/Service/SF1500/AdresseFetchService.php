@@ -87,21 +87,16 @@ class AdresseFetchService implements FetchServiceInterface
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
     {
-        $adresse = new Adresse();
-        $adresse->setId($oejebliksbillede->getObjektType()->getUUIDIdentifikator());
-
-        $this->entityManager->persist($adresse);
-
-        $this->handleRegistrering($adresse, $oejebliksbillede->getRegistrering());
+        $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(Adresse $adresse, ?array $registreringer)
+    private function handleRegistrering(string $adresseId, ?array $registreringer)
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $adresseRegistrering = new AdresseRegistrering();
-            $adresse->addRegistreringer($adresseRegistrering);
 
             $adresseRegistrering
+                ->setAdresseId($adresseId)
                 ->setTidspunkt($registrering->getTidspunkt())
                 ->setNoteTekst($registrering->getNoteTekst())
                 ->setLivscyklusKode($registrering->getLivscyklusKode())

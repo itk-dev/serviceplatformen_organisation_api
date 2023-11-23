@@ -21,9 +21,8 @@ class BrugerRegistrering
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'registreringer')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Bruger $bruger;
+    #[ORM\Column(length: 255)]
+    private string $brugerId;
 
     #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
@@ -55,14 +54,14 @@ class BrugerRegistrering
         return $this->id;
     }
 
-    public function getBruger(): ?Bruger
+    public function getBrugerId(): string
     {
-        return $this->bruger;
+        return $this->brugerId;
     }
 
-    public function setBruger(?Bruger $bruger): static
+    public function setBrugerId(string $brugerId): static
     {
-        $this->bruger = $bruger;
+        $this->brugerId = $brugerId;
 
         return $this;
     }

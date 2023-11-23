@@ -21,9 +21,8 @@ class OrganisationEnhedRegistrering
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'registreringer')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?OrganisationEnhed $organisationEnhed = null;
+    #[ORM\Column(length: 255)]
+    private string $organisationEnhedId;
 
     #[ORM\OneToMany(mappedBy: 'organisationEnhedRegistrering', targetEntity: OrganisationEnhedRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
@@ -60,14 +59,14 @@ class OrganisationEnhedRegistrering
         return $this->id;
     }
 
-    public function getOrganisationEnhed(): ?OrganisationEnhed
+    public function getOrganisationEnhedId(): string
     {
-        return $this->organisationEnhed;
+        return $this->organisationEnhedId;
     }
 
-    public function setOrganisationEnhed(?OrganisationEnhed $organisationEnhed): static
+    public function setOrganisationEnhedId(string $organisationEnhedId): static
     {
-        $this->organisationEnhed = $organisationEnhed;
+        $this->organisationEnhedId = $organisationEnhedId;
 
         return $this;
     }

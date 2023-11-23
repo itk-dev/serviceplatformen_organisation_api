@@ -21,9 +21,8 @@ class AdresseRegistrering
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'registreringer')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Adresse $adresse = null;
+    #[ORM\Column(length: 255)]
+    private string $adresseId;
 
     #[ORM\OneToMany(mappedBy: 'adresseRegistrering', targetEntity: AdresseRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
@@ -39,14 +38,14 @@ class AdresseRegistrering
         return $this->id;
     }
 
-    public function getAdresse(): ?Adresse
+    public function getAdresseId(): string
     {
-        return $this->adresse;
+        return $this->adresseId;
     }
 
-    public function setAdresse(?Adresse $adresse): static
+    public function setAdresseId(string $adresseId): static
     {
-        $this->adresse = $adresse;
+        $this->adresseId = $adresseId;
 
         return $this;
     }

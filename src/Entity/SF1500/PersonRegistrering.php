@@ -21,9 +21,8 @@ class PersonRegistrering
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;
 
-    #[ORM\ManyToOne(inversedBy: 'registreringer')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Person $person;
+    #[ORM\Column(length: 255)]
+    private string $personId;
 
     #[ORM\OneToMany(mappedBy: 'personRegistrering', targetEntity: PersonRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
@@ -39,14 +38,14 @@ class PersonRegistrering
         return $this->id;
     }
 
-    public function getPerson(): Person
+    public function getPersonId(): string
     {
-        return $this->person;
+        return $this->personId;
     }
 
-    public function setPerson(?Person $person): static
+    public function setPersonId(string $personId): static
     {
-        $this->person = $person;
+        $this->personId = $personId;
 
         return $this;
     }
