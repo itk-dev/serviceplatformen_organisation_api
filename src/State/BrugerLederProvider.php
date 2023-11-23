@@ -2,6 +2,7 @@
 
 namespace App\State;
 
+use ApiPlatform\Exception\InvalidIdentifierException;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\ProviderException;
@@ -16,7 +17,7 @@ readonly class BrugerLederProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {
-            throw new ProviderException('Could not find id in uri');
+            throw new InvalidIdentifierException('Could not find id in uri');
         }
 
         $id = $uriVariables['id'];

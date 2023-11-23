@@ -2,13 +2,14 @@
 
 namespace App\State;
 
+use ApiPlatform\Exception\InvalidIdentifierException;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\ProviderException;
 use App\Repository\Model\FunktionsDataRepository;
 use App\Repository\Model\OrganisationDataRepository;
 
-readonly class FunktionOrganisationTreeProvider implements ProviderInterface
+readonly class FunktionOrganisationPathProvider implements ProviderInterface
 {
     public function __construct(private FunktionsDataRepository $funktionsDataRepository, private OrganisationDataRepository $organisationDataRepository)
     {
@@ -17,7 +18,7 @@ readonly class FunktionOrganisationTreeProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {
-            throw new ProviderException('Could not find id in uri');
+            throw new InvalidIdentifierException('Could not find id in uri');
         }
 
         $id = $uriVariables['id'];
@@ -33,18 +34,14 @@ readonly class FunktionOrganisationTreeProvider implements ProviderInterface
         $organisationer = [];
 
         // Traverse through enheder until top is reached.
-        while (true) {
+        while (null !== $tilknyttetEnhedId) {
             $organisation = $this->organisationDataRepository->findOneBy(['id' => $tilknyttetEnhedId]);
 
             if (!$organisation) {
-                throw new ProviderException(sprintf('Could not find organisation with id %s', $tilknyttetEnhedId));
+                throw new ProviderException(sprintf('Error building organization path (parent organization with ID %s does not exist)', $tilknyttetEnhedId));
             }
 
             $organisationer[] = $organisation;
-
-            if (null === $organisation->getOverordnetId()) {
-                break;
-            }
 
             $tilknyttetEnhedId = $organisation->getOverordnetId();
         }

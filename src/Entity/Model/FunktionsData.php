@@ -5,8 +5,8 @@ namespace App\Entity\Model;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use App\Repository\Model\FunktionsDataRepository;
+use App\State\FunktionOrganisationPathProvider;
 use App\State\FunktionOrganisationProvider;
-use App\State\FunktionOrganisationTreeProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -28,11 +28,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             provider: FunktionOrganisationProvider::class,
         ),
         new Get(
-            uriTemplate: 'funktion/{id}/organisation-tree',
+            uriTemplate: 'funktion/{id}/organisation-path',
             routePrefix: 'v1/',
             shortName: 'Funktion',
             normalizationContext: ['groups' => ['organisation:item']],
-            provider: FunktionOrganisationTreeProvider::class,
+            provider: FunktionOrganisationPathProvider::class,
         ),
     ],
     paginationEnabled: false,
@@ -40,7 +40,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FunktionsData
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column]
     #[Groups(['funktion:item'])]
     private string $id;

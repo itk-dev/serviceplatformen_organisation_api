@@ -2,9 +2,9 @@
 
 namespace App\State;
 
+use ApiPlatform\Exception\InvalidIdentifierException;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Exception\ProviderException;
 use App\Repository\Model\FunktionsDataRepository;
 
 readonly class BrugerFunktionerProvider implements ProviderInterface
@@ -16,9 +16,9 @@ readonly class BrugerFunktionerProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {
-            throw new ProviderException('Could not find id in uri');
+            throw new InvalidIdentifierException('Could not find id in uri');
         }
 
-        return $this->funktionsDataRepository->findOneBy(['brugerId' => $uriVariables['id']]);
+        return $this->funktionsDataRepository->findBy(['brugerId' => $uriVariables['id']]);
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App\State;
 
+use ApiPlatform\Exception\InvalidIdentifierException;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\ProviderException;
 use App\Repository\Model\OrganisationDataRepository;
 
-readonly class OrganisationTreeProvider implements ProviderInterface
+readonly class OrganisationPathProvider implements ProviderInterface
 {
     public function __construct(private OrganisationDataRepository $organisationDataRepository)
     {
@@ -16,7 +17,7 @@ readonly class OrganisationTreeProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {
-            throw new ProviderException('Could not find id in uri');
+            throw new InvalidIdentifierException('Could not find id in uri');
         }
 
         $id = $uriVariables['id'];
@@ -24,18 +25,14 @@ readonly class OrganisationTreeProvider implements ProviderInterface
         $organisationer = [];
 
         // Traverse through enheder until top is reached.
-        while (true) {
+        while(null !== $id) {
             $organisation = $this->organisationDataRepository->findOneBy(['id' => $id]);
 
             if (!$organisation) {
-                throw new ProviderException(sprintf('Could not find organisation with id %s', $id));
+                throw new ProviderException(sprintf('Error building organization path (parent organization with ID %s does not exist)', $id));
             }
 
             $organisationer[] = $organisation;
-
-            if (null === $organisation->getOverordnetId()) {
-                break;
-            }
 
             $id = $organisation->getOverordnetId();
         }

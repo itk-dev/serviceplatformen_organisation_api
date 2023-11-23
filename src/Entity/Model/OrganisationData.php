@@ -5,7 +5,7 @@ namespace App\Entity\Model;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use App\Repository\Model\OrganisationDataRepository;
-use App\State\OrganisationTreeProvider;
+use App\State\OrganisationPathProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -20,11 +20,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             normalizationContext: ['groups' => 'organisation:item']
         ),
         new Get(
-            uriTemplate: 'organisation/{id}/tree',
+            uriTemplate: 'organisation/{id}/path',
             routePrefix: 'v1/',
             shortName: 'Organisation',
             normalizationContext: ['groups' => 'organisation:item'],
-            provider: OrganisationTreeProvider::class
+            provider: OrganisationPathProvider::class
         ),
     ],
     paginationEnabled: false,
@@ -32,7 +32,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class OrganisationData
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column]
     #[Groups(['organisation:item'])]
     private string $id;

@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             uriTemplate: 'bruger/{id}',
             routePrefix: 'v1/',
             shortName: 'Bruger',
-            normalizationContext: ['groups' => 'bruger:item'],
+            normalizationContext: ['groups' => 'bruger:item']
         ),
         new GetCollection(
             uriTemplate: 'bruger',
@@ -55,7 +55,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class BrugerData
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column]
     #[Groups(['bruger:item'])]
     private string $id;

@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Adresse
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
     #[ORM\Column]
     private string $id;
 
