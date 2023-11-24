@@ -211,7 +211,6 @@ we decided to adhere to in this project.
   docker compose run --rm node yarn check-coding-standards/markdownlint
   ```
 
-
 ### Code analysis
 
 We use Psalm for code analysis.

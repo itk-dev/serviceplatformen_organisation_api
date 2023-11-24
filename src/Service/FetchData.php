@@ -18,7 +18,7 @@ class FetchData
     /**
      * @throws DataTypeException
      */
-    public function fetch(array $dataTypes, int $pageSize = 1000, int|null $max = null): void
+    public function fetch(array $dataTypes, int $pageSize = 1000, int $max = null): void
     {
         $this->logger->debug('Fetching data');
 
