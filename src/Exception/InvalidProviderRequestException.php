@@ -5,6 +5,6 @@ namespace App\Exception;
 /**
  * Provider exception.
  */
-class ProviderException extends Exception
+class InvalidProviderRequestException extends Exception
 {
 }
