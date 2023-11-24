@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrganisationDataRepository::class)]
-#[ORM\Table(name: 'organisation_data')]
+#[ORM\Table(name: 'organisation')]
 #[ApiResource(
     operations: [
         new Get(
@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     paginationEnabled: false,
 )]
-class OrganisationData
+class Organisation
 {
     #[ORM\Id]
     #[ORM\Column]

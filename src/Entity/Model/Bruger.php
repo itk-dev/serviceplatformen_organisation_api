@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BrugerDataRepository::class, readOnly: true)]
-#[ORM\Table(name: 'bruger_data')]
+#[ORM\Table(name: 'bruger')]
 #[ApiResource(
     operations: [
         new Get(
@@ -52,7 +52,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'telefon' => 'exact',
     'lokation' => 'exact',
 ])]
-class BrugerData
+class Bruger
 {
     #[ORM\Id]
     #[ORM\Column]

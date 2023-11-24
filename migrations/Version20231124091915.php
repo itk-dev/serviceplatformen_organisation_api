@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231122080534 extends AbstractMigration
+final class Version20231124091915 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20231122080534 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql(
-            "CREATE OR REPLACE VIEW bruger_data AS
+            "CREATE OR REPLACE VIEW bruger AS
                 SELECT
                     bruger_registrering.bruger_id AS id,
                     bruger_registrering_egenskab.bruger_navn AS az,

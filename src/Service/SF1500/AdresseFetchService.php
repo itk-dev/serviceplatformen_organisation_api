@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\SF1500\Adresse;
 use App\Entity\SF1500\AdresseRegistrering;
 use App\Entity\SF1500\AdresseRegistreringEgenskab;
 use App\Exception\UnhandledException;

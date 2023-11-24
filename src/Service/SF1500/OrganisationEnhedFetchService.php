@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\SF1500\OrganisationEnhed;
 use App\Entity\SF1500\OrganisationEnhedRegistrering;
 use App\Entity\SF1500\OrganisationEnhedRegistreringAdresser;
 use App\Entity\SF1500\OrganisationEnhedRegistreringEgenskab;

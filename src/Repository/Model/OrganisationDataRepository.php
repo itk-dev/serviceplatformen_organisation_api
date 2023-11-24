@@ -2,22 +2,22 @@
 
 namespace App\Repository\Model;
 
-use App\Entity\Model\OrganisationData;
+use App\Entity\Model\Organisation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<OrganisationData>
+ * @extends ServiceEntityRepository<Organisation>
  *
- * @method OrganisationData|null find($id, $lockMode = null, $lockVersion = null)
- * @method OrganisationData|null findOneBy(array $criteria, array $orderBy = null)
- * @method OrganisationData[]    findAll()
- * @method OrganisationData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Organisation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Organisation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Organisation[]    findAll()
+ * @method Organisation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class OrganisationDataRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, OrganisationData::class);
+        parent::__construct($registry, Organisation::class);
     }
 }

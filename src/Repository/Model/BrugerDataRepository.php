@@ -2,22 +2,22 @@
 
 namespace App\Repository\Model;
 
-use App\Entity\Model\BrugerData;
+use App\Entity\Model\Bruger;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<BrugerData>
+ * @extends ServiceEntityRepository<Bruger>
  *
- * @method BrugerData|null find($id, $lockMode = null, $lockVersion = null)
- * @method BrugerData|null findOneBy(array $criteria, array $orderBy = null)
- * @method BrugerData[]    findAll()
- * @method BrugerData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Bruger|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Bruger|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Bruger[]    findAll()
+ * @method Bruger[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class BrugerDataRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BrugerData::class);
+        parent::__construct($registry, Bruger::class);
     }
 }

@@ -2,22 +2,22 @@
 
 namespace App\Repository\Model;
 
-use App\Entity\Model\FunktionsData;
+use App\Entity\Model\Funktion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FunktionsData>
+ * @extends ServiceEntityRepository<Funktion>
  *
- * @method FunktionsData|null find($id, $lockMode = null, $lockVersion = null)
- * @method FunktionsData|null findOneBy(array $criteria, array $orderBy = null)
- * @method FunktionsData[]    findAll()
- * @method FunktionsData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Funktion|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Funktion|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Funktion[]    findAll()
+ * @method Funktion[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FunktionsDataRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FunktionsData::class);
+        parent::__construct($registry, Funktion::class);
     }
 }

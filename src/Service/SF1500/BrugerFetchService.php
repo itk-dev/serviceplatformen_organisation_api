@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\SF1500\Bruger;
 use App\Entity\SF1500\BrugerRegistrering;
 use App\Entity\SF1500\BrugerRegistreringAdresse;
 use App\Entity\SF1500\BrugerRegistreringEgenskab;

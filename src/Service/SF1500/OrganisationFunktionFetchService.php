@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\SF1500\OrganisationFunktion;
 use App\Entity\SF1500\OrganisationFunktionRegistrering;
 use App\Entity\SF1500\OrganisationFunktionRegistreringEgenskab;
 use App\Entity\SF1500\OrganisationFunktionRegistreringFunktionstype;

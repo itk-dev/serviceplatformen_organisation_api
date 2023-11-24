@@ -9,6 +9,23 @@ Sets up an API with data from [Serviceplatformen Organisation](https://digitalis
 * [Symfony](https://symfony.com)
 * [API Platform](https://api-platform.com/)
 
+## SF1500 Data
+
+The objects from SF1500 that we are interested in are
+`Person`, `Bruger`, `Adresse`, `OrganisationFunktion` and `OrganisationEnhed`.
+Each of these come with an identifier and at least one `Registrering`.
+See [SF1500 objects](docs/class_information_model_organisation.png)
+and [object model](docs/object_model_organisation.png).
+
+We create views combining information from objects,
+resulting in the following views which will serve as the base for our API.
+
+| View         | Columns                                                                                |
+|--------------|----------------------------------------------------------------------------------------|
+| bruger       | id, az, navn, email, telefon, lokation                                                 |
+| funktion     | id, bruger_id, funktionsnavn, enhedsnavn, adresse, tilknytted_enhed_id, funktions_type |
+| organisation | id, enhedsnavn, overordnet_id                                                          |
+
 ## Getting started
 
 To get a local copy up and running follow these steps.

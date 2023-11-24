@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FunktionsDataRepository::class, readOnly: true)]
-#[ORM\Table(name: 'funktions_data')]
+#[ORM\Table(name: 'funktion')]
 #[ApiResource(
     operations: [
         new Get(
@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     paginationEnabled: false,
 )]
-class FunktionsData
+class Funktion
 {
     #[ORM\Id]
     #[ORM\Column]

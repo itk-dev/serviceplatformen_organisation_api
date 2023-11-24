@@ -2,7 +2,6 @@
 
 namespace App\Service\SF1500;
 
-use App\Entity\SF1500\Person;
 use App\Entity\SF1500\PersonRegistrering;
 use App\Entity\SF1500\PersonRegistreringEgenskab;
 use App\Service\SF1500Service;
