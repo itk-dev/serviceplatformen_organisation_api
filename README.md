@@ -110,7 +110,21 @@ docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interact
 To fetch data from SF1500 run
 
 ```sh
-docker compose exec phpfpm bin/console organisation:fetch:data --data-type=DATA-TYPE --page-size=PAGE-SIZE --max=MAX
+docker compose exec phpfpm bin/console organisation:fetch:data DATATYPES --page-size=PAGE-SIZE --max=MAX
+```
+
+where `DATATYPES` is a list of datatypes (separated by space)
+determining which data to fetch.
+
+#### Available datatypes
+
+Available datatypes are `bruger`, `person`,
+`adresse`, `organisationfunktion` and `organisationenhed`.
+
+If you wish to fetch data from multiple datatypes supply them separated by space:
+
+```sh
+docker compose exec phpfpm bin/console organisation:fetch:data bruger person
 ```
 
 Run `bin/console organisation:fetch:data --help` for command documentation.

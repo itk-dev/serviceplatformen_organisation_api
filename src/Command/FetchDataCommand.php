@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Service\FetchData;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Logger\ConsoleLogger;
@@ -17,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class FetchDataCommand extends Command
 {
     public const ALLOWED_DATA_TYPES = [
-        'all',
         'person',
         'bruger',
         'adresse',
@@ -35,7 +35,7 @@ class FetchDataCommand extends Command
         $dataTypeDescription = sprintf('Which data to fetch. Allowed options: %s.', implode(', ', self::ALLOWED_DATA_TYPES));
 
         $this
-            ->addOption('data-type', null, InputOption::VALUE_REQUIRED, $dataTypeDescription, 'all')
+            ->addArgument('data-type', InputArgument::IS_ARRAY, $dataTypeDescription)
             ->addOption('page-size', null, InputOption::VALUE_REQUIRED, 'Page size, e.g. number of elements fetched per call.', 1000)
             ->addOption('max', null, InputOption::VALUE_REQUIRED, 'Number of elements to fetch', PHP_INT_MAX)
         ;
@@ -44,12 +44,30 @@ class FetchDataCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Handle data type option.
-        $dataType = $input->getOption('data-type');
+        $dataTypes = $input->getArgument('data-type');
 
-        if (!in_array($dataType, self::ALLOWED_DATA_TYPES)) {
-            $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType, implode(', ', self::ALLOWED_DATA_TYPES)));
+        if (empty($dataTypes)) {
+            $output->writeln('No data-type provided.');
 
             return Command::FAILURE;
+        }
+
+        // Check for duplicate entries
+        $duplicated = array_diff_assoc($dataTypes, array_unique($dataTypes));
+
+        if (!empty($duplicated)) {
+            $output->writeln(sprintf('Duplicated data-types detected: %s.', implode(', ', $duplicated)));
+
+            return Command::FAILURE;
+        }
+
+        // Check for allowed datatypes.
+        foreach ($dataTypes as $dataType) {
+            if (!in_array($dataType, self::ALLOWED_DATA_TYPES)) {
+                $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType, implode(', ', self::ALLOWED_DATA_TYPES)));
+
+                return Command::FAILURE;
+            }
         }
 
         // Handle page size option.
@@ -71,7 +89,7 @@ class FetchDataCommand extends Command
         }
 
         $this->fetchData->setLogger(new ConsoleLogger($output));
-        $this->fetchData->fetch($dataType, $pageSize, $max);
+        $this->fetchData->fetch($dataTypes, $pageSize, $max);
 
         return Command::SUCCESS;
     }

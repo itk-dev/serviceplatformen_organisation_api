@@ -14,13 +14,13 @@ class FetchData
         $this->setLogger(new NullLogger());
     }
 
-    public function fetch(string $dataType, $pageSize = 1000, $max = null)
+    public function fetch(array $dataTypes, $pageSize = 1000, $max = null)
     {
         $this->logger->debug('Fetching data');
 
-        if ('all' === $dataType) {
-            $this->fetchAll($pageSize, $max);
-        } else {
+        $services = [];
+
+        foreach ($dataTypes as $dataType) {
             $service = match ($dataType) {
                 'person' => $this->fetchServiceFactory->personService($this->logger),
                 'bruger' => $this->fetchServiceFactory->brugerService($this->logger),
@@ -29,30 +29,11 @@ class FetchData
                 'organisationenhed' => $this->fetchServiceFactory->organisationEnhedService($this->logger),
             };
 
+            $services[] = $service;
+        }
+
+        foreach ($services as $service) {
             $service->fetch($pageSize, $max);
         }
-    }
-
-    private function fetchAll(int $pageSize, $max = null)
-    {
-        // Person data.
-        $personService = $this->fetchServiceFactory->personService($this->logger);
-        $personService->fetch($pageSize, $max);
-
-        // Bruger data.
-        $brugerService = $this->fetchServiceFactory->brugerService($this->logger);
-        $brugerService->fetch($pageSize, $max);
-
-        // Adresse data.
-        $adresseService = $this->fetchServiceFactory->adresseService($this->logger);
-        $adresseService->fetch($pageSize, $max);
-
-        // OrganisationFunktion data.
-        $organisationFunktionService = $this->fetchServiceFactory->organisationFunktionService($this->logger);
-        $organisationFunktionService->fetch($pageSize, $max);
-
-        // OrganisationEnhed data.
-        $organisationEnhedService = $this->fetchServiceFactory->organisationEnhedService($this->logger);
-        $organisationEnhedService->fetch($pageSize, $max);
     }
 }
