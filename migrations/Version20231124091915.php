@@ -29,10 +29,10 @@ final class Version20231124091915 extends AbstractMigration
                     adresse_registrering_egenskab_telefon.adresse_tekst AS telefon,
                     adresse_registrering_egenskab_lokation.adresse_tekst AS lokation
                 FROM bruger_registrering
-                JOIN bruger_registrering_egenskab ON bruger_registrering.id = bruger_registrering_egenskab.bruger_registrering_id
-                JOIN bruger_registrering_tilknyttede_personer ON bruger_registrering.id = bruger_registrering_tilknyttede_personer.bruger_registrering_id
-                JOIN person_registrering ON bruger_registrering_tilknyttede_personer.reference_id_uuididentifikator = person_registrering.person_id
-                JOIN person_registrering_egenskab ON person_registrering.id = person_registrering_egenskab.person_registrering_id
+                LEFT OUTER JOIN bruger_registrering_egenskab ON bruger_registrering.id = bruger_registrering_egenskab.bruger_registrering_id
+                LEFT OUTER JOIN bruger_registrering_tilknyttede_personer ON bruger_registrering.id = bruger_registrering_tilknyttede_personer.bruger_registrering_id
+                LEFT OUTER JOIN person_registrering ON bruger_registrering_tilknyttede_personer.reference_id_uuididentifikator = person_registrering.person_id
+                LEFT OUTER JOIN person_registrering_egenskab ON person_registrering.id = person_registrering_egenskab.person_registrering_id
                 
                 LEFT OUTER JOIN bruger_registrering_adresse AS bruger_registrering_adresse_email ON bruger_registrering.id = bruger_registrering_adresse_email.bruger_registrering_id
                     AND bruger_registrering_adresse_email.rolle_label = 'Email_bruger'

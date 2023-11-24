@@ -30,12 +30,12 @@ final class Version20231124091917 extends AbstractMigration
                     organisation_funktion_registrering_tilknyttede_enheder.reference_id_uuididentifikator AS tilknyttet_enhed_id,
                     organisation_funktion_registrering_funktionstype.reference_id_uuididentifikator AS funktions_type
                 FROM organisation_funktion_registrering
-                JOIN organisation_funktion_registrering_egenskab ON organisation_funktion_registrering.id = organisation_funktion_registrering_egenskab.organisation_funktion_registrering_id
-                JOIN organisation_funktion_registrering_tilknyttede_enheder ON organisation_funktion_registrering.id = organisation_funktion_registrering_tilknyttede_enheder.organisation_funktion_registrering_id
-                JOIN organisation_enhed_registrering ON organisation_funktion_registrering_tilknyttede_enheder.reference_id_uuididentifikator = organisation_enhed_registrering.organisation_enhed_id
-                JOIN organisation_enhed_registrering_egenskab ON organisation_enhed_registrering.id = organisation_enhed_registrering_egenskab.organisation_enhed_registrering_id
-                JOIN organisation_funktion_registrering_tilknyttede_brugere ON organisation_funktion_registrering.id = organisation_funktion_registrering_tilknyttede_brugere.organisation_funktion_registrering_id
-                JOIN organisation_funktion_registrering_funktionstype ON organisation_funktion_registrering.funktionstype_id = organisation_funktion_registrering_funktionstype.id
+                LEFT OUTER JOIN organisation_funktion_registrering_egenskab ON organisation_funktion_registrering.id = organisation_funktion_registrering_egenskab.organisation_funktion_registrering_id
+                LEFT OUTER JOIN organisation_funktion_registrering_tilknyttede_enheder ON organisation_funktion_registrering.id = organisation_funktion_registrering_tilknyttede_enheder.organisation_funktion_registrering_id
+                LEFT OUTER JOIN organisation_enhed_registrering ON organisation_funktion_registrering_tilknyttede_enheder.reference_id_uuididentifikator = organisation_enhed_registrering.organisation_enhed_id
+                LEFT OUTER JOIN organisation_enhed_registrering_egenskab ON organisation_enhed_registrering.id = organisation_enhed_registrering_egenskab.organisation_enhed_registrering_id
+                LEFT OUTER JOIN organisation_funktion_registrering_tilknyttede_brugere ON organisation_funktion_registrering.id = organisation_funktion_registrering_tilknyttede_brugere.organisation_funktion_registrering_id
+                LEFT OUTER JOIN organisation_funktion_registrering_funktionstype ON organisation_funktion_registrering.funktionstype_id = organisation_funktion_registrering_funktionstype.id
             
                 LEFT OUTER JOIN organisation_enhed_registrering_adresser ON organisation_enhed_registrering.id = organisation_enhed_registrering_adresser.organisation_enhed_registrering_id
                     AND organisation_enhed_registrering_adresser.rolle_label = 'Postadresse'

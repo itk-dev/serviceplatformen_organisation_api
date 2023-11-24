@@ -26,7 +26,7 @@ final class Version20231124091925 extends AbstractMigration
                     organisation_enhed_registrering_egenskab.enhed_navn AS enhedsnavn,
                     organisation_enhed_registrering_overordnet.reference_id_uuididentifikator AS overordnet_id
                 FROM organisation_enhed_registrering
-                JOIN organisation_enhed_registrering_egenskab ON organisation_enhed_registrering.id = organisation_enhed_registrering_egenskab.organisation_enhed_registrering_id
+                LEFT OUTER JOIN organisation_enhed_registrering_egenskab ON organisation_enhed_registrering.id = organisation_enhed_registrering_egenskab.organisation_enhed_registrering_id
                 LEFT OUTER JOIN organisation_enhed_registrering_overordnet ON organisation_enhed_registrering.overordnet_id = organisation_enhed_registrering_overordnet.id
             ;'
         );

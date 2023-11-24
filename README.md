@@ -97,6 +97,9 @@ SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD=APP_SF1500_ORGANISATION_MANAGER_ROLE_
 
 ## Commands
 
+Before fetching data the database should be emptied.
+If not, objects that were available during both fetches will appear twice.
+
 ### Drop & setup database
 
 ```sh
@@ -127,15 +130,22 @@ If you wish to fetch data from multiple datatypes supply them separated by space
 docker compose exec phpfpm bin/console organisation:fetch:data bruger person
 ```
 
-Run `bin/console organisation:fetch:data --help` for command documentation.
+#### Fetch all data
 
-Add the verbose flag if you wish to see progress.
+To fetch all data, run:
+
+```sh
+docker compose exec phpfpm bin/console organisation:fetch:data person bruger adresse organisationfunktion organisationenhed
+```
+
+Run `bin/console organisation:fetch:data --help` for command documentation,
+and add the verbose flag if you wish to see progress.
 
 **To avoid issues with memory leaks during development add the
 `--no-debug` flag to the fetch data command.**
 
 ```sh
-docker compose exec phpfpm bin/console --no-debug organisation:fetch:data -vvv
+docker compose exec phpfpm bin/console --no-debug organisation:fetch:data DATATYPES -vvv
 ```
 
 ## API
