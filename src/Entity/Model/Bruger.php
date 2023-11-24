@@ -7,13 +7,13 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use App\Repository\Model\BrugerDataRepository;
+use App\Repository\Model\BrugerRepository;
 use App\State\BrugerFunktionerProvider;
 use App\State\BrugerLederProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: BrugerDataRepository::class, readOnly: true)]
+#[ORM\Entity(repositoryClass: BrugerRepository::class, readOnly: true)]
 #[ORM\Table(name: 'bruger')]
 #[ApiResource(
     operations: [

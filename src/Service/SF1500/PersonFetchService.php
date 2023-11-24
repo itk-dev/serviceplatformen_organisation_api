@@ -61,23 +61,17 @@ class PersonFetchService implements FetchServiceInterface
             }
         }
 
-        $this->logger->debug(sprintf('Finished fetching person data'));
+        $this->logger->debug('Finished fetching person data');
     }
 
     public function clientSoeg(array $options = []): Soeg
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
-        assert($client instanceof Soeg);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
     }
 
     public function clientList(array $options = []): _List
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
-        assert($client instanceof _List);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
     }
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void

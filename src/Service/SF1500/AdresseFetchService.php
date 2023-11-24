@@ -65,31 +65,25 @@ class AdresseFetchService implements FetchServiceInterface
             }
         }
 
-        $this->logger->debug(sprintf('Finished fetching adresse data'));
+        $this->logger->debug('Finished fetching adresse data');
     }
 
     public function clientSoeg(array $options = []): Soeg
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
-        assert($client instanceof Soeg);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
     }
 
     public function clientList(array $options = []): _List
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
-        assert($client instanceof _List);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
     }
 
-    private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
+    private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void
     {
         $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(string $adresseId, ?array $registreringer)
+    private function handleRegistrering(string $adresseId, ?array $registreringer): void
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $adresseRegistrering = new AdresseRegistrering();
@@ -111,7 +105,7 @@ class AdresseFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleEgenskab(AdresseRegistrering $adresseRegistrering, ?array $egenskaber)
+    private function handleEgenskab(AdresseRegistrering $adresseRegistrering, ?array $egenskaber): void
     {
         if (null === $egenskaber) {
             return;
@@ -144,7 +138,7 @@ class AdresseFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleRelation(AdresseRegistrering $adresseRegistrering, ?RelationListeType $relationListeType)
+    private function handleRelation(AdresseRegistrering $adresseRegistrering, ?RelationListeType $relationListeType): void
     {
         if (empty($relationListeType->jsonSerialize())) {
             return;
@@ -153,7 +147,7 @@ class AdresseFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilstand(AdresseRegistrering $adresseRegistrering, ?TilstandListeType $tilstandListeType)
+    private function handleTilstand(AdresseRegistrering $adresseRegistrering, ?TilstandListeType $tilstandListeType): void
     {
         if (empty($tilstandListeType->jsonSerialize())) {
             return;

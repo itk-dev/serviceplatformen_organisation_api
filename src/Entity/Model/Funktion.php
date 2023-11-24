@@ -4,13 +4,13 @@ namespace App\Entity\Model;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use App\Repository\Model\FunktionsDataRepository;
+use App\Repository\Model\FunktionRepository;
 use App\State\FunktionOrganisationPathProvider;
 use App\State\FunktionOrganisationProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: FunktionsDataRepository::class, readOnly: true)]
+#[ORM\Entity(repositoryClass: FunktionRepository::class, readOnly: true)]
 #[ORM\Table(name: 'funktion')]
 #[ApiResource(
     operations: [

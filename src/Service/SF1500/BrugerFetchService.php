@@ -84,23 +84,17 @@ class BrugerFetchService implements FetchServiceInterface
             }
         }
 
-        $this->logger->debug(sprintf('Finished fetching bruger data'));
+        $this->logger->debug('Finished fetching bruger data');
     }
 
     public function clientSoeg(array $options = []): Soeg
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
-        assert($client instanceof Soeg);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
     }
 
     public function clientList(array $options = []): _List
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
-        assert($client instanceof _List);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
     }
 
     private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void
@@ -165,7 +159,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleGyldighed(BrugerRegistrering $brugerRegistrering, ?array $gyldigheder)
+    private function handleGyldighed(BrugerRegistrering $brugerRegistrering, ?array $gyldigheder): void
     {
         if (null === $gyldigheder) {
             return;
@@ -198,7 +192,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleRelation(BrugerRegistrering $brugerRegistrering, ?RelationListeType $relation)
+    private function handleRelation(BrugerRegistrering $brugerRegistrering, ?RelationListeType $relation): void
     {
         if (null === $relation) {
             return;
@@ -216,7 +210,7 @@ class BrugerFetchService implements FetchServiceInterface
         $this->handleLokalUdvidelse($brugerRegistrering, $relation->getLokalUdvidelse());
     }
 
-    private function handleAdresser(BrugerRegistrering $brugerRegistrering, ?array $adresser)
+    private function handleAdresser(BrugerRegistrering $brugerRegistrering, ?array $adresser): void
     {
         if (null === $adresser) {
             return;
@@ -274,7 +268,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleBrugerTyper(BrugerRegistrering $brugerRegistrering, ?array $brugerTyper)
+    private function handleBrugerTyper(BrugerRegistrering $brugerRegistrering, ?array $brugerTyper): void
     {
         if (null === $brugerTyper) {
             return;
@@ -283,7 +277,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeOpgaver(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOpgaver)
+    private function handleTilknyttedeOpgaver(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOpgaver): void
     {
         if (null === $tilknyttedeOpgaver) {
             return;
@@ -292,7 +286,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilhoerer(BrugerRegistrering $brugerRegistrering, ?OrganisationFlerRelationType $tilhoerer)
+    private function handleTilhoerer(BrugerRegistrering $brugerRegistrering, ?OrganisationFlerRelationType $tilhoerer): void
     {
         if (null === $tilhoerer) {
             return;
@@ -326,7 +320,7 @@ class BrugerFetchService implements FetchServiceInterface
         $this->entityManager->persist($brugerRegistreringTilhoerer);
     }
 
-    private function handleTilknyttedeEnheder(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeEnheder)
+    private function handleTilknyttedeEnheder(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeEnheder): void
     {
         if (null === $tilknyttedeEnheder) {
             return;
@@ -335,7 +329,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeInteressefaellesskaber(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeInteressefaellesskaber)
+    private function handleTilknyttedeInteressefaellesskaber(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeInteressefaellesskaber): void
     {
         if (null === $tilknyttedeInteressefaellesskaber) {
             return;
@@ -344,7 +338,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeOrganisationer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOrganisationer)
+    private function handleTilknyttedeOrganisationer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOrganisationer): void
     {
         if (null === $tilknyttedeOrganisationer) {
             return;
@@ -353,7 +347,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedePersoner(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedePersoner)
+    private function handleTilknyttedePersoner(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedePersoner): void
     {
         if (null === $tilknyttedePersoner) {
             return;
@@ -389,7 +383,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeItSystemer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeItSystemer)
+    private function handleTilknyttedeItSystemer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeItSystemer): void
     {
         if (null === $tilknyttedeItSystemer) {
             return;
@@ -398,7 +392,7 @@ class BrugerFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleLokalUdvidelse(BrugerRegistrering $brugerRegistrering, ?LokalUdvidelseType $lokalUdvidelse)
+    private function handleLokalUdvidelse(BrugerRegistrering $brugerRegistrering, ?LokalUdvidelseType $lokalUdvidelse): void
     {
         if (null === $lokalUdvidelse) {
             return;

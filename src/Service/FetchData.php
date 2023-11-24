@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\DataTypeException;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
@@ -14,7 +15,10 @@ class FetchData
         $this->setLogger(new NullLogger());
     }
 
-    public function fetch(array $dataTypes, $pageSize = 1000, $max = null)
+    /**
+     * @throws DataTypeException
+     */
+    public function fetch(array $dataTypes, int $pageSize = 1000, int|null $max = null): void
     {
         $this->logger->debug('Fetching data');
 
@@ -27,7 +31,12 @@ class FetchData
                 'adresse' => $this->fetchServiceFactory->adresseService($this->logger),
                 'organisationfunktion' => $this->fetchServiceFactory->organisationFunktionService($this->logger),
                 'organisationenhed' => $this->fetchServiceFactory->organisationEnhedService($this->logger),
+                default => null,
             };
+
+            if (null === $service) {
+                throw new DataTypeException(sprintf('Invalid data type detected: %s', $dataType));
+            }
 
             $services[] = $service;
         }

@@ -5,11 +5,11 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\InvalidProviderRequestException;
-use App\Repository\Model\FunktionsDataRepository;
+use App\Repository\Model\FunktionRepository;
 
 readonly class BrugerFunktionerProvider implements ProviderInterface
 {
-    public function __construct(private FunktionsDataRepository $funktionsDataRepository)
+    public function __construct(private FunktionRepository $funktionRepository)
     {
     }
 
@@ -19,6 +19,6 @@ readonly class BrugerFunktionerProvider implements ProviderInterface
             throw new InvalidProviderRequestException('Could not find id in uri');
         }
 
-        return $this->funktionsDataRepository->findBy(['brugerId' => $uriVariables['id']]);
+        return $this->funktionRepository->findBy(['brugerId' => $uriVariables['id']]);
     }
 }

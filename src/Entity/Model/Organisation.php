@@ -4,12 +4,12 @@ namespace App\Entity\Model;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use App\Repository\Model\OrganisationDataRepository;
+use App\Repository\Model\OrganisationRepository;
 use App\State\OrganisationPathProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: OrganisationDataRepository::class)]
+#[ORM\Entity(repositoryClass: OrganisationRepository::class)]
 #[ORM\Table(name: 'organisation')]
 #[ApiResource(
     operations: [

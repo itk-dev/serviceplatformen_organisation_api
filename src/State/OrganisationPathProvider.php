@@ -5,11 +5,11 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\InvalidProviderRequestException;
-use App\Repository\Model\OrganisationDataRepository;
+use App\Repository\Model\OrganisationRepository;
 
 readonly class OrganisationPathProvider implements ProviderInterface
 {
-    public function __construct(private OrganisationDataRepository $organisationDataRepository)
+    public function __construct(private OrganisationRepository $organisationDataRepository)
     {
     }
 

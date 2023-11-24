@@ -86,31 +86,25 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
             }
         }
 
-        $this->logger->debug(sprintf('Finished fetching organisation funktion data'));
+        $this->logger->debug('Finished fetching organisation funktion data');
     }
 
     public function clientSoeg(array $options = []): Soeg
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
-        assert($client instanceof Soeg);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
     }
 
     public function clientList(array $options = []): _List
     {
-        $client = $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
-        assert($client instanceof _List);
-
-        return $client;
+        return $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
     }
 
-    private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede)
+    private function handleOejebliksbillede(FiltreretOejebliksbilledeType $oejebliksbillede): void
     {
         $this->handleRegistrering($oejebliksbillede->getObjektType()->getUUIDIdentifikator(), $oejebliksbillede->getRegistrering());
     }
 
-    private function handleRegistrering(string $organisationFunktionId, array $registreringer)
+    private function handleRegistrering(string $organisationFunktionId, array $registreringer): void
     {
         foreach ($registreringer as /* @var RegistreringType $registrering */ $registrering) {
             $organisationFunktionRegistrering = new OrganisationFunktionRegistrering();
@@ -132,7 +126,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleEgenskab(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $egenskaber)
+    private function handleEgenskab(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $egenskaber): void
     {
         if (null === $egenskaber) {
             return;
@@ -165,7 +159,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleGyldighed(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $gyldigheder)
+    private function handleGyldighed(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $gyldigheder): void
     {
         if (null === $gyldigheder) {
             return;
@@ -198,7 +192,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleRelation(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?RelationListeType $relation)
+    private function handleRelation(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?RelationListeType $relation): void
     {
         if (null === $relation) {
             return;
@@ -216,7 +210,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         $this->handleLokalUdvidelse($organisationFunktionRegistrering, $relation->getLokalUdvidelse());
     }
 
-    private function handleAdresser(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $adresser)
+    private function handleAdresser(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $adresser): void
     {
         if (null === $adresser) {
             return;
@@ -225,7 +219,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleFunktionstype(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?KlasseRelationType $funktionstype)
+    private function handleFunktionstype(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?KlasseRelationType $funktionstype): void
     {
         if (null === $funktionstype) {
             return;
@@ -259,7 +253,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         $this->entityManager->persist($organisationFunktionRegistreringFunktionstype);
     }
 
-    private function handleTilknyttedeOpgaver(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeOpgaver)
+    private function handleTilknyttedeOpgaver(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeOpgaver): void
     {
         if (null === $tilknyttedeOpgaver) {
             return;
@@ -268,7 +262,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeBrugere(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeBrugere)
+    private function handleTilknyttedeBrugere(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeBrugere): void
     {
         if (null === $tilknyttedeBrugere) {
             return;
@@ -304,7 +298,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeEnheder(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeEnheder)
+    private function handleTilknyttedeEnheder(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeEnheder): void
     {
         if (null === $tilknyttedeEnheder) {
             return;
@@ -340,7 +334,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeInteressefaellesskaber(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeInteressefaellesskaber)
+    private function handleTilknyttedeInteressefaellesskaber(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeInteressefaellesskaber): void
     {
         if (null === $tilknyttedeInteressefaellesskaber) {
             return;
@@ -349,7 +343,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeOrganisationer(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeOrganisationer)
+    private function handleTilknyttedeOrganisationer(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeOrganisationer): void
     {
         if (null === $tilknyttedeOrganisationer) {
             return;
@@ -385,7 +379,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedePersoner(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedePersoner)
+    private function handleTilknyttedePersoner(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedePersoner): void
     {
         if (null === $tilknyttedePersoner) {
             return;
@@ -394,7 +388,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleTilknyttedeItSystemer(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeItSystemer)
+    private function handleTilknyttedeItSystemer(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeItSystemer): void
     {
         if (null === $tilknyttedeItSystemer) {
             return;
@@ -403,7 +397,7 @@ class OrganisationFunktionFetchService implements FetchServiceInterface
         }
     }
 
-    private function handleLokalUdvidelse(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?LokalUdvidelseType $lokalUdvidelse)
+    private function handleLokalUdvidelse(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?LokalUdvidelseType $lokalUdvidelse): void
     {
         if (null === $lokalUdvidelse) {
             return;

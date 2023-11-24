@@ -210,3 +210,12 @@ we decided to adhere to in this project.
   ```sh
   docker compose run --rm node yarn check-coding-standards/markdownlint
   ```
+
+
+### Code analysis
+
+We use Psalm for code analysis.
+
+```sh
+./vendor/bin/psalm
+```

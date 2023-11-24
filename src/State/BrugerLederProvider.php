@@ -5,11 +5,11 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Exception\InvalidProviderRequestException;
-use App\Repository\Model\FunktionsDataRepository;
+use App\Repository\Model\FunktionRepository;
 
 readonly class BrugerLederProvider implements ProviderInterface
 {
-    public function __construct(private FunktionsDataRepository $funktionsDataRepository, private array $options)
+    public function __construct(private FunktionRepository $funktionsDataRepository, private array $options)
     {
     }
 
