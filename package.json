@@ -6,6 +6,6 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "check-coding-standards/markdownlint": "markdownlint --ignore LICENSE.md '*.md' docs/"
+    "coding-standards-check/markdownlint": "markdownlint --ignore LICENSE.md '*.md' docs/"
   }
 }

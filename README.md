@@ -182,19 +182,19 @@ we decided to adhere to in this project.
 * PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
 
    ```sh
-   docker compose exec phpfpm vendor/bin/php-cs-fixer fix --dry-run
+   docker compose exec phpfpm composer coding-standards-check
    ```
 
 * Markdown files (markdownlint standard rules)
 
   ```sh
-  docker compose run --rm node yarn check-coding-standards/markdownlint
+  docker compose run --rm node yarn coding-standards-check/markdownlint
   ```
 
 ### Code analysis
 
-We use Psalm for code analysis.
+psalm
 
 ```sh
-./vendor/bin/psalm
+docker compose exec phpfpm composer coding-analysis
 ```

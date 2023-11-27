@@ -69,6 +69,24 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "coding-standards-check/phpcs": [
+            "vendor/bin/php-cs-fixer fix --dry-run"
+        ],
+        "coding-standards-apply/phpcs": [
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ],
+        "code-analysis/psalm": [
+            "vendor/bin/psalm"
+        ],
+        "code-analysis": [
+            "@code-analysis/psalm"
         ]
     },
     "conflict": {

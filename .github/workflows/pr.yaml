@@ -26,7 +26,7 @@ jobs:
         php-versions: [ '8.2' ]
         dependency-version: [ prefer-stable ]
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -50,35 +50,38 @@ jobs:
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
-  php-cs-fixer:
+  coding-standards:
+    name: PHP - Check Coding Standards
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        php: [ '8.2' ]
-    name: PHP Coding Standards Fixer (${{ matrix.php }})
+        php-versions: [ '8.2' ]
+        dependency-version: [ prefer-stable ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php}}
-          extensions: apcu, ctype, iconv, imagick, json, redis, soap, xmlreader, zip
+          php-version: ${{ matrix.php-versions }}
+          extensions: ctype, dom, iconv, json, zip, gd, soap
           coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Cache composer dependencies
+      - name: Cache dependencies
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: php-cs-fixer
-        run: phpdbg -qrr ./vendor/bin/php-cs-fixer fix --dry-run
+        run: |
+          composer install --no-interaction --no-progress --no-scripts
+      - name: PHPCS
+        run: |
+          composer coding-standards-check
 
   markdownlint:
     runs-on: ubuntu-latest
@@ -103,4 +106,38 @@ jobs:
           node-version: '18'
       - run: yarn install
       - name: markdownlint
-        run: yarn check-coding-standards/markdownlint
+        run: yarn coding-standards-check/markdownlint
+
+  code-analysis:
+    name: PHP - Code analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '8.2' ]
+        dependency-version: [ prefer-stable ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ctype, dom, iconv, json, zip, gd, soap
+          coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install Dependencies
+        run: |
+          # Using `--no-scripts` breaks something with mglaman/drupal-check.
+          composer install --no-interaction --no-progress --no-scripts
+      - name: code-analysis
+        run: |
+          composer code-analysis
