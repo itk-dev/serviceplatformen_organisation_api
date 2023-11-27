@@ -110,36 +110,18 @@ To fetch data from SF1500 run
 docker compose exec phpfpm bin/console organisation:fetch:data DATATYPES --page-size=PAGE-SIZE --max=MAX
 ```
 
-where `DATATYPES` is a list of datatypes (separated by space)
-determining which data to fetch.
-
-#### Available datatypes
-
-Available datatypes are `bruger`, `person`,
-`adresse`, `organisationfunktion` and `organisationenhed`.
-
-If you wish to fetch data from multiple datatypes supply them separated by space:
+for help run
 
 ```sh
-docker compose exec phpfpm bin/console organisation:fetch:data bruger person
+docker compose exec phpfpm bin/console organisation:fetch:data --help
 ```
-
-#### Fetch all data
-
-To fetch all data, run:
-
-```sh
-docker compose exec phpfpm bin/console organisation:fetch:data person bruger adresse organisationfunktion organisationenhed
-```
-
-Run `bin/console organisation:fetch:data --help` for command documentation,
-and add the verbose flag if you wish to see progress.
 
 **To avoid issues with memory leaks during development add the
-`--no-debug` flag to the fetch data command.**
+`--no-debug` flag to the fetch data command.** You may also want to
+add the verbose flag to see progress.
 
 ```sh
-docker compose exec phpfpm bin/console --no-debug organisation:fetch:data DATATYPES -vvv
+docker compose exec phpfpm bin/console --no-debug organisation:fetch:data -vvv
 ```
 
 ## API
@@ -180,6 +162,8 @@ curl -X 'GET' \
   -H 'accept: application/ld+json'
 ```
 
+Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
+
 #### Get funktioner
 
 ```sh
@@ -187,6 +171,8 @@ curl -X 'GET' \
   'https://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner' \
   -H 'accept: application/ld+json'
 ```
+
+Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
 
 ### Coding standard tests
 
