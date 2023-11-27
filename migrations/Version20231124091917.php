@@ -47,6 +47,6 @@ final class Version20231124091917 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP VIEW funktions_data');
+        $this->addSql('DROP VIEW funktions');
     }
 }
