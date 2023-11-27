@@ -68,6 +68,7 @@ class Funktion
     #[Groups(['funktion:item'])]
     private string $funktionsType;
 
+    // Private constructor to avoid instantiation as entity represents a database view.
     private function __construct()
     {
     }

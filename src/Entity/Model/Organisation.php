@@ -44,6 +44,7 @@ class Organisation
     #[Groups(['organisation:item'])]
     private ?string $overordnetId;
 
+    // Private constructor to avoid instantiation as entity represents a database view.
     private function __construct()
     {
     }
