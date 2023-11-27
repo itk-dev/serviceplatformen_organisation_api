@@ -10,8 +10,6 @@ use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeBrugere;
 use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeEnheder;
 use App\Entity\SF1500\OrganisationFunktionRegistreringTilknyttedeOrganisationer;
 use App\Exception\UnhandledException;
-use App\Service\SF1500Service;
-use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\BrugerFlerRelationType;
@@ -28,15 +26,10 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\RelationList
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\TilstandListeType;
-use Psr\Log\LoggerAwareTrait;
 
-class OrganisationFunktionDataFetcher implements DataFetcherInterface
+class OrganisationFunktionDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
 {
-    use LoggerAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
-    {
-    }
+    private const DATA_TYPE = 'organisation funktion';
 
     public function fetch(int $pageSize, int $max): void
     {
@@ -51,8 +44,9 @@ class OrganisationFunktionDataFetcher implements DataFetcherInterface
         );
 
         while (true) {
-            $this->logger->debug(sprintf('Fetching organisation funktion data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
+            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
@@ -86,7 +80,7 @@ class OrganisationFunktionDataFetcher implements DataFetcherInterface
             }
         }
 
-        $this->logger->debug('Finished fetching organisation funktion data');
+        $this->logFetchFinished(self::DATA_TYPE);
     }
 
     public function clientSoeg(array $options = []): Soeg

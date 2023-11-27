@@ -11,8 +11,6 @@ use App\Entity\SF1500\OrganisationEnhedRegistreringOpgave;
 use App\Entity\SF1500\OrganisationEnhedRegistreringOverordnet;
 use App\Entity\SF1500\OrganisationEnhedRegistreringTilhoerer;
 use App\Exception\UnhandledException;
-use App\Service\SF1500Service;
-use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\AdresseFlerRelationType;
@@ -31,15 +29,10 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\TilstandListeType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\VirksomhedRelationType;
-use Psr\Log\LoggerAwareTrait;
 
-class OrganisationEnhedDataFetcher implements DataFetcherInterface
+class OrganisationEnhedDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
 {
-    use LoggerAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
-    {
-    }
+    private const DATA_TYPE = 'organisation enhed';
 
     public function fetch(int $pageSize, int $max): void
     {
@@ -54,8 +47,9 @@ class OrganisationEnhedDataFetcher implements DataFetcherInterface
         );
 
         while (true) {
-            $this->logger->debug(sprintf('Fetching organisation enhed data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
+            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
@@ -89,7 +83,7 @@ class OrganisationEnhedDataFetcher implements DataFetcherInterface
             }
         }
 
-        $this->logger->debug('Finished fetching organisation enhed data');
+        $this->logFetchFinished(self::DATA_TYPE);
     }
 
     public function clientSoeg(array $options = []): Soeg

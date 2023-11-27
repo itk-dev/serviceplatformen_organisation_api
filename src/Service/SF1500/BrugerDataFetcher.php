@@ -9,8 +9,6 @@ use App\Entity\SF1500\BrugerRegistreringGyldighed;
 use App\Entity\SF1500\BrugerRegistreringTilhoerer;
 use App\Entity\SF1500\BrugerRegistreringTilknyttedePersoner;
 use App\Exception\UnhandledException;
-use App\Service\SF1500Service;
-use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Bruger\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Bruger\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\AdresseFlerRelationType;
@@ -26,15 +24,10 @@ use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\TilstandListeType;
-use Psr\Log\LoggerAwareTrait;
 
-class BrugerDataFetcher implements DataFetcherInterface
+class BrugerDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
 {
-    use LoggerAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
-    {
-    }
+    private const DATA_TYPE = 'bruger';
 
     public function fetch(int $pageSize, int $max): void
     {
@@ -49,8 +42,9 @@ class BrugerDataFetcher implements DataFetcherInterface
         );
 
         while (true) {
-            $this->logger->debug(sprintf('Fetching bruger data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
+            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
@@ -84,7 +78,7 @@ class BrugerDataFetcher implements DataFetcherInterface
             }
         }
 
-        $this->logger->debug('Finished fetching bruger data');
+        $this->logFetchFinished(self::DATA_TYPE);
     }
 
     public function clientSoeg(array $options = []): Soeg

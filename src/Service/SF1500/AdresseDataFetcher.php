@@ -5,8 +5,6 @@ namespace App\Service\SF1500;
 use App\Entity\SF1500\AdresseRegistrering;
 use App\Entity\SF1500\AdresseRegistreringEgenskab;
 use App\Exception\UnhandledException;
-use App\Service\SF1500Service;
-use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Adresse\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Adresse\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\EgenskabType;
@@ -17,23 +15,19 @@ use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\RelationListeType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\TilstandListeType;
-use Psr\Log\LoggerAwareTrait;
 
-class AdresseDataFetcher implements DataFetcherInterface
+class AdresseDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
 {
-    use LoggerAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
-    {
-    }
+    private const DATA_TYPE = 'adresse';
 
     public function fetch(int $pageSize, int $max): void
     {
         $total = 0;
 
         while (true) {
-            $this->logger->debug(sprintf('Fetching adresse data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
+            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
@@ -65,7 +59,7 @@ class AdresseDataFetcher implements DataFetcherInterface
             }
         }
 
-        $this->logger->debug('Finished fetching adresse data');
+        $this->logFetchFinished(self::DATA_TYPE);
     }
 
     public function clientSoeg(array $options = []): Soeg

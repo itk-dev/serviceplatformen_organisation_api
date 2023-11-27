@@ -4,8 +4,6 @@ namespace App\Service\SF1500;
 
 use App\Entity\SF1500\PersonRegistrering;
 use App\Entity\SF1500\PersonRegistreringEgenskab;
-use App\Service\SF1500Service;
-use Doctrine\ORM\EntityManagerInterface;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Person\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\EgenskabType;
@@ -13,23 +11,19 @@ use ItkDev\Serviceplatformen\SF1500\Person\StructType\FiltreretOejebliksbilledeT
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegInputType;
-use Psr\Log\LoggerAwareTrait;
 
-class PersonDataFetcher implements DataFetcherInterface
+class PersonDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
 {
-    use LoggerAwareTrait;
-
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SF1500Service $sf1500Service)
-    {
-    }
+    private const DATA_TYPE = 'person';
 
     public function fetch(int $pageSize, int $max): void
     {
         $total = 0;
 
         while (true) {
-            $this->logger->debug(sprintf('Fetching person data, offset: %d , max: %d', $total, $max));
-            $this->logger->debug(sprintf('Memory used: %d ', memory_get_usage() / 1024 / 1024));
+            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
             $request = (new SoegInputType())
                 ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
                 ->setFoersteResultatReference($total)
@@ -61,7 +55,7 @@ class PersonDataFetcher implements DataFetcherInterface
             }
         }
 
-        $this->logger->debug('Finished fetching person data');
+        $this->logFetchFinished(self::DATA_TYPE);
     }
 
     public function clientSoeg(array $options = []): Soeg
