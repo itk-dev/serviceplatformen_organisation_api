@@ -30,7 +30,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegOutputTy
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\TilstandListeType;
 use Psr\Log\LoggerAwareTrait;
 
-class OrganisationFunktionFetchService implements FetchServiceInterface
+class OrganisationFunktionDataFetcher implements DataFetcherInterface
 {
     use LoggerAwareTrait;
 

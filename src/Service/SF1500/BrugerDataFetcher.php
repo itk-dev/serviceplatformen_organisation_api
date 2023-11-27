@@ -28,7 +28,7 @@ use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\TilstandListeType;
 use Psr\Log\LoggerAwareTrait;
 
-class BrugerFetchService implements FetchServiceInterface
+class BrugerDataFetcher implements DataFetcherInterface
 {
     use LoggerAwareTrait;
 

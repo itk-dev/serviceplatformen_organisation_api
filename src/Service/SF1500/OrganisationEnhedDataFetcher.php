@@ -33,7 +33,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\TilstandListeTy
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\VirksomhedRelationType;
 use Psr\Log\LoggerAwareTrait;
 
-class OrganisationEnhedFetchService implements FetchServiceInterface
+class OrganisationEnhedDataFetcher implements DataFetcherInterface
 {
     use LoggerAwareTrait;
 

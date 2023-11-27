@@ -2,7 +2,7 @@
 
 namespace App\Service\SF1500;
 
-interface FetchServiceInterface
+interface DataFetcherInterface
 {
     public function fetch(int $pageSize, int $max): void;
 
