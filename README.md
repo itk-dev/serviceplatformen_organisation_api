@@ -51,13 +51,7 @@ To get a local copy up and running follow these steps.
    docker compose exec phpfpm composer install
    ```
 
-4. Install yarn packages
-
-   ```sh
-   docker compose run --rm node yarn install
-   ```
-
-5. Run database migrations
+4. Run database migrations
 
    ```sh
    docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interaction
