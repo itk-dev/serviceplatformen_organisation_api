@@ -16,6 +16,10 @@ abstract class AbstractDataFetcher
 
     abstract public function fetch(int $pageSize, int $max): void;
 
+    abstract public function clientSoeg(array $options = []);
+
+    abstract public function clientList(array $options = []);
+
     protected function logFetchProgress(string $dataType, int $total, int $max): void
     {
         $this->logger->debug(sprintf('Fetching %s data, offset: %d , max: %d', $dataType, $total, $max));

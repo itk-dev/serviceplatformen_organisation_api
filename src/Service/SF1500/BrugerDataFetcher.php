@@ -25,7 +25,7 @@ use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\TilstandListeType;
 
-class BrugerDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
+class BrugerDataFetcher extends AbstractDataFetcher
 {
     private const DATA_TYPE = 'bruger';
 

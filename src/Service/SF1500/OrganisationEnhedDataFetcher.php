@@ -30,7 +30,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\TilstandListeType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\VirksomhedRelationType;
 
-class OrganisationEnhedDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
+class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 {
     private const DATA_TYPE = 'organisation enhed';
 

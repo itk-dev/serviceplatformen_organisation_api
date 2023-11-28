@@ -16,7 +16,7 @@ use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegInputType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\TilstandListeType;
 
-class AdresseDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
+class AdresseDataFetcher extends AbstractDataFetcher
 {
     private const DATA_TYPE = 'adresse';
 

@@ -12,7 +12,7 @@ use ItkDev\Serviceplatformen\SF1500\Person\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegInputType;
 
-class PersonDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
+class PersonDataFetcher extends AbstractDataFetcher
 {
     private const DATA_TYPE = 'person';
 

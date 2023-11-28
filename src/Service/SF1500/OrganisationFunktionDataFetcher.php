@@ -27,7 +27,7 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegInputTyp
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\SoegOutputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationFunktion\StructType\TilstandListeType;
 
-class OrganisationFunktionDataFetcher extends AbstractDataFetcher implements DataFetcherInterface
+class OrganisationFunktionDataFetcher extends AbstractDataFetcher
 {
     private const DATA_TYPE = 'organisation funktion';
 
