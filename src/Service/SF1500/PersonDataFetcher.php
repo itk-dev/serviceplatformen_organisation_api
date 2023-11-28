@@ -11,51 +11,35 @@ use ItkDev\Serviceplatformen\SF1500\Person\StructType\FiltreretOejebliksbilledeT
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\RegistreringType;
 use ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegInputType;
+use ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType;
 
 class PersonDataFetcher extends AbstractDataFetcher
 {
-    private const DATA_TYPE = 'person';
+    protected const DATA_TYPE = 'person';
 
-    public function fetch(int $pageSize, int $max): void
+    public function fetchData(int $pageSize, int $total, int $max): int|bool
     {
-        $total = 0;
+        $request = (new SoegInputType())
+            ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
+            ->setFoersteResultatReference($total)
+        ;
 
-        while (true) {
-            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
-            $this->logMemoryUsage();
+        /** @var SoegOutputType $data */
+        $soeg = $this->clientSoeg()->soeg($request);
 
-            $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
-                ->setFoersteResultatReference($total)
-            ;
+        $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            /** @var \ItkDev\Serviceplatformen\SF1500\Person\StructType\SoegOutputType $data */
-            $soeg = $this->clientSoeg()->soeg($request);
-
-            $ids = $soeg->getIdListe()->getUUIDIdentifikator();
-
-            if (!is_countable($ids) || empty($ids)) {
-                break;
-            }
-
-            $personList = $this->clientList()->_list_11(new ListInputType($ids));
-
-            foreach ($personList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
-                $this->handleOejebliksbillede($oejebliksbillede);
-            }
-
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-            gc_collect_cycles();
-
-            $total += count($ids);
-
-            if ($total >= $max) {
-                break;
-            }
+        if (!is_countable($ids) || empty($ids)) {
+            return false;
         }
 
-        $this->logFetchFinished(self::DATA_TYPE);
+        $personList = $this->clientList()->_list_11(new ListInputType($ids));
+
+        foreach ($personList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            $this->handleOejebliksbillede($oejebliksbillede);
+        }
+
+        return count($ids);
     }
 
     public function clientSoeg(array $options = []): Soeg

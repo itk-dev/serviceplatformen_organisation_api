@@ -32,58 +32,45 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\VirksomhedRelat
 
 class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 {
-    private const DATA_TYPE = 'organisation enhed';
+    protected const DATA_TYPE = 'organisation enhed';
+    private ?TilstandListeType $tilstandListeType = null;
 
-    public function fetch(int $pageSize, int $max): void
+    protected function preFetchData(): void
     {
-        $total = 0;
-
-        $tilstandListeType = new TilstandListeType();
-        $tilstandListeType->addToGyldighed(
+        $this->tilstandListeType = new TilstandListeType();
+        $this->tilstandListeType->addToGyldighed(
             new GyldighedType(
                 null,
                 'Aktiv'
             )
         );
+    }
 
-        while (true) {
-            $this->logFetchProgress(self::DATA_TYPE, $total, $max);
-            $this->logMemoryUsage();
+    protected function fetchData(int $pageSize, int $total, int $max): int|false
+    {
+        $request = (new SoegInputType())
+            ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
+            ->setFoersteResultatReference($total)
+            // Only want active objects.
+            ->setTilstandListe($this->tilstandListeType)
+        ;
 
-            $request = (new SoegInputType())
-                ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
-                ->setFoersteResultatReference($total)
-                // Only want active objects.
-                ->setTilstandListe($tilstandListeType)
-            ;
+        /** @var SoegOutputType $data */
+        $soeg = $this->clientSoeg()->soeg($request);
 
-            /** @var SoegOutputType $data */
-            $soeg = $this->clientSoeg()->soeg($request);
+        $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
-            $ids = $soeg->getIdListe()->getUUIDIdentifikator();
-
-            if (!is_countable($ids) || empty($ids)) {
-                break;
-            }
-
-            $brugerList = $this->clientList()->_list_9(new ListInputType($ids));
-
-            foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
-                $this->handleOejebliksbillede($oejebliksbillede);
-            }
-
-            $this->entityManager->flush();
-            $this->entityManager->clear();
-            gc_collect_cycles();
-
-            $total += count($ids);
-
-            if ($total >= $max) {
-                break;
-            }
+        if (!is_countable($ids) || empty($ids)) {
+            return false;
         }
 
-        $this->logFetchFinished(self::DATA_TYPE);
+        $brugerList = $this->clientList()->_list_9(new ListInputType($ids));
+
+        foreach ($brugerList->getFiltreretOejebliksbillede() as /* @var FiltreretOejebliksbilledeType $oejebliksbillede */ $oejebliksbillede) {
+            $this->handleOejebliksbillede($oejebliksbillede);
+        }
+
+        return count($ids);
     }
 
     public function clientSoeg(array $options = []): Soeg

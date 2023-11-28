@@ -10,11 +10,47 @@ abstract class AbstractDataFetcher
 {
     use LoggerAwareTrait;
 
+    protected const DATA_TYPE = null;
+
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SF1500Service $sf1500Service)
     {
     }
 
-    abstract public function fetch(int $pageSize, int $max): void;
+    public function fetch(int $pageSize, int $max)
+    {
+        $total = 0;
+
+        $this->preFetchData();
+
+        while (true) {
+            $this->logFetchProgress(static::DATA_TYPE, $total, $max);
+            $this->logMemoryUsage();
+
+            $dataSize = $this->fetchData($pageSize, $total, $max);
+
+            if (false === $dataSize) {
+                break;
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+            gc_collect_cycles();
+
+            $total += $dataSize;
+
+            if ($total >= $max) {
+                break;
+            }
+        }
+
+        $this->logFetchFinished(static::DATA_TYPE);
+    }
+
+    protected function preFetchData(): void
+    {
+    }
+
+    abstract protected function fetchData(int $pageSize, int $total, int $max): int|bool;
 
     abstract public function clientSoeg(array $options = []);
 
