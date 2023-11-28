@@ -17,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class FetchDataCommand extends Command
 {
-    public const ALL_DATA_TYPES_OPTION = 'all';
     public const ALLOWED_DATA_TYPES = [
         'person',
         'bruger',
@@ -33,7 +32,7 @@ class FetchDataCommand extends Command
 
     protected function configure(): void
     {
-        $dataTypeDescription = sprintf('Which data to fetch. Allowed options: %s, %s.', self::ALL_DATA_TYPES_OPTION, implode(', ', self::ALLOWED_DATA_TYPES));
+        $dataTypeDescription = sprintf('Which data to fetch. If no data type(s) is provided it will fetch all by default. Allowed options: %s.', implode(', ', self::ALLOWED_DATA_TYPES));
 
         $this
             ->addArgument('data-type', InputArgument::IS_ARRAY, $dataTypeDescription)
@@ -45,13 +44,7 @@ class FetchDataCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Handle data type option.
-        $dataTypes = $input->getArgument('data-type');
-
-        if (empty($dataTypes)) {
-            $output->writeln('No data-type provided.');
-
-            return Command::FAILURE;
-        }
+        $dataTypes = $input->getArgument('data-type') ?: self::ALLOWED_DATA_TYPES;
 
         // Check for duplicate entries
         $duplicated = array_diff_assoc($dataTypes, array_unique($dataTypes));
@@ -62,15 +55,10 @@ class FetchDataCommand extends Command
             return Command::FAILURE;
         }
 
-        // If 'all' option used, fetch all data types.
-        if (in_array(self::ALL_DATA_TYPES_OPTION, $dataTypes)) {
-            $dataTypes = self::ALLOWED_DATA_TYPES;
-        }
-
+        // Check for allowed datatypes.
         foreach ($dataTypes as $dataType) {
-            // Check for allowed datatypes.
             if (!in_array($dataType, self::ALLOWED_DATA_TYPES)) {
-                $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s, %s.', $dataType, self::ALL_DATA_TYPES_OPTION, implode(', ', self::ALLOWED_DATA_TYPES)));
+                $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType, implode(', ', self::ALLOWED_DATA_TYPES)));
 
                 return Command::FAILURE;
             }
