@@ -79,7 +79,7 @@ class Bruger
     #[Groups(['bruger:item'])]
     private string $lokation;
 
-    // Private constructor to avoid instantiation as entity represents a database view.
+    // Private constructor to ensure entity is read-only.
     private function __construct()
     {
     }
