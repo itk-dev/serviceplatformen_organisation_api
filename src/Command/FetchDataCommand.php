@@ -52,7 +52,7 @@ class FetchDataCommand extends Command
         if (!empty($duplicated)) {
             $output->writeln(sprintf('Duplicated data-types detected: %s.', implode(', ', $duplicated)));
 
-            return Command::FAILURE;
+            return Command::INVALID;
         }
 
         // Check for allowed datatypes.
@@ -60,7 +60,7 @@ class FetchDataCommand extends Command
             if (!in_array($dataType, self::ALLOWED_DATA_TYPES)) {
                 $output->writeln(sprintf('Data type: %s not allowed. Allowed data types are: %s.', $dataType, implode(', ', self::ALLOWED_DATA_TYPES)));
 
-                return Command::FAILURE;
+                return Command::INVALID;
             }
         }
 
@@ -70,7 +70,7 @@ class FetchDataCommand extends Command
         if ($pageSize < 1 || $pageSize > 1000) {
             $output->writeln(sprintf('Page size: %s not allowed. Page size should be an integer between 1 and 1000', $pageSize));
 
-            return Command::FAILURE;
+            return Command::INVALID;
         }
 
         // Handle max option.
@@ -79,7 +79,7 @@ class FetchDataCommand extends Command
         if ($max < 1) {
             $output->writeln(sprintf('Max: %s not allowed. Max should be an integer greater than 1', $max));
 
-            return Command::FAILURE;
+            return Command::INVALID;
         }
 
         $this->fetchData->setLogger(new ConsoleLogger($output));
