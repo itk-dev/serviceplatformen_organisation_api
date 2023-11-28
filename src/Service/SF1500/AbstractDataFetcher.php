@@ -24,7 +24,6 @@ abstract class AbstractDataFetcher
 
         while (true) {
             $this->logFetchProgress(static::DATA_TYPE, $total, $max);
-            $this->logMemoryUsage();
 
             $dataSize = $this->fetchData($pageSize, $total, $max);
 
@@ -59,10 +58,6 @@ abstract class AbstractDataFetcher
     protected function logFetchProgress(string $dataType, int $total, int $max): void
     {
         $this->logger->debug(sprintf('Fetching %s data, offset: %d , max: %d', $dataType, $total, $max));
-    }
-
-    protected function logMemoryUsage(): void
-    {
         $this->logger->debug(sprintf('Memory used: %s ', $this->convertFilesize(memory_get_usage())));
     }
 
