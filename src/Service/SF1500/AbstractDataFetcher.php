@@ -51,14 +51,14 @@ abstract class AbstractDataFetcher
     }
 
     /**
-     * Method for adding logic prior to fetchData, e.g. setting up ressources or variables.
+     * Method for adding logic prior to fetchData, e.g. setting up resources or variables.
      */
     protected function preFetchData(): void
     {
     }
 
     /**
-     * Method for adding logic post fetchData, e.g. cleaning up ressources or variables.
+     * Method for adding logic post fetchData, e.g. cleaning up resources or variables.
      */
     protected function postFetchData(): void
     {
@@ -68,7 +68,7 @@ abstract class AbstractDataFetcher
      * Method should fetch next chunk of data and persist them via the entity manager.
      *  Flushing is handled by the fetch method @see AbstractDataFetcher::fetch().
      *
-     * @return int the number of fetched records or -1
+     * @return int The number of fetched records or -1.
      */
     abstract protected function fetchData(int $pageSize, int $total, int $max): int;
 
