@@ -196,5 +196,5 @@ we decided to adhere to in this project.
 psalm
 
 ```sh
-docker compose exec phpfpm composer coding-analysis
+docker compose exec phpfpm composer code-analysis
 ```
