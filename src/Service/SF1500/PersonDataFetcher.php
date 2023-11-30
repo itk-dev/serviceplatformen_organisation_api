@@ -17,7 +17,7 @@ class PersonDataFetcher extends AbstractDataFetcher
 {
     protected const DATA_TYPE = 'person';
 
-    public function fetchData(int $pageSize, int $total, int $max): int|bool
+    public function fetchData(int $pageSize, int $total, int $max): int
     {
         $request = (new SoegInputType())
             ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
@@ -30,7 +30,7 @@ class PersonDataFetcher extends AbstractDataFetcher
         $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
         if (!is_countable($ids) || empty($ids)) {
-            return false;
+            return -1;
         }
 
         $personList = $this->clientList()->_list_11(new ListInputType($ids));

@@ -46,7 +46,7 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
         );
     }
 
-    protected function fetchData(int $pageSize, int $total, int $max): int|false
+    protected function fetchData(int $pageSize, int $total, int $max): int
     {
         $request = (new SoegInputType())
             ->setMaksimalAntalKvantitet(min($pageSize, $max - $total))
@@ -61,7 +61,7 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
         $ids = $soeg->getIdListe()->getUUIDIdentifikator();
 
         if (!is_countable($ids) || empty($ids)) {
-            return false;
+            return -1;
         }
 
         $brugerList = $this->clientList()->_list_9(new ListInputType($ids));
