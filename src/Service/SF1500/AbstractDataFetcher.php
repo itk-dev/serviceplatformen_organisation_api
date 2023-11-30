@@ -68,7 +68,7 @@ abstract class AbstractDataFetcher
      * Method should fetch next chunk of data and persist them via the entity manager.
      *  Flushing is handled by the fetch method @see AbstractDataFetcher::fetch().
      *
-     * @return int The number of fetched records or -1.
+     * @return int the number of fetched records or -1
      */
     abstract protected function fetchData(int $pageSize, int $total, int $max): int;
 
