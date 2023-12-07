@@ -10,7 +10,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: OrganisationEnhedRegistreringAdresserRepository::class)]
-#[ORM\Index(columns: ['reference_id_uuididentifikator'], name: 'organisation_adresser_ref_uuid_idx')]
+#[ORM\Index(columns: ['reference_id_uuididentifikator'], name: 'reference_id_uuididentifikator_idx')]
 class OrganisationEnhedRegistreringAdresser
 {
     use ReferenceIdTrait;
