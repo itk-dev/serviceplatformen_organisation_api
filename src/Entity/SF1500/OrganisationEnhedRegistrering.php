@@ -10,7 +10,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: OrganisationEnhedRegistreringRepository::class)]
-#[ORM\Index(columns: ["organisation_enhed_id"], name: "organisation_enhed_id_idx")]
+#[ORM\Index(columns: ['organisation_enhed_id'], name: 'organisation_enhed_id_idx')]
 class OrganisationEnhedRegistrering
 {
     #[ORM\Id]
