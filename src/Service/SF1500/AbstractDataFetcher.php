@@ -11,6 +11,7 @@ abstract class AbstractDataFetcher
     use LoggerAwareTrait;
 
     protected const DATA_TYPE = null;
+    private int $start = 0;
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SF1500Service $sf1500Service)
     {
@@ -21,6 +22,7 @@ abstract class AbstractDataFetcher
      */
     public function fetch(int $pageSize, int $max): void
     {
+        $this->start = strtotime('now');
         $total = 0;
 
         $this->preFetchData();
@@ -96,7 +98,9 @@ abstract class AbstractDataFetcher
      */
     protected function logFetchFinished(int $total): void
     {
-        $this->logger->debug(sprintf('Finished fetching %s data. Fetched a total of %d records.', static::DATA_TYPE, $total));
+        $this->logger->debug(sprintf('Finished fetching %s data.', static::DATA_TYPE));
+        $this->logger->debug(sprintf('Fetched a total of %d records.', $total));
+        $this->logger->debug(sprintf('Elapsed time: %s', gmdate('H:i:s', strtotime('now') - $this->start)));
     }
 
     /**

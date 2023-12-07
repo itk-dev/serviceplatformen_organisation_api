@@ -3,8 +3,6 @@
 namespace App\Entity\SF1500;
 
 use App\Repository\SF1500\AdresseRegistreringRepository;
-use App\Trait\BrugerRefTrait;
-use App\Trait\RegistreringTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,11 +10,9 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: AdresseRegistreringRepository::class)]
+#[ORM\Index(columns: ["adresse_id"], name: "adresse_id_idx")]
 class AdresseRegistrering
 {
-    use RegistreringTrait;
-    use BrugerRefTrait;
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;

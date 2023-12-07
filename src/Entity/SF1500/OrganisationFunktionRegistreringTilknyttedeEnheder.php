@@ -4,15 +4,14 @@ namespace App\Entity\SF1500;
 
 use App\Repository\SF1500\OrganisationFunktionRegistreringTilknyttedeEnhederRepository;
 use App\Trait\ReferenceIdTrait;
-use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: OrganisationFunktionRegistreringTilknyttedeEnhederRepository::class)]
+#[ORM\Index(columns: ["reference_id_uuididentifikator"], name: "organisation_funktion_tilknyttede_enheder_ref_uuid_idx")]
 class OrganisationFunktionRegistreringTilknyttedeEnheder
 {
-    use VirkningTrait;
     use ReferenceIdTrait;
 
     #[ORM\Id]

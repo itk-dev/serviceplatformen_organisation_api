@@ -5,10 +5,7 @@ namespace App\Service\SF1500;
 use App\Entity\SF1500\BrugerRegistrering;
 use App\Entity\SF1500\BrugerRegistreringAdresse;
 use App\Entity\SF1500\BrugerRegistreringEgenskab;
-use App\Entity\SF1500\BrugerRegistreringGyldighed;
-use App\Entity\SF1500\BrugerRegistreringTilhoerer;
 use App\Entity\SF1500\BrugerRegistreringTilknyttedePersoner;
-use App\Exception\UnhandledException;
 use ItkDev\Serviceplatformen\SF1500\Bruger\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Bruger\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\Bruger\StructType\AdresseFlerRelationType;
@@ -90,11 +87,6 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
             $brugerRegistrering
                 ->setBrugerId($brugerId)
-                ->setTidspunkt($registrering->getTidspunkt())
-                ->setNoteTekst($registrering->getNoteTekst())
-                ->setLivscyklusKode($registrering->getLivscyklusKode())
-                ->setBrugerRefUUIDIdentifikator($registrering->getBrugerRef()->getUUIDIdentifikator())
-                ->setBrugerRefURNIdentifikator($registrering->getBrugerRef()->getURNIdentifikator())
             ;
 
             $this->entityManager->persist($brugerRegistrering);
@@ -118,22 +110,7 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
             $brugerRegistreringEgenskab
                 ->setBrugerNavn($egenskab->getBrugerNavn())
-                ->setBrugervendtNoegleTekst($egenskab->getBrugervendtNoegleTekst())
                 ->setBrugerTypeTekst($egenskab->getBrugerTypeTekst())
-            ;
-
-            // Virkning.
-            $virkning = $egenskab->getVirkning();
-
-            $brugerRegistreringEgenskab
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
             ;
 
             $this->entityManager->persist($brugerRegistreringEgenskab);
@@ -142,37 +119,7 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
     private function handleGyldighed(BrugerRegistrering $brugerRegistrering, ?array $gyldigheder): void
     {
-        return;
-
-        if (null === $gyldigheder) {
-            return;
-        }
-
-        foreach ($gyldigheder as /* @var GyldighedType $gyldighed */ $gyldighed) {
-            $brugerRegistreringGyldighed = new BrugerRegistreringGyldighed();
-
-            $brugerRegistrering->addGyldigheder($brugerRegistreringGyldighed);
-
-            $brugerRegistreringGyldighed
-                ->setGyldighedStatusKode($gyldighed->getGyldighedStatusKode())
-            ;
-
-            // Virkning.
-            $virkning = $gyldighed->getVirkning();
-
-            $brugerRegistreringGyldighed
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
-            $this->entityManager->persist($brugerRegistreringGyldighed);
-        }
+        // Not needed for now.
     }
 
     private function handleRelation(BrugerRegistrering $brugerRegistrering, ?RelationListeType $relation): void
@@ -203,48 +150,11 @@ class BrugerDataFetcher extends AbstractDataFetcher
             $brugerRegistreringAdresse = new BrugerRegistreringAdresse();
             $brugerRegistrering->addAdresser($brugerRegistreringAdresse);
 
-            $brugerRegistreringAdresse
-                ->setIndeks($adresse->getIndeks())
-            ;
-
-            // Virkning.
-            $virkning = $adresse->getVirkning();
-
-            $brugerRegistreringAdresse
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
             // Reference id.
             $referenceId = $adresse->getReferenceID();
 
             $brugerRegistreringAdresse
                 ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-                ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
-            ;
-
-            // Rolle.
-            $rolle = $adresse->getRolle();
-
-            $brugerRegistreringAdresse
-                ->setRolleUUIDIdentifikator($rolle->getUUIDIdentifikator())
-                ->setRolleURNIdentifikator($rolle->getURNIdentifikator())
-                ->setRolleLabel($rolle->getLabel())
-            ;
-
-            // Type.
-            $type = $adresse->getType();
-
-            $brugerRegistreringAdresse
-                ->setTypeUUIDIdentifikator($type->getUUIDIdentifikator())
-                ->setTypeURNIdentifikator($type->getURNIdentifikator())
-                ->setTypeLabel($type->getLabel())
             ;
 
             $this->entityManager->persist($brugerRegistreringAdresse);
@@ -253,83 +163,32 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
     private function handleBrugerTyper(BrugerRegistrering $brugerRegistrering, ?array $brugerTyper): void
     {
-        if (null === $brugerTyper) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeOpgaver(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOpgaver): void
     {
-        if (null === $tilknyttedeOpgaver) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilhoerer(BrugerRegistrering $brugerRegistrering, ?OrganisationFlerRelationType $tilhoerer): void
     {
-        return;
-
-        if (null === $tilhoerer) {
-            return;
-        }
-
-        $brugerRegistreringTilhoerer = new BrugerRegistreringTilhoerer();
-        $brugerRegistrering->addTilhoerer($brugerRegistreringTilhoerer);
-
-        // Virkning.
-        $virkning = $tilhoerer->getVirkning();
-
-        $brugerRegistreringTilhoerer
-            ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-            ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-            ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-            ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-            ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-            ->setVirkningNoteTekst($virkning->getNoteTekst())
-        ;
-
-        // Reference id.
-        $referenceId = $tilhoerer->getReferenceID();
-
-        $brugerRegistreringTilhoerer
-            ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-            ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
-        ;
-
-        $this->entityManager->persist($brugerRegistreringTilhoerer);
+        // Not needed for now.
     }
 
     private function handleTilknyttedeEnheder(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeEnheder): void
     {
-        if (null === $tilknyttedeEnheder) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeInteressefaellesskaber(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeInteressefaellesskaber): void
     {
-        if (null === $tilknyttedeInteressefaellesskaber) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeOrganisationer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeOrganisationer): void
     {
-        if (null === $tilknyttedeOrganisationer) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedePersoner(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedePersoner): void
@@ -342,26 +201,11 @@ class BrugerDataFetcher extends AbstractDataFetcher
             $brugerRegistreringTilknyttedePersoner = new BrugerRegistreringTilknyttedePersoner();
             $brugerRegistrering->addTilknyttedePersoner($brugerRegistreringTilknyttedePersoner);
 
-            // Virkning.
-            $virkning = $tilknyttedePerson->getVirkning();
-
-            $brugerRegistreringTilknyttedePersoner
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
             // Reference id.
             $referenceId = $tilknyttedePerson->getReferenceID();
 
             $brugerRegistreringTilknyttedePersoner
                 ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-                ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
             ;
 
             $this->entityManager->persist($brugerRegistreringTilknyttedePersoner);
@@ -370,19 +214,11 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
     private function handleTilknyttedeItSystemer(BrugerRegistrering $brugerRegistrering, ?array $tilknyttedeItSystemer): void
     {
-        if (null === $tilknyttedeItSystemer) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleLokalUdvidelse(BrugerRegistrering $brugerRegistrering, ?LokalUdvidelseType $lokalUdvidelse): void
     {
-        if (null === $lokalUdvidelse) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 }
