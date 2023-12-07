@@ -142,6 +142,8 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
     private function handleGyldighed(BrugerRegistrering $brugerRegistrering, ?array $gyldigheder): void
     {
+        return;
+
         if (null === $gyldigheder) {
             return;
         }
@@ -269,6 +271,8 @@ class BrugerDataFetcher extends AbstractDataFetcher
 
     private function handleTilhoerer(BrugerRegistrering $brugerRegistrering, ?OrganisationFlerRelationType $tilhoerer): void
     {
+        return;
+
         if (null === $tilhoerer) {
             return;
         }

@@ -142,6 +142,8 @@ class OrganisationFunktionDataFetcher extends AbstractDataFetcher
 
     private function handleGyldighed(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $gyldigheder): void
     {
+        return;
+
         if (null === $gyldigheder) {
             return;
         }
@@ -326,6 +328,8 @@ class OrganisationFunktionDataFetcher extends AbstractDataFetcher
 
     private function handleTilknyttedeOrganisationer(OrganisationFunktionRegistrering $organisationFunktionRegistrering, ?array $tilknyttedeOrganisationer): void
     {
+        return;
+
         if (null === $tilknyttedeOrganisationer) {
             return;
         }

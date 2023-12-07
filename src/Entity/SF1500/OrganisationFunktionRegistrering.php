@@ -27,9 +27,6 @@ class OrganisationFunktionRegistrering
     #[ORM\OneToMany(mappedBy: 'organisationFunktionRegistrering', targetEntity: OrganisationFunktionRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
 
-    #[ORM\OneToMany(mappedBy: 'organisationFunktionRegistrering', targetEntity: OrganisationFunktionRegistreringGyldighed::class, orphanRemoval: true)]
-    private Collection $gyldigheder;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?OrganisationFunktionRegistreringFunktionstype $funktionstype = null;
 
@@ -39,17 +36,12 @@ class OrganisationFunktionRegistrering
     #[ORM\OneToMany(mappedBy: 'organisationFunktionRegistrering', targetEntity: OrganisationFunktionRegistreringTilknyttedeEnheder::class, orphanRemoval: true)]
     private Collection $tilknyttedeEnheder;
 
-    #[ORM\OneToMany(mappedBy: 'organisationFunktionRegistrering', targetEntity: OrganisationFunktionRegistreringTilknyttedeOrganisationer::class, orphanRemoval: true)]
-    private Collection $tilknyttedeOrganisationer;
-
     public function __construct()
     {
         $this->id = Uuid::v4();
         $this->egenskaber = new ArrayCollection();
-        $this->gyldigheder = new ArrayCollection();
         $this->tilknyttedeBrugere = new ArrayCollection();
         $this->tilknyttedeEnheder = new ArrayCollection();
-        $this->tilknyttedeOrganisationer = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -93,36 +85,6 @@ class OrganisationFunktionRegistrering
             // set the owning side to null (unless already changed)
             if ($egenskaber->getOrganisationFunktionRegistrering() === $this) {
                 $egenskaber->setOrganisationFunktionRegistrering(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, OrganisationFunktionRegistreringGyldighed>
-     */
-    public function getGyldigheder(): Collection
-    {
-        return $this->gyldigheder;
-    }
-
-    public function addGyldigheder(OrganisationFunktionRegistreringGyldighed $gyldigheder): static
-    {
-        if (!$this->gyldigheder->contains($gyldigheder)) {
-            $this->gyldigheder->add($gyldigheder);
-            $gyldigheder->setOrganisationFunktionRegistrering($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGyldigheder(OrganisationFunktionRegistreringGyldighed $gyldigheder): static
-    {
-        if ($this->gyldigheder->removeElement($gyldigheder)) {
-            // set the owning side to null (unless already changed)
-            if ($gyldigheder->getOrganisationFunktionRegistrering() === $this) {
-                $gyldigheder->setOrganisationFunktionRegistrering(null);
             }
         }
 
@@ -195,36 +157,6 @@ class OrganisationFunktionRegistrering
             // set the owning side to null (unless already changed)
             if ($tilknyttedeEnheder->getOrganisationFunktionRegistrering() === $this) {
                 $tilknyttedeEnheder->setOrganisationFunktionRegistrering(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, OrganisationFunktionRegistreringTilknyttedeOrganisationer>
-     */
-    public function getTilknyttedeOrganisationer(): Collection
-    {
-        return $this->tilknyttedeOrganisationer;
-    }
-
-    public function addTilknyttedeOrganisationer(OrganisationFunktionRegistreringTilknyttedeOrganisationer $tilknyttedeOrganisationer): static
-    {
-        if (!$this->tilknyttedeOrganisationer->contains($tilknyttedeOrganisationer)) {
-            $this->tilknyttedeOrganisationer->add($tilknyttedeOrganisationer);
-            $tilknyttedeOrganisationer->setOrganisationFunktionRegistrering($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTilknyttedeOrganisationer(OrganisationFunktionRegistreringTilknyttedeOrganisationer $tilknyttedeOrganisationer): static
-    {
-        if ($this->tilknyttedeOrganisationer->removeElement($tilknyttedeOrganisationer)) {
-            // set the owning side to null (unless already changed)
-            if ($tilknyttedeOrganisationer->getOrganisationFunktionRegistrering() === $this) {
-                $tilknyttedeOrganisationer->setOrganisationFunktionRegistrering(null);
             }
         }
 

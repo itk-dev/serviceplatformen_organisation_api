@@ -27,14 +27,8 @@ class BrugerRegistrering
     #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringEgenskab::class, orphanRemoval: true)]
     private Collection $egenskaber;
 
-    #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringGyldighed::class, orphanRemoval: true)]
-    private Collection $gyldigheder;
-
     #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringAdresse::class, orphanRemoval: true)]
     private Collection $adresser;
-
-    #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringTilhoerer::class, orphanRemoval: true)]
-    private Collection $tilhoerer;
 
     #[ORM\OneToMany(mappedBy: 'brugerRegistrering', targetEntity: BrugerRegistreringTilknyttedePersoner::class, orphanRemoval: true)]
     private Collection $tilknyttedePersoner;
@@ -43,9 +37,7 @@ class BrugerRegistrering
     {
         $this->id = Uuid::v4();
         $this->egenskaber = new ArrayCollection();
-        $this->gyldigheder = new ArrayCollection();
         $this->adresser = new ArrayCollection();
-        $this->tilhoerer = new ArrayCollection();
         $this->tilknyttedePersoner = new ArrayCollection();
     }
 
@@ -97,36 +89,6 @@ class BrugerRegistrering
     }
 
     /**
-     * @return Collection<int, BrugerRegistreringGyldighed>
-     */
-    public function getGyldigheder(): Collection
-    {
-        return $this->gyldigheder;
-    }
-
-    public function addGyldigheder(BrugerRegistreringGyldighed $gyldigheder): static
-    {
-        if (!$this->gyldigheder->contains($gyldigheder)) {
-            $this->gyldigheder->add($gyldigheder);
-            $gyldigheder->setBrugerRegistrering($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGyldigheder(BrugerRegistreringGyldighed $gyldigheder): static
-    {
-        if ($this->gyldigheder->removeElement($gyldigheder)) {
-            // set the owning side to null (unless already changed)
-            if ($gyldigheder->getBrugerRegistrering() === $this) {
-                $gyldigheder->setBrugerRegistrering(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, BrugerRegistreringAdresse>
      */
     public function getAdresser(): Collection
@@ -150,36 +112,6 @@ class BrugerRegistrering
             // set the owning side to null (unless already changed)
             if ($adresser->getBrugerRegistrering() === $this) {
                 $adresser->setBrugerRegistrering(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, BrugerRegistreringTilhoerer>
-     */
-    public function getTilhoerer(): Collection
-    {
-        return $this->tilhoerer;
-    }
-
-    public function addTilhoerer(BrugerRegistreringTilhoerer $tilhoerer): static
-    {
-        if (!$this->tilhoerer->contains($tilhoerer)) {
-            $this->tilhoerer->add($tilhoerer);
-            $tilhoerer->setBrugerRegistrering($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTilhoerer(BrugerRegistreringTilhoerer $tilhoerer): static
-    {
-        if ($this->tilhoerer->removeElement($tilhoerer)) {
-            // set the owning side to null (unless already changed)
-            if ($tilhoerer->getBrugerRegistrering() === $this) {
-                $tilhoerer->setBrugerRegistrering(null);
             }
         }
 

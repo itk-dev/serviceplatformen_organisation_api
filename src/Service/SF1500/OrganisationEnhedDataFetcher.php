@@ -145,6 +145,8 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleGyldighed(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $gyldigheder): void
     {
+        return;
+
         if (null === $gyldigheder) {
             return;
         }
@@ -279,6 +281,8 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleEnhedstype(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?KlasseRelationType $enhedstype): void
     {
+        return;
+
         if (null === $enhedstype) {
             return;
         }
@@ -313,6 +317,8 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleOpgaver(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $opgaver): void
     {
+        return;
+
         if (null === $opgaver) {
             return;
         }
@@ -423,6 +429,8 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleTilhoerer(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?OrganisationFlerRelationType $tilhoerer): void
     {
+        return;
+
         if (null === $tilhoerer) {
             return;
         }
