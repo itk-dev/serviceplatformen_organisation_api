@@ -153,6 +153,13 @@ class BrugerDataFetcher extends AbstractDataFetcher
             // Reference id.
             $referenceId = $adresse->getReferenceID();
 
+            // Rolle.
+            $rolle = $adresse->getRolle();
+
+            $brugerRegistreringAdresse
+                ->setRolleLabel($rolle->getLabel())
+            ;
+
             $brugerRegistreringAdresse
                 ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
             ;
