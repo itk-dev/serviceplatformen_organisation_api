@@ -11,6 +11,7 @@ abstract class AbstractDataFetcher
     use LoggerAwareTrait;
 
     protected const DATA_TYPE = null;
+    private ?\DateTimeImmutable $start = null;
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SF1500Service $sf1500Service)
     {
@@ -21,6 +22,7 @@ abstract class AbstractDataFetcher
      */
     public function fetch(int $pageSize, int $max): void
     {
+        $this->start = new \DateTimeImmutable();
         $total = 0;
 
         $this->preFetchData();
@@ -87,8 +89,11 @@ abstract class AbstractDataFetcher
      */
     protected function logFetchProgress(int $total, int $max): void
     {
+        $now = new \DateTimeImmutable();
+
         $this->logger->debug(sprintf('Fetching %s data, offset: %d , max: %d', static::DATA_TYPE, $total, $max));
         $this->logger->debug(sprintf('Memory used: %s ', $this->convertFilesize(memory_get_usage())));
+        $this->logger->debug(sprintf('Elapsed time: %s', $now->diff($this->start)->format('%H:%I:%S')));
     }
 
     /**
@@ -96,7 +101,11 @@ abstract class AbstractDataFetcher
      */
     protected function logFetchFinished(int $total): void
     {
-        $this->logger->debug(sprintf('Finished fetching %s data. Fetched a total of %d records.', static::DATA_TYPE, $total));
+        $now = new \DateTimeImmutable();
+
+        $this->logger->debug(sprintf('Finished fetching %s data.', static::DATA_TYPE));
+        $this->logger->debug(sprintf('Fetched a total of %d records.', $total));
+        $this->logger->debug(sprintf('Elapsed time: %s', $now->diff($this->start)->format('%H:%I:%S')));
     }
 
     /**
