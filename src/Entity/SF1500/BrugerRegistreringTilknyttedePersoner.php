@@ -4,15 +4,14 @@ namespace App\Entity\SF1500;
 
 use App\Repository\SF1500\BrugerRegistreringTilknyttedePersonerRepository;
 use App\Trait\ReferenceIdTrait;
-use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: BrugerRegistreringTilknyttedePersonerRepository::class)]
+#[ORM\Index(columns: ['reference_id_uuididentifikator'], name: 'reference_id_uuididentifikator_idx')]
 class BrugerRegistreringTilknyttedePersoner
 {
-    use VirkningTrait;
     use ReferenceIdTrait;
 
     #[ORM\Id]

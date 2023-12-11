@@ -4,7 +4,6 @@ namespace App\Service\SF1500;
 
 use App\Entity\SF1500\AdresseRegistrering;
 use App\Entity\SF1500\AdresseRegistreringEgenskab;
-use App\Exception\UnhandledException;
 use ItkDev\Serviceplatformen\SF1500\Adresse\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\Adresse\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\Adresse\StructType\EgenskabType;
@@ -67,11 +66,6 @@ class AdresseDataFetcher extends AbstractDataFetcher
 
             $adresseRegistrering
                 ->setAdresseId($adresseId)
-                ->setTidspunkt($registrering->getTidspunkt())
-                ->setNoteTekst($registrering->getNoteTekst())
-                ->setLivscyklusKode($registrering->getLivscyklusKode())
-                ->setBrugerRefUUIDIdentifikator($registrering->getBrugerRef()->getUUIDIdentifikator())
-                ->setBrugerRefURNIdentifikator($registrering->getBrugerRef()->getURNIdentifikator())
             ;
 
             $this->entityManager->persist($adresseRegistrering);
@@ -94,21 +88,6 @@ class AdresseDataFetcher extends AbstractDataFetcher
 
             $adresseRegistreringEgenskab
                 ->setAdresseTekst($egenskab->getAdresseTekst())
-                ->setBrugervendtNoegleTekst($egenskab->getBrugervendtNoegleTekst())
-            ;
-
-            // Virkning.
-            $virkning = $egenskab->getVirkning();
-
-            $adresseRegistreringEgenskab
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
             ;
 
             $this->entityManager->persist($adresseRegistreringEgenskab);
@@ -117,19 +96,11 @@ class AdresseDataFetcher extends AbstractDataFetcher
 
     private function handleRelation(AdresseRegistrering $adresseRegistrering, ?RelationListeType $relationListeType): void
     {
-        if (empty($relationListeType->jsonSerialize())) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilstand(AdresseRegistrering $adresseRegistrering, ?TilstandListeType $tilstandListeType): void
     {
-        if (empty($tilstandListeType->jsonSerialize())) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 }

@@ -5,12 +5,7 @@ namespace App\Service\SF1500;
 use App\Entity\SF1500\OrganisationEnhedRegistrering;
 use App\Entity\SF1500\OrganisationEnhedRegistreringAdresser;
 use App\Entity\SF1500\OrganisationEnhedRegistreringEgenskab;
-use App\Entity\SF1500\OrganisationEnhedRegistreringEnhedstype;
-use App\Entity\SF1500\OrganisationEnhedRegistreringGyldighed;
-use App\Entity\SF1500\OrganisationEnhedRegistreringOpgave;
 use App\Entity\SF1500\OrganisationEnhedRegistreringOverordnet;
-use App\Entity\SF1500\OrganisationEnhedRegistreringTilhoerer;
-use App\Exception\UnhandledException;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\ServiceType\_List;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\ServiceType\Soeg;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\AdresseFlerRelationType;
@@ -20,7 +15,6 @@ use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\GyldighedType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\KlasseRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\ListInputType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\LokalUdvidelseType;
-use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OpgaverFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OrganisationEnhedRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\OrganisationFlerRelationType;
 use ItkDev\Serviceplatformen\SF1500\OrganisationEnhed\StructType\RegistreringType;
@@ -95,11 +89,6 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
             $organisationEnhedRegistrering
                 ->setOrganisationEnhedId($organisationEnhedId)
-                ->setTidspunkt($registrering->getTidspunkt())
-                ->setNoteTekst($registrering->getNoteTekst())
-                ->setLivscyklusKode($registrering->getLivscyklusKode())
-                ->setBrugerRefUUIDIdentifikator($registrering->getBrugerRef()->getUUIDIdentifikator())
-                ->setBrugerRefURNIdentifikator($registrering->getBrugerRef()->getURNIdentifikator())
             ;
 
             $this->entityManager->persist($organisationEnhedRegistrering);
@@ -122,21 +111,6 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
             $organisationEnhedRegistreringEgenskab
                 ->setEnhedNavn($egenskab->getEnhedNavn())
-                ->setBrugervendtNoegleTekst($egenskab->getBrugervendtNoegleTekst())
-            ;
-
-            // Virkning.
-            $virkning = $egenskab->getVirkning();
-
-            $organisationEnhedRegistreringEgenskab
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
             ;
 
             $this->entityManager->persist($organisationEnhedRegistreringEgenskab);
@@ -145,35 +119,7 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleGyldighed(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $gyldigheder): void
     {
-        if (null === $gyldigheder) {
-            return;
-        }
-
-        foreach ($gyldigheder as /* @var GyldighedType $gyldighed */ $gyldighed) {
-            $organisationEnhedRegistreringGyldighed = new OrganisationEnhedRegistreringGyldighed();
-
-            $organisationEnhedRegistrering->addGyldigheder($organisationEnhedRegistreringGyldighed);
-
-            $organisationEnhedRegistreringGyldighed
-                ->setGyldighedStatusKode($gyldighed->getGyldighedStatusKode())
-            ;
-
-            // Virkning.
-            $virkning = $gyldighed->getVirkning();
-
-            $organisationEnhedRegistreringGyldighed
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
-            $this->entityManager->persist($organisationEnhedRegistreringGyldighed);
-        }
+        // Not needed for now.
     }
 
     private function handleRelation(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?RelationListeType $relation): void
@@ -211,48 +157,18 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
             $organisationEnhedRegistreringAdresse = new OrganisationEnhedRegistreringAdresser();
             $organisationEnhedRegistrering->addAdresser($organisationEnhedRegistreringAdresse);
 
-            $organisationEnhedRegistreringAdresse
-                ->setIndeks($adresse->getIndeks())
-            ;
-
-            // Virkning.
-            $virkning = $adresse->getVirkning();
-
-            $organisationEnhedRegistreringAdresse
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
             // Reference id.
             $referenceId = $adresse->getReferenceID();
 
             $organisationEnhedRegistreringAdresse
                 ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-                ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
             ;
 
             // Rolle.
             $rolle = $adresse->getRolle();
 
             $organisationEnhedRegistreringAdresse
-                ->setRolleUUIDIdentifikator($rolle->getUUIDIdentifikator())
-                ->setRolleURNIdentifikator($rolle->getURNIdentifikator())
                 ->setRolleLabel($rolle->getLabel())
-            ;
-
-            // Type.
-            $type = $adresse->getType();
-
-            $organisationEnhedRegistreringAdresse
-                ->setTypeUUIDIdentifikator($type->getUUIDIdentifikator())
-                ->setTypeURNIdentifikator($type->getURNIdentifikator())
-                ->setTypeLabel($type->getLabel())
             ;
 
             $this->entityManager->persist($organisationEnhedRegistreringAdresse);
@@ -261,112 +177,22 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleAnsatte(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $ansatte): void
     {
-        if (null === $ansatte) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleBranche(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?KlasseRelationType $branche): void
     {
-        if (null === $branche) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleEnhedstype(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?KlasseRelationType $enhedstype): void
     {
-        if (null === $enhedstype) {
-            return;
-        }
-
-        $organisationEnhedRegistreringEnhedstype = new OrganisationEnhedRegistreringEnhedstype();
-        $organisationEnhedRegistrering->setEnhedstype($organisationEnhedRegistreringEnhedstype);
-
-        // Virkning.
-        $virkning = $enhedstype->getVirkning();
-
-        $organisationEnhedRegistreringEnhedstype
-            ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-            ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-            ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-            ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-            ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-            ->setVirkningNoteTekst($virkning->getNoteTekst())
-        ;
-
-        // Reference id.
-        $referenceId = $enhedstype->getReferenceID();
-
-        $organisationEnhedRegistreringEnhedstype
-            ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-            ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
-        ;
-
-        $this->entityManager->persist($organisationEnhedRegistreringEnhedstype);
+        // Not needed for now.
     }
 
     private function handleOpgaver(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $opgaver): void
     {
-        if (null === $opgaver) {
-            return;
-        }
-
-        foreach ($opgaver as /* @var OpgaverFlerRelationType $opgaver */ $opgave) {
-            $organisationEnhedRegistreringOpgave = new OrganisationEnhedRegistreringOpgave();
-            $organisationEnhedRegistrering->addOpgaver($organisationEnhedRegistreringOpgave);
-
-            $organisationEnhedRegistreringOpgave
-                ->setIndeks($opgave->getIndeks())
-            ;
-
-            // Virkning.
-            $virkning = $opgave->getVirkning();
-
-            $organisationEnhedRegistreringOpgave
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
-
-            // Reference id.
-            $referenceId = $opgave->getReferenceID();
-
-            $organisationEnhedRegistreringOpgave
-                ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-                ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
-            ;
-
-            // Rolle.
-            $rolle = $opgave->getRolle();
-
-            $organisationEnhedRegistreringOpgave
-                ->setRolleUUIDIdentifikator($rolle->getUUIDIdentifikator())
-                ->setRolleURNIdentifikator($rolle->getURNIdentifikator())
-                ->setRolleLabel($rolle->getLabel())
-            ;
-
-            // Type.
-            $type = $opgave->getType();
-
-            $organisationEnhedRegistreringOpgave
-                ->setTypeUUIDIdentifikator($type->getUUIDIdentifikator())
-                ->setTypeURNIdentifikator($type->getURNIdentifikator())
-                ->setTypeLabel($type->getLabel())
-            ;
-
-            $this->entityManager->persist($organisationEnhedRegistreringOpgave);
-        }
+        // Not needed for now.
     }
 
     private function handleOverordnet(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?OrganisationEnhedRelationType $overordnet): void
@@ -378,26 +204,11 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
         $organisationEnhedRegistreringOverordnet = new OrganisationEnhedRegistreringOverordnet();
         $organisationEnhedRegistrering->setOverordnet($organisationEnhedRegistreringOverordnet);
 
-        // Virkning.
-        $virkning = $overordnet->getVirkning();
-
-        $organisationEnhedRegistreringOverordnet
-            ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-            ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-            ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-            ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-            ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-            ->setVirkningNoteTekst($virkning->getNoteTekst())
-        ;
-
         // Reference id.
         $referenceId = $overordnet->getReferenceID();
 
         $organisationEnhedRegistreringOverordnet
             ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-            ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
         ;
 
         $this->entityManager->persist($organisationEnhedRegistreringOverordnet);
@@ -405,125 +216,56 @@ class OrganisationEnhedDataFetcher extends AbstractDataFetcher
 
     private function handleProduktionsenhed(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?VirksomhedRelationType $produktionsenhed): void
     {
-        if (null === $produktionsenhed) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleSkatteenhed(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?VirksomhedRelationType $skatteenhed): void
     {
-        if (null === $skatteenhed) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilhoerer(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?OrganisationFlerRelationType $tilhoerer): void
     {
-        if (null === $tilhoerer) {
-            return;
-        }
-
-        $organisationEnhedRegistreringTilhoerer = new OrganisationEnhedRegistreringTilhoerer();
-        $organisationEnhedRegistrering->setTilhoerer($organisationEnhedRegistreringTilhoerer);
-
-        // Virkning.
-        $virkning = $tilhoerer->getVirkning();
-
-        $organisationEnhedRegistreringTilhoerer
-            ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-            ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-            ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-            ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-            ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-            ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-            ->setVirkningNoteTekst($virkning->getNoteTekst())
-        ;
-
-        // Reference id.
-        $referenceId = $tilhoerer->getReferenceID();
-
-        $organisationEnhedRegistreringTilhoerer
-            ->setReferenceIdUUIDIdentifikator($referenceId->getUUIDIdentifikator())
-            ->setReferenceIdURNIdentifikator($referenceId->getURNIdentifikator())
-        ;
-
-        $this->entityManager->persist($organisationEnhedRegistreringTilhoerer);
+        // Not needed for now.
     }
 
     private function handleTilknyttedeBrugere(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeBrugere): void
     {
-        if (null === $tilknyttedeBrugere) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeEnheder(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeEnheder): void
     {
-        if (null === $tilknyttedeEnheder) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeFunktioner(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeFunktioner): void
     {
-        if (null === $tilknyttedeFunktioner) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeInteressefaellesskaber(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeInteressefaellesskaber): void
     {
-        if (null === $tilknyttedeInteressefaellesskaber) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeOrganisationer(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeOrganisationer): void
     {
-        if (null === $tilknyttedeOrganisationer) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedePersoner(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedePersoner): void
     {
-        if (null === $tilknyttedePersoner) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleTilknyttedeItSystemer(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?array $tilknyttedeItSystemer): void
     {
-        if (null === $tilknyttedeItSystemer) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 
     private function handleLokalUdvidelse(OrganisationEnhedRegistrering $organisationEnhedRegistrering, ?LokalUdvidelseType $lokalUdvidelse): void
     {
-        if (null === $lokalUdvidelse) {
-            return;
-        } else {
-            throw new UnhandledException(sprintf('Unhandled data in %s: %s.', __CLASS__, __FUNCTION__));
-        }
+        // Not needed for now.
     }
 }

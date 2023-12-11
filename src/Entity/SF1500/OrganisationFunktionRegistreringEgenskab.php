@@ -3,8 +3,6 @@
 namespace App\Entity\SF1500;
 
 use App\Repository\SF1500\OrganisationFunktionRegistreringEgenskabRepository;
-use App\Trait\BrugervendtNoegleTekstTrait;
-use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -12,9 +10,6 @@ use Symfony\Component\Uid\UuidV4;
 #[ORM\Entity(repositoryClass: OrganisationFunktionRegistreringEgenskabRepository::class)]
 class OrganisationFunktionRegistreringEgenskab
 {
-    use VirkningTrait;
-    use BrugervendtNoegleTekstTrait;
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidV4 $id;

@@ -64,11 +64,6 @@ class PersonDataFetcher extends AbstractDataFetcher
 
             $personRegistrering
                 ->setPersonId($personId)
-                ->setTidspunkt($registrering->getTidspunkt())
-                ->setNoteTekst($registrering->getNoteTekst())
-                ->setLivscyklusKode($registrering->getLivscyklusKode())
-                ->setBrugerRefUUIDIdentifikator($registrering->getBrugerRef()->getUUIDIdentifikator())
-                ->setBrugerRefURNIdentifikator($registrering->getBrugerRef()->getURNIdentifikator())
             ;
 
             $this->entityManager->persist($personRegistrering);
@@ -89,25 +84,10 @@ class PersonDataFetcher extends AbstractDataFetcher
 
             $personRegistreringEgenskab
                 ->setNavnTekst($egenskab->getNavnTekst())
-                ->setBrugervendtNoegleTekst($egenskab->getBrugervendtNoegleTekst())
             ;
             // Left out due to undefined property.
             // Warning: Undefined property: ItkDev\Serviceplatformen\SF1500\Person\StructType\EgenskabType::$CPR-NummerTekst
             // $personRegistreringEgenskab->setCprNummerTekst($egenskab->getCPR_NummerTekst());
-
-            // Virkning.
-            $virkning = $egenskab->getVirkning();
-
-            $personRegistreringEgenskab
-                ->setVirkningFraTidsstempelDatoTid($virkning->getFraTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningFraGraenseIndikator($virkning->getFraTidspunkt()->getGraenseIndikator())
-                ->setVirkningTilTidsstempelDatoTid($virkning->getTilTidspunkt()->getTidsstempelDatoTid())
-                ->setVirkningTilGraenseIndikator($virkning->getTilTidspunkt()->getGraenseIndikator())
-                ->setVirkningAktoerRefUUIDIdentifikator($virkning->getAktoerRef()->getUUIDIdentifikator())
-                ->setVirkningAktoerRefURNIdentifikator($virkning->getAktoerRef()->getURNIdentifikator())
-                ->setVirkningAktoerTypeKode($virkning->getAktoerTypeKode())
-                ->setVirkningNoteTekst($virkning->getNoteTekst())
-            ;
 
             $this->entityManager->persist($personRegistreringEgenskab);
         }

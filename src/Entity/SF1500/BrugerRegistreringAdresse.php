@@ -3,23 +3,18 @@
 namespace App\Entity\SF1500;
 
 use App\Repository\SF1500\BrugerRegistreringAdresseRepository;
-use App\Trait\IndeksTrait;
 use App\Trait\ReferenceIdTrait;
 use App\Trait\RolleTrait;
-use App\Trait\TypeTrait;
-use App\Trait\VirkningTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: BrugerRegistreringAdresseRepository::class)]
+#[ORM\Index(columns: ['reference_id_uuididentifikator'], name: 'reference_id_uuididentifikator_idx')]
 class BrugerRegistreringAdresse
 {
-    use VirkningTrait;
     use ReferenceIdTrait;
     use RolleTrait;
-    use TypeTrait;
-    use IndeksTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
