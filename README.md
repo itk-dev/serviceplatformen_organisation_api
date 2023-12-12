@@ -170,7 +170,7 @@ Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
 
 ### Using the API from another docker compose setup
 
-To use the API you must use the `serviceplatformen_organisation_api_default`
+To use the API you must use the `serviceplatformen_organisation_api_app`
 network.
 
 ```sh
