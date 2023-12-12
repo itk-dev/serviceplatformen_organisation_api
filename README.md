@@ -35,7 +35,7 @@ To get a local copy up and running follow these steps.
 1. Clone the repo
 
    ```sh
-   git clone git@github.com:itk-dev/os2forms_organisation_api.git
+   git clone git@github.com:itk-dev/serviceplatformen_organisation_api.git
    ```
 
 2. Pull docker images and start docker containers
@@ -169,6 +169,22 @@ curl "http://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-
 Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
 
 ### Using the API from another docker compose setup
+
+To use the API you must use the `serviceplatformen_organisation_api_default`
+network.
+
+```sh
+networks:
+  organisation_api:
+    external: true
+    name: serviceplatformen_organisation_api_app
+
+services:
+  phpfpm:
+    networks:
+      - organisation_api
+    ...
+```
 
 The `nginx` container has been overridden to have the container name
 `organisation_api`. Calls from other projects already having a `nginx`
