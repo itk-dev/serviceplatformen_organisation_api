@@ -58,6 +58,6 @@ SQL);
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP VIEW funktions');
+        $this->addSql('DROP VIEW funktion');
     }
 }
