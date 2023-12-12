@@ -94,11 +94,10 @@ SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD=APP_SF1500_ORGANISATION_MANAGER_ROLE_
 Before fetching data the database should be emptied.
 If not, objects that were available during both fetches will appear twice.
 
-### Drop & setup database
+### Reset database
 
 ```sh
-docker compose exec phpfpm bin/console doctrine:database:drop --force
-docker compose exec phpfpm bin/console doctrine:database:create
+docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interaction first
 docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interaction
 ```
 
