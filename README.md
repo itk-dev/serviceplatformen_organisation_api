@@ -1,4 +1,4 @@
-# Organisation API
+# Serviceplatformen Organisation API
 
 ## About the project
 
