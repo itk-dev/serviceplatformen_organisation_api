@@ -186,9 +186,7 @@ services:
     ...
 ```
 
-The `nginx` container has been overridden to have the container name
-`organisation_api`. Calls from other projects already having a `nginx`
-container should use `organisation_api` to make calls to the API, i.e.
+The API is now available at `http://organisation_api:8080` i.e.
 
 ```sh
 curl "http://organisation_api:8080/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann"
