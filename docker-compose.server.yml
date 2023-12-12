@@ -9,7 +9,6 @@ networks:
     internal: false
 
 services:
-
   phpfpm:
     image: itkdev/php8.2-fpm:alpine
     restart: unless-stopped
