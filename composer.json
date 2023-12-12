@@ -1,5 +1,5 @@
 {
-    "name": "itk-dev/serviceplatformen_organisation_api",
+    "name": "itk-dev/serviceplatformen-organisation-api",
     "description": "Api backend for SF1500 Organisation",
     "type": "project",
     "license": "proprietary",
