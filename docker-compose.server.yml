@@ -9,18 +9,6 @@ networks:
     internal: false
 
 services:
-  mariadb:
-    image: itkdev/mariadb:latest
-    networks:
-      - app
-    ports:
-      - '3306'
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=db
-      - MYSQL_PASSWORD=db
-      - MYSQL_DATABASE=db
-      #- ENCRYPT=1 # Uncomment to enable database encryption.
 
   phpfpm:
     image: itkdev/php8.2-fpm:alpine
