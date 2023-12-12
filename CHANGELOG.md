@@ -7,4 +7,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/itk-dev/os2forms_organisation_api/tree/develop
+[Unreleased]: https://github.com/itk-dev/serviceplatformen_organisation_api/tree/develop
