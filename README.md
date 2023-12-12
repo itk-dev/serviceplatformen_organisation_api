@@ -1,4 +1,4 @@
-# OS2Forms Organisation API
+# Organisation API
 
 ## About the project
 
@@ -139,9 +139,7 @@ for api specifics.
 #### Search for users
 
 ```sh
-curl -X 'GET' \
-  'https://$(docker compose port nginx 8080)/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann' \
-  -H 'accept: application/ld+json'
+curl "http://$(docker compose port nginx 8080)/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann"
 ```
 
 Search parameters
@@ -157,9 +155,7 @@ Search parameters
 #### Get info on user
 
 ```sh
-curl -X 'GET' \
-  'https://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66' \
-  -H 'accept: application/ld+json'
+curl "http://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66"
 ```
 
 Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
@@ -167,12 +163,20 @@ Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
 #### Get funktioner
 
 ```sh
-curl -X 'GET' \
-  'https://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner' \
-  -H 'accept: application/ld+json'
+curl "http://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-9fd4-d69849939b66/funktioner"
 ```
 
 Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
+
+### Calling from another docker container
+
+The `nginx` container has been overridden to have the container name
+`organisation_api`. Calls from other projects already having a `nginx`
+container should use `organisation_api` to make calls to the API, i.e.
+
+```sh
+curl "http://organisation_api:8080/api/v1/bruger?page=1&navn=Jeppe%20Kuhlmann"
+```
 
 ### Coding standard tests
 

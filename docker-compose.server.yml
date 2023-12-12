@@ -9,6 +9,19 @@ networks:
     internal: false
 
 services:
+  mariadb:
+    image: itkdev/mariadb:latest
+    networks:
+      - app
+    ports:
+      - '3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=db
+      - MYSQL_PASSWORD=db
+      - MYSQL_DATABASE=db
+      #- ENCRYPT=1 # Uncomment to enable database encryption.
+
   phpfpm:
     image: itkdev/php8.2-fpm:alpine
     restart: unless-stopped
@@ -37,12 +50,4 @@ services:
       - ./.docker/vhost.conf:/etc/nginx/conf.d/default.conf:ro
       - ./.docker/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./:/app:rw
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=frontend"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.rule=Host(`${COMPOSE_SERVER_DOMAIN}`)"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.entrypoints=web"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_SERVER_DOMAIN}`)"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=websecure"
+    # Labels removed deliberately
