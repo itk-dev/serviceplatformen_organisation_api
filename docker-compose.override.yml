@@ -1,5 +1,4 @@
 services:
   nginx:
-    # Give a different name since it is to be called from another container,
-    # which may already have a nginx container.
+    # Rename the `nginx` service to make it available to other docker compose setups which may already contain a service called `nginx`.
     container_name: organisation_api
