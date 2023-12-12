@@ -168,7 +168,7 @@ curl "http://$(docker compose port nginx 8080)/api/v1/bruger/ffdb7559-2ad3-4662-
 
 Here `ffdb7559-2ad3-4662-9fd4-d69849939b66` should be a `bruger` identifier.
 
-### Calling from another docker container
+### Using the API from another docker compose setup
 
 The `nginx` container has been overridden to have the container name
 `organisation_api`. Calls from other projects already having a `nginx`
