@@ -51,3 +51,10 @@ services:
                 test_mode: '%env(bool:SF1500_ORGANISATION_TEST_MODE)%'
                 leder_rolle_uuid_test: '%env(SF1500_ORGANISATION_MANAGER_ROLE_UUID_TEST)%'
                 leder_rolle_uuid_prod: '%env(SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD)%'
+
+    App\State\BrugerLederFunktionerProvider:
+        arguments:
+            $options:
+                test_mode: '%env(bool:SF1500_ORGANISATION_TEST_MODE)%'
+                leder_rolle_uuid_test: '%env(SF1500_ORGANISATION_MANAGER_ROLE_UUID_TEST)%'
+                leder_rolle_uuid_prod: '%env(SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD)%'
