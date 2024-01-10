@@ -11,9 +11,7 @@ Sets up an API with data from [Serviceplatformen Organisation](https://digitalis
 
 ## Disclaimer
 
-The currently suggested setup exposes the API via docker networks, see
-[Using the API from another docker compose setup](#using-the-api-from-another-docker-compose-setup).
-__It is very important that API is not exposed to the public.__
+__The API has no authentication methods and should not be exposed to the web.__
 
 ## SF1500 Data
 
@@ -210,10 +208,10 @@ we decided to adhere to in this project.
 
 * Markdown files (markdownlint standard rules)
 
-  ```sh
-  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app install
-  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app coding-standards-check
-  ```
+   ```sh
+   docker compose run --rm node yarn install
+   docker compose run --rm node yarn coding-standards-check
+   ```
 
 ### Coding standards apply
 
@@ -228,10 +226,10 @@ we decided to adhere to in this project.
 
 * Markdown files (markdownlint standard rules)
 
-  ```sh
-  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app install
-  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app coding-standards-apply
-  ```
+   ```sh
+   docker compose run --rm node yarn install
+   docker compose run --rm node yarn coding-standards-apply
+   ```
 
 ### Code analysis
 

@@ -3,3 +3,9 @@ services:
     # Give a different name since it is to be called from another container,
     # which may already have a nginx container.
     container_name: organisation_api
+
+  node:
+    image: node:18
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
