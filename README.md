@@ -9,6 +9,12 @@ Sets up an API with data from [Serviceplatformen Organisation](https://digitalis
 * [Symfony](https://symfony.com)
 * [API Platform](https://api-platform.com/)
 
+## Disclaimer
+
+The currently suggested setup exposes the API via docker networks, see
+[Using the API from another docker compose setup](#using-the-api-from-another-docker-compose-setup).
+__It is very important that API is not exposed to the public.__
+
 ## SF1500 Data
 
 The objects from SF1500 that we are interested in are
@@ -205,7 +211,26 @@ we decided to adhere to in this project.
 * Markdown files (markdownlint standard rules)
 
   ```sh
-  docker compose run --rm node yarn coding-standards-check/markdownlint
+  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app install
+  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app coding-standards-check
+  ```
+
+### Coding standards apply
+
+The following commands let you apply the coding standards
+we decided to adhere to in this project.
+
+* PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
+
+   ```sh
+   docker compose exec phpfpm composer coding-standards-apply
+   ```
+
+* Markdown files (markdownlint standard rules)
+
+  ```sh
+  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app install
+  docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app coding-standards-apply
   ```
 
 ### Code analysis
