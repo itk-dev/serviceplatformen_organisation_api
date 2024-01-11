@@ -10,9 +10,9 @@ services:
     volumes:
       - ./.docker/vhost-prod.conf:/etc/nginx/conf.d/default.conf:ro
 
-    # Disable traefik to it's not exposed to the internet by removing label.
-    # See https://docs.docker.com/compose/compose-file/13-merge/#reset-value
-    labels: !reset []
+    # Disable traefik to not expose the service to the internet.
+    labels:
+      - "traefik.enable=false"
 
   phpfpm:
     # Give a different name since it is to be called from another container,
