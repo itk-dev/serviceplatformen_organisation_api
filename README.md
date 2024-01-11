@@ -9,6 +9,10 @@ Sets up an API with data from [Serviceplatformen Organisation](https://digitalis
 * [Symfony](https://symfony.com)
 * [API Platform](https://api-platform.com/)
 
+## Disclaimer
+
+__The API has no authentication methods and should not be exposed to the web.__
+
 ## SF1500 Data
 
 The objects from SF1500 that we are interested in are
@@ -94,11 +98,10 @@ SF1500_ORGANISATION_MANAGER_ROLE_UUID_PROD=APP_SF1500_ORGANISATION_MANAGER_ROLE_
 Before fetching data the database should be emptied.
 If not, objects that were available during both fetches will appear twice.
 
-### Drop & setup database
+### Reset database
 
 ```sh
-docker compose exec phpfpm bin/console doctrine:database:drop --force
-docker compose exec phpfpm bin/console doctrine:database:create
+docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interaction first
 docker compose exec phpfpm bin/console doctrine:migrations:migrate --no-interaction
 ```
 
@@ -205,9 +208,28 @@ we decided to adhere to in this project.
 
 * Markdown files (markdownlint standard rules)
 
-  ```sh
-  docker compose run --rm node yarn coding-standards-check/markdownlint
-  ```
+   ```sh
+   docker compose run --rm node yarn install
+   docker compose run --rm node yarn coding-standards-check
+   ```
+
+### Coding standards apply
+
+The following commands let you apply the coding standards
+we decided to adhere to in this project.
+
+* PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
+
+   ```sh
+   docker compose exec phpfpm composer coding-standards-apply
+   ```
+
+* Markdown files (markdownlint standard rules)
+
+   ```sh
+   docker compose run --rm node yarn install
+   docker compose run --rm node yarn coding-standards-apply
+   ```
 
 ### Code analysis
 
