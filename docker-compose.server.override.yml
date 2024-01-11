@@ -1,5 +1,20 @@
+version: "3"
+
 services:
   nginx:
     # Give a different name since it is to be called from another container,
     # which may already have a nginx container.
     container_name: organisation_api
+
+    # Use production vhost config, which basically is just using the renamed php-fpm container below.
+    volumes:
+      - ./.docker/vhost-prod.conf:/etc/nginx/conf.d/default.conf:ro
+
+    # Disable traefik to it's not exposed to the internet by removing label.
+    # See https://docs.docker.com/compose/compose-file/13-merge/#reset-value
+    labels: !reset []
+
+  phpfpm:
+    # Give a different name since it is to be called from another container,
+    # which may already have a phpfpm container.
+    container_name: phpfpm-api
