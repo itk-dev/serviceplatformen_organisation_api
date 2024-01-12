@@ -73,16 +73,13 @@ class CertificateLocator
     /**
      * Checks if certificate locator token should be refreshed.
      */
-    public function shouldAzureKeyVaultAccessTokenBeRefreshed(): bool
+    public function needRefresh(): bool
     {
         $certificateSettings = $this->options;
         $locatorType = $certificateSettings['certificate_locator_type'];
 
-        // Reset if token is within a minute of expiration time.
-        if (self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType && $this->tokenExpiration - 60 <= (new \DateTimeImmutable())->getTimestamp()) {
-            return true;
-        }
-
-        return false;
+        // Refresh if token is within a minute of expiration time.
+        return self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType
+            && $this->tokenExpiration - 60 <= (new \DateTimeImmutable())->getTimestamp();
     }
 }

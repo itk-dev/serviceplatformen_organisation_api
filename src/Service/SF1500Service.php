@@ -23,16 +23,12 @@ class SF1500Service
      */
     public function getSF1500(): SF1500
     {
-        if (null === $this->sf1500) {
-            $this->setupSF1500();
-        }
-
-        if ($this->certificateLocator->shouldAzureKeyVaultAccessTokenBeRefreshed()) {
+        if (null === $this->sf1500 || $this->certificateLocator->needRefresh()) {
             $this->setupSF1500();
         }
 
         if (null === $this->sf1500) {
-            throw new SF1500Exception('SF1500 not setup correctly');
+            throw new SF1500Exception('SF1500 not set up correctly');
         }
 
         return $this->sf1500;
