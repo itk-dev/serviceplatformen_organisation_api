@@ -23,26 +23,35 @@ class SF1500Service
     public function getSF1500(): SF1500
     {
         if (null === $this->sf1500) {
-            $certificateSettings = $this->options;
+            $this->setupSF1500();
+        }
 
-            $soapClient = new SoapClient([
-                'cache_expiration_time' => ['tomorrow'],
-            ]);
-
-            $options = [
-                'certificate_locator' => $this->certificateLocator->getCertificateLocator(),
-                'authority_cvr' => $certificateSettings['authority_cvr'],
-                'sts_applies_to' => $certificateSettings['sts_applies_to'],
-                'test_mode' => $certificateSettings['test_mode'],
-            ];
-
-            $sf1514 = new SF1514($soapClient, $options);
-
-            unset($options['sts_applies_to']);
-
-            $this->sf1500 = new SF1500($sf1514, $options);
+        if ($this->certificateLocator->tokenShouldBeRefreshed()) {
+            $this->setupSF1500();
         }
 
         return $this->sf1500;
+    }
+
+    private function setupSF1500()
+    {
+        $certificateSettings = $this->options;
+
+        $soapClient = new SoapClient([
+            'cache_expiration_time' => ['tomorrow'],
+        ]);
+
+        $options = [
+            'certificate_locator' => $this->certificateLocator->getCertificateLocator(),
+            'authority_cvr' => $certificateSettings['authority_cvr'],
+            'sts_applies_to' => $certificateSettings['sts_applies_to'],
+            'test_mode' => $certificateSettings['test_mode'],
+        ];
+
+        $sf1514 = new SF1514($soapClient, $options);
+
+        unset($options['sts_applies_to']);
+
+        $this->sf1500 = new SF1500($sf1514, $options);
     }
 }
