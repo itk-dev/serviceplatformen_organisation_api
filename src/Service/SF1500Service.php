@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\SF1500Exception;
 use ItkDev\Serviceplatformen\Service\SF1500\SF1500;
 use ItkDev\Serviceplatformen\Service\SF1514\SF1514;
 use ItkDev\Serviceplatformen\Service\SoapClient;
@@ -28,6 +29,10 @@ class SF1500Service
 
         if ($this->certificateLocator->shouldAzureKeyVaultAccessTokenBeRefreshed()) {
             $this->setupSF1500();
+        }
+
+        if (null === $this->sf1500) {
+            throw new SF1500Exception('SF1500 not setup correctly');
         }
 
         return $this->sf1500;
