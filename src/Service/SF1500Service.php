@@ -26,7 +26,7 @@ class SF1500Service
             $this->setupSF1500();
         }
 
-        if ($this->certificateLocator->tokenShouldBeRefreshed()) {
+        if ($this->certificateLocator->shouldAzureKeyVaultAccessTokenBeRefreshed()) {
             $this->setupSF1500();
         }
 

@@ -16,7 +16,7 @@ class CertificateLocator
 {
     private const LOCATOR_TYPE_AZURE_KEY_VAULT = 'azure_key_vault';
     private const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
-    public int $tokenExpiration;
+    private int $tokenExpiration;
 
     public function __construct(private readonly array $options)
     {
@@ -73,7 +73,7 @@ class CertificateLocator
     /**
      * Checks if certificate locator token should be refreshed.
      */
-    public function tokenShouldBeRefreshed(): bool
+    public function shouldAzureKeyVaultAccessTokenBeRefreshed(): bool
     {
         $certificateSettings = $this->options;
         $locatorType = $certificateSettings['certificate_locator_type'];
