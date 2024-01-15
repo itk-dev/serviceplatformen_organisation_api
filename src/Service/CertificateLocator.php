@@ -44,6 +44,9 @@ class CertificateLocator
             );
 
             $this->tokenExpiration = $token->getExpiresOn();
+            // TODO: DEBUGGING
+            $this->tokenExpiration = (new \DateTimeImmutable())->getTimestamp() + 120;
+            var_export($this->tokenExpiration);
 
             $vault = new VaultSecret(
                 $httpClient,
