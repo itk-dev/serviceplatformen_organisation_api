@@ -16,6 +16,7 @@ class CertificateLocator
 {
     private const LOCATOR_TYPE_AZURE_KEY_VAULT = 'azure_key_vault';
     private const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
+    private int $tokenExpiration;
 
     public function __construct(private readonly array $options)
     {
@@ -42,6 +43,8 @@ class CertificateLocator
                 $certificateSettings['certificate_client_secret'],
             );
 
+            $this->tokenExpiration = $token->getExpiresOn();
+
             $vault = new VaultSecret(
                 $httpClient,
                 $requestFactory,
@@ -65,5 +68,18 @@ class CertificateLocator
         }
 
         throw new CertificateLocatorException(sprintf('Invalid certificate locator type: %s', $locatorType));
+    }
+
+    /**
+     * Checks if certificate locator token should be refreshed.
+     */
+    public function needRefresh(): bool
+    {
+        $certificateSettings = $this->options;
+        $locatorType = $certificateSettings['certificate_locator_type'];
+
+        // Refresh if token is within a minute of expiration time.
+        return self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType
+            && $this->tokenExpiration - 60 <= (new \DateTimeImmutable())->getTimestamp();
     }
 }
