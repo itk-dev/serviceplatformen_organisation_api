@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 * Updated data fetchers to retry 5 times due to sporadic soap faults.
+* Added logging via `symfony/monolog-bundle`
 
 ## [1.0.1] 2024-01-16
 

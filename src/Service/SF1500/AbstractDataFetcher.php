@@ -40,6 +40,11 @@ abstract class AbstractDataFetcher
                 } catch (SoapException $exception) {
                     // If the same call has failed 5 times in a row stop.
                     if ($retry >= 5) {
+                        $this->logger->error('Fetching data failed', [
+                            'class' => self::class,
+                            'exception_message' => $exception->getMessage(),
+                            'exception_code' => $exception->getCode(),
+                        ]);
                         throw $exception;
                     }
                 }
