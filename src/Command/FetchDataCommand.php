@@ -3,12 +3,12 @@
 namespace App\Command;
 
 use App\Service\FetchData;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
@@ -25,7 +25,7 @@ class FetchDataCommand extends Command
         'organisationenhed',
     ];
 
-    public function __construct(private readonly FetchData $fetchData)
+    public function __construct(private readonly FetchData $fetchData, private readonly LoggerInterface $logger)
     {
         parent::__construct();
     }
@@ -82,7 +82,7 @@ class FetchDataCommand extends Command
             return Command::INVALID;
         }
 
-        $this->fetchData->setLogger(new ConsoleLogger($output));
+        $this->fetchData->setLogger($this->logger);
         $this->fetchData->fetch($dataTypes, $pageSize, $max);
 
         return Command::SUCCESS;
