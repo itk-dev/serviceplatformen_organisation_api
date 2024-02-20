@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Updated data fetchers to retry 5 times due to sporadic soap faults.
 * Added logging via `symfony/monolog-bundle`
+* Upped offset for when certificate locator token should be refreshed.
 
 ## [1.0.1] 2024-01-16
 

@@ -80,6 +80,6 @@ class CertificateLocator
 
         // Refresh if token is within a minute of expiration time.
         return self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType
-            && $this->tokenExpiration - 60 <= (new \DateTimeImmutable())->getTimestamp();
+            && $this->tokenExpiration - 600 <= (new \DateTimeImmutable())->getTimestamp();
     }
 }
