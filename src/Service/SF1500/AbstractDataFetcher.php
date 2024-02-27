@@ -4,6 +4,7 @@ namespace App\Service\SF1500;
 
 use App\Service\SF1500Service;
 use Doctrine\ORM\EntityManagerInterface;
+use ItkDev\Serviceplatformen\Service\Exception\SoapException;
 use Psr\Log\LoggerAwareTrait;
 
 abstract class AbstractDataFetcher
@@ -30,7 +31,25 @@ abstract class AbstractDataFetcher
         while (true) {
             $this->logFetchProgress($total, $max);
 
-            $dataSize = $this->fetchData($pageSize, $total, $max);
+            $dataSize = null;
+            $retry = 0;
+
+            while (null === $dataSize) {
+                try {
+                    $dataSize = $this->fetchData($pageSize, $total, $max);
+                } catch (SoapException $exception) {
+                    // If the same call has failed 5 times in a row stop.
+                    if ($retry >= 5) {
+                        $this->logger->error('Fetching data failed', [
+                            'class' => self::class,
+                            'exception_message' => $exception->getMessage(),
+                            'exception_code' => $exception->getCode(),
+                        ]);
+                        throw $exception;
+                    }
+                }
+                ++$retry;
+            }
 
             if ($dataSize < 1) {
                 break;

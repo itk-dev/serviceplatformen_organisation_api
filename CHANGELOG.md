@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.1] 2024-02-16
+## [1.0.2] 2024-02-20
+
+* Updated data fetchers to retry 5 times due to sporadic soap faults.
+* Added logging via `symfony/monolog-bundle`
+* Upped offset for when certificate locator token should be refreshed.
+
+## [1.0.1] 2024-01-16
 
 * Refreshed Azure Key Vault access token if it expires during fetch data run.
 
@@ -15,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Initial release
 
-[Unreleased]: https://github.com/itk-dev/serviceplatformen_organisation_api/compare/1.0.1...HEAD
+[Unreleased]: https://github.com/itk-dev/serviceplatformen_organisation_api/compare/1.0.2...HEAD
+[1.0.2]: https://github.com/itk-dev/serviceplatformen_organisation_api/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/itk-dev/serviceplatformen_organisation_api/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/itk-dev/serviceplatformen_organisation_api/releases/tag/1.0.0
