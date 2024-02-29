@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Restore to default monolog config.
+
 ## [1.0.2] 2024-02-20
 
 * Updated data fetchers to retry 5 times due to sporadic soap faults.
