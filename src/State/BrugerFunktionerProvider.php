@@ -7,7 +7,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Exception\InvalidProviderRequestException;
 use App\Repository\Model\FunktionRepository;
 
-readonly class BrugerFunktionerProvider implements ProviderInterface
+class BrugerFunktionerProvider implements ProviderInterface
 {
     public function __construct(private FunktionRepository $funktionRepository)
     {

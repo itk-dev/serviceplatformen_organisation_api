@@ -1,10 +1,8 @@
-version: "3"
-
 services:
   nginx:
     # Give a different name since it is to be called from another container,
     # which may already have a nginx container.
-    container_name: organisation_api
+    container_name: $COMPOSE_PROJECT_NAME-nginx
 
     # Use production vhost config, which basically is just using the renamed php-fpm container below.
     volumes:
@@ -17,4 +15,16 @@ services:
   phpfpm:
     # Give a different name since it is to be called from another container,
     # which may already have a phpfpm container.
-    container_name: phpfpm-api
+    container_name: $COMPOSE_PROJECT_NAME-phpfpm
+    # https://docs.docker.com/compose/compose-file/05-services/#env_file/
+    env_file:
+      - path: ./.env
+      - path: ./.env.local
+        required: false
+      - path: ./.env.local.database
+
+  jq:
+    # https://github.com/jqlang/jq/pkgs/container/jq
+    image: ghcr.io/jqlang/jq:1.7.1
+    profiles:
+      - dev

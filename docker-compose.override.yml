@@ -47,3 +47,5 @@ services:
   jq:
     # https://github.com/jqlang/jq/pkgs/container/jq
     image: ghcr.io/jqlang/jq:1.7.1
+    profiles:
+      - dev
