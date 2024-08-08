@@ -213,6 +213,12 @@ we decided to adhere to in this project.
    docker compose run --rm node yarn coding-standards-check
    ```
 
+* Shell scripts
+
+   ```sh
+   docker run --rm --tty --volume "$PWD:/app" peterdavehello/shellcheck shellcheck /app/bin/fetch-data
+   ```
+
 ### Coding standards apply
 
 The following commands let you apply the coding standards

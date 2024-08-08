@@ -2,10 +2,8 @@
 set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
 IFS=$'\n\t'
 
-script_dir=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-project_dir=$(cd $(dirname "$script_dir") && pwd)
-bold=$(tput -Txterm-256color bold)
-normal=$(tput -Txterm-256color sgr0)
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+project_dir=$(cd "$(dirname "$script_dir")" && pwd)
 
 cd "$project_dir"
 
@@ -24,14 +22,14 @@ for i in "${!database_urls[@]}"; do
     fi
 done
 
-next_index=$(( ($current_index+1) % "${#database_urls[@]}" ))
+next_index=$(( (current_index + 1) % "${#database_urls[@]}" ))
 
 next_database_url="${database_urls[$next_index]}"
 
-echo current_database_url: $current_database_url
-echo current_index: $current_index
-echo next_index: $next_index
-echo next_database_url: $next_database_url
+echo current_database_url: "$current_database_url"
+echo current_index: "$current_index"
+echo next_database_url: "$next_database_url"
+echo next_index: "$next_index"
 
 docker compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console doctrine:migrations:migrate --no-interaction
 # @todo Fetch data
