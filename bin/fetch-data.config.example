@@ -1,0 +1,13 @@
+# Database URLs
+database_urls=(
+    # Databases defined in ../docker-compose.override.yml
+    'mysql://db:db@database-0:3306/db?serverVersion=10.11.2-MariaDB&charset=utf8mb4'
+    'mysql://db:db@database-1:3306/db?serverVersion=10.11.2-MariaDB&charset=utf8mb4'
+)
+
+# Optional path to compose script. The path is relative to the directory of this file.
+# compose_script=docker compose
+
+# Options for bin/console organisation:fetch:data
+# max=10
+# page_size=5

@@ -2,7 +2,7 @@
 
 ## About the project
 
-Sets up an API with data from [Serviceplatformen Organisation](https://digitaliseringskataloget.dk/integration/sf1500).
+Sets up an API with data from [Serviceplatformen Organisation][sf1500].
 
 ### Built with
 
@@ -119,13 +119,67 @@ for help run
 docker compose exec phpfpm bin/console organisation:fetch:data --help
 ```
 
-**To avoid issues with memory leaks during development add the
-`--no-debug` flag to the fetch data command.** You may also want to
+__To avoid issues with memory leaks during development add the
+`--no-debug` flag to the fetch data command.__ You may also want to
 add the verbose flag to see progress.
 
 ```sh
 docker compose exec phpfpm bin/console --no-debug organisation:fetch:data -vvv
 ```
+
+## Multi-database setup
+
+Fetching all data from [SF1500] can be unstable, so for production we use a multi-database setup; one database is
+*current* and the other is used to fetch data. If all data is successfully fetched into ‘the other“ database, it will
+become ‘the current“ database.
+
+Data is fetched by running `bin/fetch-data`, but first a little configuration must be made:
+
+```sh
+# Copy the example config
+cp bin/fetch-data.config.example bin/fetch-data.config
+```
+
+Edit `bin/fetch-data.config` to match your; the most important (and only required) config variable is `database_urls`.
+
+When the configuration is in place, run
+
+``` sh
+bin/fetch-data
+```
+
+to fetch all data into the first database, i.e. the first entry in `database_urls`. If the command succeeds, the first
+database will become the current database. If you run the command again, data will be fetched into the second database,
+and if the fetching succeeds, the second database will become the current database.
+
+For testing that the switching of databases actually work, set
+
+```sh
+# bin/fetch-data.config
+max=10
+```
+
+in `bin/fetch-data.config` to fetch at most 10 items of each type.
+
+To test that switching databases does not accur in case of an error during fetching, you can define a bogus database URL
+before running `bin/fetch-data`:
+
+```sh
+# bin/fetch-data.config
+database_urls=(
+    'mysql://db:db@bogus.example.com:3306/db'
+)
+```
+
+If nedd be, you can define which [compose command](https://docs.docker.com/compose/compose-application-model/#cli) (the
+default being `docker compose`) is actually used to run the compose setup:
+
+```sh
+# bin/fetch-data.config
+compose=my-custom-compose
+```
+
+See [`bin/fetch-data.config.example`](bin/fetch-data.config.example) for details on configuration variables.
 
 ## API
 
@@ -209,8 +263,14 @@ we decided to adhere to in this project.
 * Markdown files (markdownlint standard rules)
 
    ```sh
-   docker compose run --rm node yarn install
-   docker compose run --rm node yarn coding-standards-check
+   docker run --rm --volume "$PWD:/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore vendor/ '**/*.md' --fix
+   docker run --rm --volume "$PWD:/md" peterdavehello/markdownlint markdownlint --ignore LICENSE.md --ignore vendor/ '**/*.md'
+   ```
+
+* Shell scripts
+
+   ```sh
+   docker run --rm --tty --volume "$PWD:/app" peterdavehello/shellcheck shellcheck /app/bin/fetch-data
    ```
 
 ### Coding standards apply
@@ -238,3 +298,5 @@ psalm
 ```sh
 docker compose exec phpfpm composer code-analysis
 ```
+
+[sf1500]: https://digitaliseringskataloget.dk/integration/sf1500

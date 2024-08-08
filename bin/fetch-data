@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+project_dir=$(cd "$(dirname "$script_dir")" && pwd)
+
+cd "$project_dir"
+
+config_file="$script_dir/fetch-data.config"
+
+if [ ! -e "$config_file" ]; then
+    (>&2 echo "Config file $config_file does not exists")
+
+    exit 1
+fi
+
+# shellcheck source=fetch-data.config
+source "$config_file"
+
+if [ -z "${database_urls:-}" ]; then
+    cat <<EOF >&2
+Missing or empty
+
+database_urls=(…)
+
+in $config_file.
+
+EOF
+
+    exit 1
+fi
+
+function compose() {
+    if [[ -n "${compose_script:-}" ]]; then
+       "$compose_script" "$@"
+    else
+        docker compose "$@"
+    fi
+}
+
+current_database_url=$(compose exec phpfpm bin/console debug:config DoctrineBundle --resolve-env --format=json | compose run --rm jq '.doctrine.dbal.connections.default.url' --raw-output)
+
+current_index=-1
+for i in "${!database_urls[@]}"; do
+    if [ "${database_urls[$i]}" = "$current_database_url" ]; then
+       current_index=$i
+    fi
+done
+
+next_index=$(( (current_index + 1) % "${#database_urls[@]}" ))
+
+next_database_url="${database_urls[$next_index]}"
+
+echo current_database_url: "$current_database_url"
+echo current_index: "$current_index"
+echo next_database_url: "$next_database_url"
+echo next_index: "$next_index"
+
+# https://www.php.net/manual/en/reserved.constants.php#constant.php-int-max
+max=${max:-9223372036854775807}
+page_size=${page_size:-1000}
+
+echo max: "$max"
+echo page_size: "$page_size"
+
+# Fetch data into "next" database
+# Cf.
+compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console doctrine:migrations:migrate --no-interaction first
+compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console doctrine:migrations:migrate --no-interaction
+compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console --no-debug organisation:fetch:data --max="$max" --page-size="$page_size" -vvv
+
+echo "Data fetched into $next_database_url"
+
+# Switch to next database.
+echo "DATABASE_URL='$next_database_url'" | tee >| .env.local.database
+# Re-up to read in new database URL.
+compose up --detach

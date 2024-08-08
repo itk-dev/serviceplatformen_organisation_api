@@ -8,7 +8,7 @@ use App\Exception\InvalidProviderRequestException;
 use App\Repository\Model\FunktionRepository;
 use App\Repository\Model\OrganisationRepository;
 
-readonly class FunktionOrganisationProvider implements ProviderInterface
+class FunktionOrganisationProvider implements ProviderInterface
 {
     public function __construct(private FunktionRepository $funktionsDataRepository, private OrganisationRepository $organisationDataRepository)
     {
