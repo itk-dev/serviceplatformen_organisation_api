@@ -9,3 +9,41 @@ services:
     volumes:
       - .:/app:delegated
     working_dir: /app
+
+  phpfpm:
+    # https://docs.docker.com/compose/compose-file/05-services/#env_file
+    env_file:
+      - path: ./.env
+      - path: ./.env.local
+        required: false
+      - path: ./.env.local.database
+
+  database-0:
+    image: itkdev/mariadb:latest
+    networks:
+      - app
+    ports:
+      - '3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=db
+      - MYSQL_PASSWORD=db
+      - MYSQL_DATABASE=db
+      #- ENCRYPT=1 # Uncomment to enable database encryption.
+
+  database-1:
+    image: itkdev/mariadb:latest
+    networks:
+      - app
+    ports:
+      - '3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=db
+      - MYSQL_PASSWORD=db
+      - MYSQL_DATABASE=db
+      #- ENCRYPT=1 # Uncomment to enable database encryption.
+
+  jq:
+    # https://github.com/jqlang/jq/pkgs/container/jq
+    image: ghcr.io/jqlang/jq:1.7.1
