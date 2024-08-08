@@ -20,7 +20,7 @@ source "$config_file"
 
 if [ -z "${database_urls:-}" ]; then
     cat <<EOF >&2
-Missing
+Missing or empty
 
 database_urls=(…)
 
@@ -30,13 +30,6 @@ EOF
 
     exit 1
 fi
-
-# https://www.php.net/manual/en/reserved.constants.php#constant.php-int-max
-max=${max:-9223372036854775807}
-page_size=${page_size:-1000}
-
-echo max: "$max"
-echo page_size: "$page_size"
 
 function compose() {
     if [[ -n "${compose_script:-}" ]]; then
@@ -64,12 +57,22 @@ echo current_index: "$current_index"
 echo next_database_url: "$next_database_url"
 echo next_index: "$next_index"
 
+# https://www.php.net/manual/en/reserved.constants.php#constant.php-int-max
+max=${max:-9223372036854775807}
+page_size=${page_size:-1000}
+
+echo max: "$max"
+echo page_size: "$page_size"
+
+# Fetch data into "next" database
+# Cf.
+compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console doctrine:migrations:migrate --no-interaction first
 compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console doctrine:migrations:migrate --no-interaction
 compose exec --env DATABASE_URL="$next_database_url" phpfpm bin/console --no-debug organisation:fetch:data --max="$max" --page-size="$page_size" -vvv
 
-echo "DATABASE_URL='$next_database_url'" | tee >| .env.local.database
+echo "Data fetched into $next_database_url"
 
+# Switch to next database.
+echo "DATABASE_URL='$next_database_url'" | tee >| .env.local.database
 # Re-up to read in new database URL.
 compose up --detach
-
-echo 'SUCCESS!'

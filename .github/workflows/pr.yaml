@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
@@ -23,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.2' ]
+        php-versions: [ '8.1', '8.2' ]
         dependency-version: [ prefer-stable ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -55,10 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.2' ]
+        php-versions: [ '8.1', '8.2' ]
         dependency-version: [ prefer-stable ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
@@ -83,40 +83,26 @@ jobs:
         run: |
           composer coding-standards-check
 
-  markdownlint:
+  markdown-coding-standards:
+    name: Markdown coding standards
     runs-on: ubuntu-latest
-    name: markdownlint
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache yarn packages
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Yarn install
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-      - run: yarn install
-      - name: markdownlint
-        run: yarn coding-standards-check/markdownlint
+        uses: actions/checkout@v4
+
+      - name: Coding standards
+        run: |
+          docker run --rm --volume "$PWD":/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
 
   code-analysis:
     name: PHP - Code analysis
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.2' ]
+        php-versions: [ '8.1', '8.2' ]
         dependency-version: [ prefer-stable ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
