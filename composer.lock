@@ -2005,16 +2005,16 @@
         },
         {
             "name": "itk-dev/azure-key-vault-php",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itk-dev/AzureKeyVaultPhp.git",
-                "reference": "a8b6ec6abe85401aceedc73e484be7609052d592"
+                "reference": "bb22ee1358b58b181760892a9ecee6a042bf0819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itk-dev/AzureKeyVaultPhp/zipball/a8b6ec6abe85401aceedc73e484be7609052d592",
-                "reference": "a8b6ec6abe85401aceedc73e484be7609052d592",
+                "url": "https://api.github.com/repos/itk-dev/AzureKeyVaultPhp/zipball/bb22ee1358b58b181760892a9ecee6a042bf0819",
+                "reference": "bb22ee1358b58b181760892a9ecee6a042bf0819",
                 "shasum": ""
             },
             "require": {
@@ -2051,9 +2051,9 @@
             ],
             "support": {
                 "issues": "https://github.com/itk-dev/AzureKeyVaultPhp/issues",
-                "source": "https://github.com/itk-dev/AzureKeyVaultPhp/tree/1.0.0"
+                "source": "https://github.com/itk-dev/AzureKeyVaultPhp/tree/1.0.1"
             },
-            "time": "2021-02-08T11:39:53+00:00"
+            "time": "2024-09-25T09:24:26+00:00"
         },
         {
             "name": "itk-dev/serviceplatformen",
@@ -9084,7 +9084,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -9092,6 +9092,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
