@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* [PR-20](https://github.com/itk-dev/serviceplatformen_organisation_api/pull/20)
+  Update Key Vault module
+
 ## [1.0.3] 2024-02-29
 
 * Restore to default monolog config.
