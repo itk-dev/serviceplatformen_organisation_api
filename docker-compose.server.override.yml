@@ -6,10 +6,6 @@ services:
     # which may already have a nginx container.
     container_name: organisation_api
 
-    # Use production vhost config, which basically is just using the renamed php-fpm container below.
-    volumes:
-      - ./.docker/vhost-prod.conf:/etc/nginx/conf.d/default.conf:ro
-
     # Disable traefik to not expose the service to the internet.
     labels:
       - "traefik.enable=false"
