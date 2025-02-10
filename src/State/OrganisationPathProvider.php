@@ -7,7 +7,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Exception\InvalidProviderRequestException;
 use App\Repository\Model\OrganisationRepository;
 
-readonly class OrganisationPathProvider implements ProviderInterface
+class OrganisationPathProvider implements ProviderInterface
 {
     public function __construct(private OrganisationRepository $organisationDataRepository)
     {
