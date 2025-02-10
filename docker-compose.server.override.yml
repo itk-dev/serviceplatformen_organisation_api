@@ -15,6 +15,5 @@ services:
       - "traefik.enable=false"
 
   phpfpm:
-    # Give a different name since it is to be called from another container,
-    # which may already have a phpfpm container.
-    container_name: phpfpm-api
+    environment:
+      - PHP_MEMORY_LIMIT=512M
