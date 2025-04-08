@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-* Downgraded to PHP 8.1
+* Upgraded to PHP 8.3
+* Upgraded to Symfony 6.4
 
 ## [1.0.3] 2024-02-29
 
