@@ -49,7 +49,7 @@ CREATE OR REPLACE VIEW funktion AS
 
     -- Add adresse
     LEFT OUTER JOIN organisation_enhed_registrering_adresser ON organisation_enhed_registrering.id = organisation_enhed_registrering_adresser.organisation_enhed_registrering_id
-        AND organisation_enhed_registrering_adresser.rolle_label = 'Postadresse'
+        AND organisation_enhed_registrering_adresser.rolle_label = 'OrganisationEnhed.Adresse.Postadresse'
     LEFT OUTER JOIN adresse_registrering ON organisation_enhed_registrering_adresser.reference_id_uuididentifikator = adresse_registrering.adresse_id
     LEFT OUTER JOIN adresse_registrering_egenskab ON adresse_registrering.id = adresse_registrering_egenskab.adresse_registrering_id
 ;
