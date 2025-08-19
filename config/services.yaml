@@ -42,7 +42,7 @@ services:
             $options:
                 authority_cvr: '%env(SF1500_ORGANISATION_AUTHORITY_CVR)%'
                 sts_applies_to: '%env(SF1500_ORGANISATION_STS_APPLIES_TO)%'
-                test_mode: '%env(SF1500_ORGANISATION_TEST_MODE)%'
+                test_mode: '%env(bool:SF1500_ORGANISATION_TEST_MODE)%'
 
 
     App\State\BrugerLederProvider:

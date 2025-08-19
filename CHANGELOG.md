@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] 2025-08-19
+
+* Ensured `SF1500_ORGANISATION_TEST_MODE` environment variable is boolean.
+
 ## [1.1.0] 2025-04-08
 
 * Upgraded to PHP 8.3
