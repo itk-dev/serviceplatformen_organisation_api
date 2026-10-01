@@ -17,6 +17,12 @@ final class Version20231207122658 extends AbstractMigration
         return '';
     }
 
+    public function isTransactional(): bool
+    {
+        // MariaDB commits schema changes implicitly, so a transaction cannot be honoured.
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql(<<<'SQL'
