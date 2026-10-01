@@ -36,6 +36,7 @@
     },
     "config": {
         "allow-plugins": {
+            "ergebnis/composer-normalize": true,
             "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
@@ -101,6 +102,7 @@
         }
     },
     "require-dev": {
+        "ergebnis/composer-normalize": "^2.54",
         "friendsofphp/php-cs-fixer": "^3.38",
         "symfony/maker-bundle": "^1.51",
         "vimeo/psalm": "^6.19"
