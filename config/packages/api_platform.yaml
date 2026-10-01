@@ -1,12 +1,15 @@
 api_platform:
     title: Hello API Platform
     version: 1.0.0
+    use_symfony_listeners: false
     formats:
         jsonld: ['application/ld+json']
     docs_formats:
         jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
+    serializer:
+        hydra_prefix: true
     defaults:
         stateless: true
         cache_headers:

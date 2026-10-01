@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\Get;
 use App\Repository\Model\OrganisationRepository;
 use App\State\OrganisationPathProvider;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrganisationRepository::class)]
 #[ORM\Table(name: 'organisation')]
