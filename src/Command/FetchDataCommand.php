@@ -30,6 +30,7 @@ class FetchDataCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $dataTypeDescription = sprintf('Which data to fetch. If no data type(s) is provided it will fetch all by default. Allowed options: %s.', implode(', ', self::ALLOWED_DATA_TYPES));
@@ -41,6 +42,7 @@ class FetchDataCommand extends Command
         ;
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Handle data type option.

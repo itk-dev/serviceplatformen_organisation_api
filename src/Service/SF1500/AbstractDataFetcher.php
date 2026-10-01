@@ -130,16 +130,16 @@ abstract class AbstractDataFetcher
     /**
      * Converts filesize.
      */
-    protected function convertFilesize($bytes, $precision = 2): string
+    protected function convertFilesize(int|float $bytes, int $precision = 2): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
-        $bytes = max($bytes, 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
+        $bytes = max((float) $bytes, 0.0);
+        $pow = $bytes > 0 ? (int) floor(log($bytes) / log(1024)) : 0;
+        $pow = max(0, min($pow, count($units) - 1));
 
-        $bytes /= pow(1024, $pow);
+        $bytes /= (float) pow(1024, $pow);
 
-        return round($bytes, $precision).$units[$pow];
+        return (string) round($bytes, $precision).$units[$pow];
     }
 }

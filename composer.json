@@ -103,6 +103,6 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.38",
         "symfony/maker-bundle": "^1.51",
-        "vimeo/psalm": "^5.16"
+        "vimeo/psalm": "^6.19"
     }
 }

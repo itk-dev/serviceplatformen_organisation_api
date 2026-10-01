@@ -19,6 +19,7 @@ class AdresseDataFetcher extends AbstractDataFetcher
 {
     protected const DATA_TYPE = 'adresse';
 
+    #[\Override]
     protected function fetchData(int $pageSize, int $total, int $max): int
     {
         $request = (new SoegInputType())
@@ -44,11 +45,13 @@ class AdresseDataFetcher extends AbstractDataFetcher
         return count($ids);
     }
 
+    #[\Override]
     public function clientSoeg(array $options = []): Soeg
     {
         return $this->sf1500Service->getSF1500()->getClient(Soeg::class, $options);
     }
 
+    #[\Override]
     public function clientList(array $options = []): _List
     {
         return $this->sf1500Service->getSF1500()->getClient(_List::class, $options);
