@@ -2,11 +2,12 @@
 
 namespace App\Entity\Model;
 
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\ExactFilter;
+use ApiPlatform\Doctrine\Orm\Filter\PartialSearchFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Repository\Model\BrugerRepository;
 use App\State\BrugerFunktionerProvider;
 use App\State\BrugerLederFunktionerProvider;
@@ -29,6 +30,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
             routePrefix: 'v1/',
             shortName: 'Bruger',
             normalizationContext: ['groups' => 'bruger:item'],
+            parameters: [
+                'navn' => new QueryParameter(property: 'navn', filter: new PartialSearchFilter()),
+                'az' => new QueryParameter(property: 'az', filter: new ExactFilter()),
+                'email' => new QueryParameter(property: 'email', filter: new ExactFilter()),
+                'telefon' => new QueryParameter(property: 'telefon', filter: new ExactFilter()),
+                'lokation' => new QueryParameter(property: 'lokation', filter: new ExactFilter()),
+            ],
         ),
         new GetCollection(
             uriTemplate: 'bruger/{id}/funktioner',
@@ -53,13 +61,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: [
-    'navn' => 'partial',
-    'az' => 'exact',
-    'email' => 'exact',
-    'telefon' => 'exact',
-    'lokation' => 'exact',
-])]
 class Bruger
 {
     #[ORM\Id]
