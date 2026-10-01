@@ -23,7 +23,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-versions: ["8.3"]
+                php-versions: ["8.4"]
                 dependency-version: [prefer-stable]
         steps:
             - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-versions: ["8.3"]
+                php-versions: ["8.4"]
                 dependency-version: [prefer-stable]
         steps:
             - uses: actions/checkout@v4
@@ -113,7 +113,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php-versions: ["8.3"]
+                php-versions: ["8.4"]
                 dependency-version: [prefer-stable]
         steps:
             - uses: actions/checkout@v4
