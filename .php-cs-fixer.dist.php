@@ -9,6 +9,8 @@ $finder = new PhpCsFixer\Finder();
 $finder->in(__DIR__);
 // … that are not ignored by VCS
 $finder->ignoreVCSIgnored(true);
+// … and not the configuration reference that Symfony 7.4+ generates in debug mode
+$finder->notPath('config/reference.php');
 
 $config = new PhpCsFixer\Config();
 $config->setFinder($finder);
