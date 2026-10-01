@@ -11,7 +11,7 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
+        autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     # makes classes in src/ available to be used as services
@@ -40,14 +40,12 @@ services:
                 certificate_version: '%env(SF1500_ORGANISATION_CERTIFICATE_VERSION)%'
                 certificate_passphrase: '%env(SF1500_ORGANISATION_CERTIFICATE_PASSPHRASE)%'
 
-
     App\Service\SF1500Service:
         arguments:
             $options:
                 authority_cvr: '%env(SF1500_ORGANISATION_AUTHORITY_CVR)%'
                 sts_applies_to: '%env(SF1500_ORGANISATION_STS_APPLIES_TO)%'
                 test_mode: '%env(bool:SF1500_ORGANISATION_TEST_MODE)%'
-
 
     App\State\BrugerLederProvider:
         arguments:

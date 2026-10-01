@@ -1,15 +1,15 @@
 version: "3"
 
 services:
-  nginx:
-    # Give a different name since it is to be called from another container,
-    # which may already have a nginx container.
-    container_name: organisation_api
+    nginx:
+        # Give a different name since it is to be called from another container,
+        # which may already have a nginx container.
+        container_name: organisation_api
 
-    # Disable traefik to not expose the service to the internet.
-    labels:
-      - "traefik.enable=false"
+        # Disable traefik to not expose the service to the internet.
+        labels:
+            - "traefik.enable=false"
 
-  phpfpm:
-    environment:
-      - PHP_MEMORY_LIMIT=512M
+    phpfpm:
+        environment:
+            - PHP_MEMORY_LIMIT=512M

@@ -209,8 +209,7 @@ we decided to adhere to in this project.
 * Markdown files (markdownlint standard rules)
 
    ```sh
-   docker compose run --rm node yarn install
-   docker compose run --rm node yarn coding-standards-check
+   docker compose run --rm prettier '**/*.{yml,yaml}' --check
    ```
 
 ### Coding standards apply
@@ -227,8 +226,7 @@ we decided to adhere to in this project.
 * Markdown files (markdownlint standard rules)
 
    ```sh
-   docker compose run --rm node yarn install
-   docker compose run --rm node yarn coding-standards-apply
+   docker compose run --rm prettier '**/*.{yml,yaml}' --write
    ```
 
 ### Code analysis
