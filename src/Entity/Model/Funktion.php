@@ -8,7 +8,7 @@ use App\Repository\Model\FunktionRepository;
 use App\State\FunktionOrganisationPathProvider;
 use App\State\FunktionOrganisationProvider;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: FunktionRepository::class, readOnly: true)]
 #[ORM\Table(name: 'funktion')]

@@ -1,55 +1,42 @@
 {
     "name": "itk-dev/serviceplatformen-organisation-api",
     "description": "Api backend for SF1500 Organisation",
-    "type": "project",
     "license": "proprietary",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
+    "type": "project",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/core": "^3.2",
+        "api-platform/core": "^4.4",
+        "doctrine/dbal": "^3.10",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^2.16",
+        "doctrine/orm": "^3.7",
         "itk-dev/serviceplatformen": "^1.5",
         "nelmio/cors-bundle": "^2.3",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.24",
-        "symfony/asset": "6.4.*",
-        "symfony/console": "6.4.*",
-        "symfony/dotenv": "6.4.*",
-        "symfony/expression-language": "6.4.*",
+        "symfony/asset": "~7.4.0",
+        "symfony/console": "~7.4.0",
+        "symfony/dotenv": "~7.4.0",
+        "symfony/expression-language": "~7.4.0",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "6.4.*",
+        "symfony/framework-bundle": "~7.4.0",
         "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "6.4.*",
-        "symfony/property-info": "6.4.*",
-        "symfony/runtime": "6.4.*",
-        "symfony/security-bundle": "6.4.*",
-        "symfony/serializer": "6.4.*",
-        "symfony/twig-bundle": "6.4.*",
-        "symfony/validator": "6.4.*",
-        "symfony/yaml": "6.4.*"
+        "symfony/property-access": "~7.4.0",
+        "symfony/property-info": "~7.4.0",
+        "symfony/runtime": "~7.4.0",
+        "symfony/security-bundle": "~7.4.0",
+        "symfony/serializer": "~7.4.0",
+        "symfony/twig-bundle": "~7.4.0",
+        "symfony/validator": "~7.4.0",
+        "symfony/yaml": "~7.4.0"
     },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
-        },
-        "sort-packages": true
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Tests\\": "tests/"
-        }
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.54",
+        "friendsofphp/php-cs-fixer": "^3.38",
+        "symfony/maker-bundle": "^1.51",
+        "vimeo/psalm": "^6.19"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -60,19 +47,55 @@
         "symfony/polyfill-php80": "*",
         "symfony/polyfill-php81": "*"
     },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
         },
+        "sort-packages": true
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "7.4.*"
+        }
+    },
+    "scripts": {
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "coding-standards-check/phpcs": [
-            "vendor/bin/php-cs-fixer fix --dry-run"
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "code-analysis": [
+            "@code-analysis/psalm"
+        ],
+        "code-analysis/psalm": [
+            "vendor/bin/psalm"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
         ],
         "coding-standards-apply/phpcs": [
             "vendor/bin/php-cs-fixer fix"
@@ -80,28 +103,8 @@
         "coding-standards-check": [
             "@coding-standards-check/phpcs"
         ],
-        "coding-standards-apply": [
-            "@coding-standards-apply/phpcs"
-        ],
-        "code-analysis/psalm": [
-            "vendor/bin/psalm"
-        ],
-        "code-analysis": [
-            "@code-analysis/psalm"
+        "coding-standards-check/phpcs": [
+            "vendor/bin/php-cs-fixer fix --dry-run"
         ]
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "6.4.*"
-        }
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.38",
-        "symfony/maker-bundle": "^1.51",
-        "vimeo/psalm": "^5.16"
     }
 }

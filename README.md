@@ -119,8 +119,8 @@ for help run
 docker compose exec phpfpm bin/console organisation:fetch:data --help
 ```
 
-**To avoid issues with memory leaks during development add the
-`--no-debug` flag to the fetch data command.** You may also want to
+__To avoid issues with memory leaks during development add the
+`--no-debug` flag to the fetch data command.__ You may also want to
 add the verbose flag to see progress.
 
 ```sh
@@ -147,13 +147,13 @@ curl "http://$(docker compose port nginx 8080)/api/v1/bruger?page=1&navn=Jeppe%2
 
 Search parameters
 
-| Name    | Type | Example                 |
-|---------|------|-------------------------|
-| navn    | Text | `navn=Jeppe%20Kuhlmann` |
-| az      | Text | `az=az12345`            |
-| email   | Text | `email=jeppe%40test.dk` |
-| telefon | Text | `telefon=12345678`      |
-| lokation   | Text | `lokation=ITK`          |
+| Name     | Type | Example                 |
+|----------|------|-------------------------|
+| navn     | Text | `navn=Jeppe%20Kuhlmann` |
+| az       | Text | `az=az12345`            |
+| email    | Text | `email=jeppe%40test.dk` |
+| telefon  | Text | `telefon=12345678`      |
+| lokation | Text | `lokation=ITK`          |
 
 #### Get info on user
 
@@ -203,14 +203,13 @@ we decided to adhere to in this project.
 * PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
 
    ```sh
-   docker compose exec phpfpm composer coding-standards-check
+   docker compose run --rm phpfpm vendor/bin/php-cs-fixer check
    ```
 
 * Markdown files (markdownlint standard rules)
 
    ```sh
-   docker compose run --rm node yarn install
-   docker compose run --rm node yarn coding-standards-check
+   docker compose run --rm prettier '**/*.{yml,yaml}' --check
    ```
 
 ### Coding standards apply
@@ -221,14 +220,13 @@ we decided to adhere to in this project.
 * PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
 
    ```sh
-   docker compose exec phpfpm composer coding-standards-apply
+   docker compose run --rm phpfpm vendor/bin/php-cs-fixer fix --dry-run --diff
    ```
 
 * Markdown files (markdownlint standard rules)
 
    ```sh
-   docker compose run --rm node yarn install
-   docker compose run --rm node yarn coding-standards-apply
+   docker compose run --rm prettier '**/*.{yml,yaml}' --write
    ```
 
 ### Code analysis

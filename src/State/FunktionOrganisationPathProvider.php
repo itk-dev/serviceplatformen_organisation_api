@@ -14,6 +14,7 @@ class FunktionOrganisationPathProvider implements ProviderInterface
     {
     }
 
+    #[\Override]
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         if (!isset($uriVariables['id'])) {

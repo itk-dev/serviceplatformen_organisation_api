@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+* Upgraded to Symfony 7.4 and API Platform 4.4.
+* Upgraded Doctrine ORM to 3.7.
+* Replaced the deprecated `#[ApiFilter]` declaration with `QueryParameter`
+  filters.
+* Updated psalm to 6 and added `#[\Override]` attributes.
+
 ## [1.1.3] 2026-05-21
 
 * Security updates
