@@ -203,7 +203,7 @@ we decided to adhere to in this project.
 * PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
 
    ```sh
-   docker compose exec phpfpm composer coding-standards-check
+   docker compose run --rm phpfpm vendor/bin/php-cs-fixer check
    ```
 
 * Markdown files (markdownlint standard rules)
@@ -220,7 +220,7 @@ we decided to adhere to in this project.
 * PHP files (PHP-CS-Fixer with the Symfony ruleset enabled)
 
    ```sh
-   docker compose exec phpfpm composer coding-standards-apply
+   docker compose run --rm phpfpm vendor/bin/php-cs-fixer fix --dry-run --diff
    ```
 
 * Markdown files (markdownlint standard rules)
