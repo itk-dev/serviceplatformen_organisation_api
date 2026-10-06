@@ -8,11 +8,11 @@ use ItkDev\Serviceplatformen\Certificate\Exception\CertificateLocatorException;
 /**
  * Certificate locator for a PEM certificate fetched from a vault.
  *
- * The value must hold the private key and the certificate chain as PEM blocks;
- * anything outside the blocks, such as the "Bag Attributes" lines printed by
- * openssl exports, is ignored. The certificate is kept in memory and only
- * written to a temporary file when a path is required; that file disappears
- * when the process ends.
+ * The value must hold one unencrypted private key and the certificate chain,
+ * leaf first, as PEM blocks; anything outside the blocks, such as the
+ * "Bag Attributes" lines printed by openssl exports, is ignored. The
+ * certificate is kept in memory and only written to a temporary file when a
+ * path is required; that file disappears when the process ends.
  */
 class VaultCertificateLocator extends AbstractCertificateLocator
 {
@@ -63,62 +63,36 @@ class VaultCertificateLocator extends AbstractCertificateLocator
     }
 
     /**
-     * Reads the PEM into the structure openssl_pkcs12_read() produces: pkey, cert and optional extracerts.
+     * Splits the PEM into the parts the library reads: pkey, cert and optional extracerts.
      */
     private function readCertificate(): array
     {
         $pem = str_replace("\r\n", "\n", trim($this->certificate));
-        if (!str_contains($pem, self::PEM_MARKER)) {
+        if (!str_contains($pem, self::PEM_MARKER)
+            || !preg_match_all('/-----BEGIN ([A-Z ]+)-----\n.+?\n-----END \1-----/s', $pem, $matches)) {
             throw new CertificateLocatorException('Certificate is not in PEM format.');
         }
-        if (!preg_match_all('/-----BEGIN ([A-Z ]+)-----\n.+?\n-----END \1-----/s', $pem, $matches)) {
-            throw new CertificateLocatorException('No PEM blocks found in certificate.');
-        }
 
-        $privateKeyBlock = null;
-        $certificateBlocks = [];
+        $keys = [];
+        $certificates = [];
         foreach ($matches[0] as $index => $block) {
-            $type = $matches[1][$index];
-            if ('CERTIFICATE' === $type) {
-                $certificateBlocks[] = $block."\n";
-            } elseif (str_ends_with($type, 'PRIVATE KEY')) {
-                $privateKeyBlock = $block."\n";
+            if ('CERTIFICATE' === $matches[1][$index]) {
+                $certificates[] = $block."\n";
+            } elseif (str_ends_with($matches[1][$index], 'PRIVATE KEY')) {
+                $keys[] = $block."\n";
             }
         }
-        if (null === $privateKeyBlock) {
-            throw new CertificateLocatorException('No private key found in certificate.');
-        }
-        if ([] === $certificateBlocks) {
-            throw new CertificateLocatorException('No certificate found in certificate.');
+        if (1 !== count($keys) || [] === $certificates) {
+            throw new CertificateLocatorException('Certificate must hold one private key and at least one certificate.');
         }
 
-        $privateKey = openssl_pkey_get_private($privateKeyBlock, $this->hasPassphrase() ? $this->getPassphrase() : null);
-        if (false === $privateKey) {
-            throw new CertificateLocatorException('Could not read private key.');
+        // Leaf first, then the chain, as openssl and certificate issuers order them.
+        $store = ['pkey' => $keys[0], 'cert' => array_shift($certificates)];
+        if (!openssl_x509_check_private_key($store['cert'], $store['pkey'])) {
+            throw new CertificateLocatorException('Private key does not match the first certificate.');
         }
-        // The library expects the key unencrypted, as openssl_pkcs12_read() returns it.
-        $exportedKey = '';
-        if (!openssl_pkey_export($privateKey, $exportedKey)) {
-            throw new CertificateLocatorException('Could not export private key.');
-        }
-
-        // The certificate belonging to the key is the leaf; the rest is the chain.
-        $certificate = null;
-        $chain = [];
-        foreach ($certificateBlocks as $block) {
-            if (null === $certificate && openssl_x509_check_private_key($block, $privateKey)) {
-                $certificate = $block;
-            } else {
-                $chain[] = $block;
-            }
-        }
-        if (null === $certificate) {
-            throw new CertificateLocatorException('None of the certificates match the private key.');
-        }
-
-        $store = ['cert' => $certificate, 'pkey' => $exportedKey];
-        if ([] !== $chain) {
-            $store['extracerts'] = $chain;
+        if ([] !== $certificates) {
+            $store['extracerts'] = $certificates;
         }
 
         return $store;
