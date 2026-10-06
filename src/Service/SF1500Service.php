@@ -23,7 +23,7 @@ class SF1500Service
      */
     public function getSF1500(): SF1500
     {
-        if (null === $this->sf1500 || $this->certificateLocator->needRefresh()) {
+        if (null === $this->sf1500) {
             $this->setupSF1500();
         }
 
