@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 * Upgraded to Symfony 7.4 and API Platform 4.4.
+* Fetched the SF1500 certificate from HashiCorp Vault through `itk-dev/vault-bundle`
+  instead of Azure Key Vault.
 * Upgraded Doctrine ORM to 3.7.
 * Replaced the deprecated `#[ApiFilter]` declaration with `QueryParameter`
   filters.

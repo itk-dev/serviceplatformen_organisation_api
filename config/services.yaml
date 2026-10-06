@@ -30,15 +30,18 @@ services:
     App\Service\CertificateLocator:
         arguments:
             $options:
+                # 'vault' or 'file_system'
                 certificate_locator_type: '%env(SF1500_ORGANISATION_CERTIFICATE_LOCATOR_TYPE)%'
-                certificate_path: '%env(SF1500_ORGANISATION_CERTIFICATE_PATH)%'
-                certificate_tenant_id: '%env(SF1500_ORGANISATION_CERTIFICATE_TENANT_ID)%'
-                certificate_application_id: '%env(SF1500_ORGANISATION_CERTIFICATE_APPLICATION_ID)%'
-                certificate_client_secret: '%env(SF1500_ORGANISATION_CERTIFICATE_CLIENT_SECRET)%'
-                certificate_name: '%env(SF1500_ORGANISATION_CERTIFICATE_NAME)%'
-                certificate_secret: '%env(SF1500_ORGANISATION_CERTIFICATE_SECRET)%'
-                certificate_version: '%env(SF1500_ORGANISATION_CERTIFICATE_VERSION)%'
                 certificate_passphrase: '%env(SF1500_ORGANISATION_CERTIFICATE_PASSPHRASE)%'
+                # file_system: path to the PKCS#12 file
+                certificate_path: '%env(SF1500_ORGANISATION_CERTIFICATE_PATH)%'
+                # vault: where the PEM certificate (private key and chain) lives (version empty = latest)
+                vault_role_id: '%env(VAULT_ROLE_ID)%'
+                vault_secret_id: '%env(VAULT_SECRET_ID)%'
+                vault_path: '%env(SF1500_ORGANISATION_CERTIFICATE_VAULT_PATH)%'
+                certificate_secret: '%env(SF1500_ORGANISATION_CERTIFICATE_SECRET)%'
+                vault_key: '%env(SF1500_ORGANISATION_CERTIFICATE_VAULT_KEY)%'
+                certificate_version: '%env(SF1500_ORGANISATION_CERTIFICATE_VERSION)%'
 
     App\Service\SF1500Service:
         arguments:

@@ -3,22 +3,16 @@
 namespace App\Service;
 
 use App\Exception\CertificateLocatorException;
-use GuzzleHttp\Client;
-use Http\Adapter\Guzzle7\Client as GuzzleAdapter;
-use Http\Factory\Guzzle\RequestFactory;
-use ItkDev\AzureKeyVault\Authorisation\VaultToken;
-use ItkDev\AzureKeyVault\KeyVault\VaultSecret;
-use ItkDev\Serviceplatformen\Certificate\AzureKeyVaultCertificateLocator;
 use ItkDev\Serviceplatformen\Certificate\CertificateLocatorInterface;
 use ItkDev\Serviceplatformen\Certificate\FilesystemCertificateLocator;
+use ItkDev\VaultBundle\Service\Vault;
 
 class CertificateLocator
 {
-    private const LOCATOR_TYPE_AZURE_KEY_VAULT = 'azure_key_vault';
+    private const LOCATOR_TYPE_VAULT = 'vault';
     private const LOCATOR_TYPE_FILE_SYSTEM = 'file_system';
-    private int $tokenExpiration;
 
-    public function __construct(private readonly array $options)
+    public function __construct(private readonly Vault $vault, private readonly array $options)
     {
     }
 
@@ -27,59 +21,31 @@ class CertificateLocator
      */
     public function getCertificateLocator(): CertificateLocatorInterface
     {
-        $certificateSettings = $this->options;
+        $settings = $this->options;
+        $locatorType = $settings['certificate_locator_type'];
 
-        $locatorType = $certificateSettings['certificate_locator_type'];
-
-        if (self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType) {
-            $httpClient = new GuzzleAdapter(new Client());
-            $requestFactory = new RequestFactory();
-
-            $vaultToken = new VaultToken($httpClient, $requestFactory);
-
-            $token = $vaultToken->getToken(
-                $certificateSettings['certificate_tenant_id'],
-                $certificateSettings['certificate_application_id'],
-                $certificateSettings['certificate_client_secret'],
+        if (self::LOCATOR_TYPE_VAULT === $locatorType) {
+            $token = $this->vault->login($settings['vault_role_id'], $settings['vault_secret_id']);
+            $secret = $this->vault->getSecret(
+                token: $token,
+                path: $settings['vault_path'],
+                secret: $settings['certificate_secret'],
+                key: $settings['vault_key'],
+                version: '' === $settings['certificate_version'] ? null : (int) $settings['certificate_version'],
             );
 
-            $this->tokenExpiration = $token->getExpiresOn();
+            return new VaultCertificateLocator($secret->value, $settings['certificate_passphrase']);
+        }
 
-            $vault = new VaultSecret(
-                $httpClient,
-                $requestFactory,
-                $certificateSettings['certificate_name'],
-                $token->getAccessToken()
-            );
-
-            return new AzureKeyVaultCertificateLocator(
-                $vault,
-                $certificateSettings['certificate_secret'],
-                $certificateSettings['certificate_version'],
-                $certificateSettings['certificate_passphrase'],
-            );
-        } elseif (self::LOCATOR_TYPE_FILE_SYSTEM === $locatorType) {
-            $certificatepath = realpath($certificateSettings['certificate_path']) ?: null;
-            if (null === $certificatepath) {
-                throw new CertificateLocatorException(sprintf('Invalid certificate path %s', $certificateSettings['certificate_path']));
+        if (self::LOCATOR_TYPE_FILE_SYSTEM === $locatorType) {
+            $certificatePath = realpath($settings['certificate_path']) ?: null;
+            if (null === $certificatePath) {
+                throw new CertificateLocatorException(sprintf('Invalid certificate path %s', $settings['certificate_path']));
             }
 
-            return new FilesystemCertificateLocator($certificatepath, $certificateSettings['certificate_passphrase']);
+            return new FilesystemCertificateLocator($certificatePath, $settings['certificate_passphrase']);
         }
 
         throw new CertificateLocatorException(sprintf('Invalid certificate locator type: %s', $locatorType));
-    }
-
-    /**
-     * Checks if certificate locator token should be refreshed.
-     */
-    public function needRefresh(): bool
-    {
-        $certificateSettings = $this->options;
-        $locatorType = $certificateSettings['certificate_locator_type'];
-
-        // Refresh if token is within a minute of expiration time.
-        return self::LOCATOR_TYPE_AZURE_KEY_VAULT === $locatorType
-            && $this->tokenExpiration - 600 <= (new \DateTimeImmutable())->getTimestamp();
     }
 }
